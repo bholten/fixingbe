@@ -1,0 +1,204 @@
+#menu {
+  position: absolute;
+  width: 116px;
+}
+
+#main {
+	left: 160px;
+  position: absolute;
+  top: 8px
+}
+
+#skin {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+body {
+	color: black;
+  font-family: Helvetica, Arial;
+  background-color: #008000;
+}
+
+p {
+	//text-indent: 1em;
+}
+
+.border {
+  border: 1px;
+  border-style: solid;
+  border-color: black;
+}
+
+.border_left {
+  border-left: 1px;
+  border-bottom: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-style: solid;
+  border-color: black;
+}
+
+.border_left_bottom {
+  border-left: 1px;
+  border-bottom: 1px;
+  border-right: 0px;
+  border-top: 0px;
+  border-style: solid;
+  border-color: black;
+}
+
+.border_bottom {
+  border-left: 0px;
+  border-bottom: 1px;
+  border-right: 0px;
+  border-top: 0px;
+  border-style: solid;
+  border-color: black;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  color: black;
+	font-family: "Univers 55", Univers, Verdana;
+}
+
+a {
+	color: darkred;
+  text-decoration: none;
+}
+
+a:hover {
+	color: lightblue;
+}
+
+.noindent {
+	text-indent: 0px;
+}
+
+.menuindent {
+  text-indent: 0px;
+}
+
+.bigindent {
+	margin-left: 2em;
+  text-indent: 0px;
+}
+
+.code {
+	margin-left: 2em;
+  color: darkblue;
+  text-indent: 0px;
+}
+
+table {
+  background-color: white;
+  border-color: black;
+  border-collapse: collapse;
+}
+
+table.regular {
+  background: inherit;
+}
+
+tr {
+  color: black;
+}
+
+/*
+tr:hover {
+  color: white;
+  background-color: darkblue;
+  border-color: black;
+}
+*/
+
+td,th {
+  border-color: black;
+  border-top: 1px;
+  border-bottom: 1px;
+  border-right: 1px;
+  border-left: 1px;
+  border-style: solid;
+  padding: 8px;
+}
+
+th {
+  background-color: black;
+  border-color: black;
+  color: white;
+}
+
+table.regular td,th {
+  border: none;
+}
+
+table.regular th {
+  background-color: inherit;
+  color: inherit;
+}
+
+.nonch {
+  background-color: lightgreen;
+}
+
+.aggro {
+  background-color: red;
+}
+
+.mountable {
+  background-color: yellow;
+}
+
+.destroyed {
+  background-color: goldenrod;
+}
+
+.used {
+  background-color: lightblue;
+}
+
+.ar1 {
+  background-color: violet;
+}
+
+.experiment {
+  background-color: silver;
+}
+
+.vulnerable {
+  color: #cccccc;
+}
+
+.used .vulnerable {
+  color: #88ccff;
+}
+
+.destroyed .vulnerable {
+  color: #ffcc66;
+}
+
+.aggro .vulnerable {
+  color: #ffcccc;
+}
+
+.mountable .vulnerable {
+  color: #ffffcc;
+}
+
+.ar1 .vulnerable {
+  color: #ff88cc;
+}
+
+/* Increase on experimentation */
+.experiment .inc {
+  background-color: lightgreen;
+  border-color: inherit;
+}
+
+/* Decrease on experimentation */
+.experiment .dec {
+  background-color: red;
+  border-color: inherit;
+}
+

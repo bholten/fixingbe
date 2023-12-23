@@ -1,0 +1,462 @@
+id,serial,quality,hardiness,fortitude,dexterity,endurance,intellect,cleverness,dependability,courage,fierceness,power,armor,kinetic,energy,blast,heat,cold,electricity,acid,stun,sa1,sa2,ranged,used
+dd848f88-3a08-48b7-a46c-2192ef959ec9,266f04mq,high,611,442,352,317,105,50,763,519,27,137,"",58,-64,-2,-35,-34,-99,40,Crippling/Intimidation/Ranged,crippling,intimidation,true,00pas7q5
+e20ca7d4-6f41-4cb9-97c9-ed79ade9309e,qoodetmk,high,370,93,202,338,122,71,788,511,73,95,"",28,5,5,-99,-68,-68,-5,Crippling/--/--,crippling,"",false,019pdtas
+9cfedcf1-44b5-498d-9e56-cccadddee983,7pc5dm95,high,575,406,395,341,338,191,417,212,142,447,"",24,16,5,4,3,4,6,Dizzy/Strong poison/Ranged,dizzy,strong_poison,true,01oatm1v
+8d334f4d-91fa-474f-8821-810adb430bf6,ar63gbss,high,459,242,382,455,111,98,717,515,248,319,"",-16,47,-65,-31,52,-31,-92,Stunning/Intimidation/Ranged,stunning,intimidation,true,04anubgq
+357fec3a-8a85-4bc0-b103-e6cc20f54bf2,ntktb3hj,above_average,349,153,167,317,46,65,517,418,1,269,"",21,31,-4,-29,-90,-10,8,Stunning/--/--,stunning,"",false,06tjc3dn
+17dadaf4-0620-485c-9d31-3735ee14a468,7cm51u3m,above_average,649,473,554,493,319,285,616,333,290,391,"",59,-55,-30,6,10,-55,-28,Stunning/Intimidation/Ranged,stunning,intimidation,true,07hb7unl
+54dc28bd-5130-4a82-b99f-ba2f8d9a6234,t8gm7n59,low,594,526,213,184,298,110,683,194,25,181,light,18,12,"",8,8,-42,-8,Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,08scmn1f
+1e74d96b-019d-4099-9bf6-b7944a5b2ca1,ah3rpail,high,583,438,345,303,90,38,543,522,25,119,"",59,-62,40,-34,-23,-88,-1,--/Intimidation/--,"",intimidation,false,094fpaem
+6607eb46-14cb-45db-9a80-e5da385f8aa6,tdiiqnau,above_average,83,14,84,312,103,58,956,340,25,43,"",13,15,0,-82,-82,-14,54,Stunning/Crippling/--,stunning,crippling,false,0el9tnqd
+b828723b-07ec-412f-86ef-e354f3e54247,slsk0pou,average,92,18,61,167,115,118,715,116,34,21,"",17,9,0,20,-39,-53,-39,--/--/--,"","",false,0enc7p4r
+efbe82e6-e151-481c-b45e-d288b5463811,7t6nuj36,above_average,581,455,344,298,100,47,742,365,23,151,"",60,-64,45,-34,-23,-88,-1,--/Dizzy/--,"",dizzy,false,0etpojrb
+485c4498-f89e-4d3a-8664-01808fbca1c3,0vct7vc2,above_average,619,503,612,437,631,1,713,476,26,332,light,57,-77,0,"","",-69,"",Dizzy/Mild poison/Ranged,dizzy,mild_poison,true,0f5spo4n
+a73420b3-e53d-455b-bb30-c4ea674a06dc,st8mfbgg,high,627,472,607,509,622,468,491,481,339,403,"",35,60,45,90,90,90,45,Knockdown/--/--,knockdown,"",false,0iafqb8b
+cb500c46-5c92-4d35-a4cd-d52ab1815bd0,qk0b25um,high,633,514,541,421,496,254,723,516,295,559,light,37,37,27,15,67,67,27,Stunning/Intimidation/Ranged,stunning,intimidation,true,0ifvf46h
+8e4ab48f-3a86-49c0-9a34-ca6b0a02ebff,lui6bds6,high,637,461,531,489,511,362,619,507,208,341,"",47,32,-12,50,50,-99,-5,Dizzy/Mild poison/Ranged,dizzy,mild_poison,true,0lddsdcp
+1abe14bd-da7b-470c-9809-c8d2547c5456,top6b9cr,above_average,33,8,34,331,16,39,799,505,24,57,"",2,2,0,0,3,0,0,--/Intimidation/--,"",intimidation,false,0pct89s1
+be6bfd90-de59-43a6-afa0-4e50423f5a22,01071ce5,high,25,5,13,331,5,7,730,339,41,16,"",6,0,4,0,-39,-39,-39,Stunning/--/--,stunning,"",false,0vd5dclr
+fc5eb88e-b5bc-4cd4-af81-7d615c2002e4,6e2lqi1g,high,391,84,417,335,398,184,580,336,178,407,"",20,-19,-21,"",-5,-24,-44,Intimidation/Dizzy/Ranged,intimidation,dizzy,true,10pq6ihd
+587188f1-fba9-4e89-b8d1-40cea299879a,rau49ui1,high,381,93,132,335,128,69,784,511,74,96,"",28,5,5,-99,-68,-99,-5,--/Intimidation/--,"",intimidation,false,15bh6u6r
+9b60ba4b-a5eb-4c44-9636-05d0306bad2c,s53glk68,high,624,516,625,513,585,468,478,478,432,486,light,33,50,-59,78,78,78,-59,Knockdown/Intimidation/--,stunning,intimidation,false,1f7bgk2q
+e5d22e95-e7f8-4a41-a4c7-5772deab9d39,idmmbc11,high,512,390,204,155,136,103,644,312,99,225,"",37,36,29,-2,52,49,22,Blinding/Stunning/Ranged,blinding,stunning,true,1f8gec1e
+48ae596d-97e6-451d-9274-dfe8793e2da0,ktvcu4hc,above_average,557,321,532,453,533,323,595,471,53,256,"",55,56,27,19,-1,-66,-14,Knockdown/Dizzy/Ranged,knockdown,dizzy,true,1fk6r499
+55728754-e9c6-459d-8c75-9ae876429067,saqec934,above_average,552,394,517,481,295,233,735,503,238,436,"",14,9,-29,29,22,23,-33,Dizzy/Stunning/--,dizzy,stunning,false,1gnl98ni
+529c0d6f-34cf-402c-8885-02130f192536,u6ctganm,high,568,444,330,303,99,46,761,523,25,136,"",59,-26,40,-69,-34,-64,-38,Crippling/Intimidation/--,crippling,intimidation,false,1jq3rnnq
+2b56349f-b4ab-4597-bb43-9c3771099cf2,5gj0fnlq,above_average,557,439,311,281,401,193,503,120,103,292,"",20,1,8,6,5,6,9,Dizzy/Strong poison/Ranged,dizzy,strong_poison,true,1lc95n55
+e548d2f3-45b7-4e63-b341-311ffdf5e0c2,36gdjoig,high,211,42,207,418,64,53,692,333,26,129,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,1na8hoqd
+54450637-b272-43c4-b208-d58f899669a9,cts10b51,above_average,560,445,339,311,99,45,760,524,26,136,"",59,-59,-14,-21,-5,-75,-3,Dizzy/--/--,dizzy,"",false,1unq6blk
+c9ffb4f1-0b88-4f8a-9dee-7f83dec1fe07,7n85hv2t,above_average,73,16,47,330,53,26,682,334,23,37,"",11,9,-44,0,0,-44,0,--/Strong poison/--,"",strong_poison,false,21eedu6e
+db304367-9c5d-4814-9360-17db09185b29,cr940ikd,high,552,414,340,292,88,28,760,524,26,237,"",60,-70,-19,-2,-1,-76,-18,Stunning/Intimidation/--,stunning,intimidation,false,24soei87
+a0b42153-e69f-4133-a639-a0b50ded5226,bij40lld,high,326,226,283,336,324,136,640,429,236,408,"",21,17,17,20,"",-99,-29,Stunning/Medium poison/Ranged,stunning,medium_poison,true,259neltg
+5465a059-fd9c-453a-80b8-eeef87ba63b9,fcfdd9r6,average,189,42,194,251,162,54,566,255,9,82,"",0,0,0,0,-99,0,-99,--/Stunning/--,"","",false,26v5a9oh
+d039e42a-f497-4c34-94d3-7ea8e878bd03,5rnr3aci,high,371,95,219,336,110,68,788,511,74,97,"",28,5,5,-99,-69,-69,-55,Crippling/--/--,crippling,"",false,2akr1dhq
+264ddd17-9db8-4504-9947-c822edd2fdde,7lm5lsrq,low,389,219,266,336,74,64,757,708,37,95,"",1,1,20,20,20,20,20,--/Stunning/--,"",stunning,false,2elfjs7r
+961e31e9-8f2c-4963-8a84-461baae4937d,97pdf4f6,above_average,646,583,498,392,565,428,479,413,268,525,light,38,51,27,72,90,71,17,Crippling/--/Ranged,crippling,"",true,2ikrl4j0
+7832f6ba-fe0e-4ff3-9930-1ff8cd54e97b,nm37iiur,high,590,440,389,308,95,48,762,524,26,129,"",59,-62,40,-34,-11,-76,-19,--/Intimidation/--,"",intimidation,false,2jp5lhn6
+c49b28e1-76ea-4126-9486-e1282b666aa2,svppin03,average,214,83,229,325,171,158,676,151,23,1,"",7,7,"",1,-13,-24,-2,Dizzy/Intimidation/--,dizzy,intimidation,false,2jr5bm82
+b051d605-249b-4ca4-828b-6313d5da9899,cb0naj3k,average,41,8,191,351,12,28,478,297,40,20,"",6,10,0,0,0,-24,0,--/--/--,"","",false,3058sjj6
+2b0090a4-3282-4947-b76c-d821e1c6e942,hkfo9gda,above_average,255,219,80,332,188,182,267,337,122,134,"",20,13,-39,20,20,20,-39,--/--/Ranged,"","",true,30ctgn9q
+1859537b-0a31-46be-860d-e7deadd493f5,b54lf44p,high,546,422,313,286,78,40,766,376,26,155,"",56,-59,-18,-5,-2,-94,"",Crippling/Stunning/--,crippling,stunning,false,3524f44a
+2bf58d4d-5f2f-4f91-bc14-886ded9207f8,nn314aml,high,386,95,221,337,113,67,783,510,72,96,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,38u9raer
+48cfc804-c427-4112-a36a-4eb9ee74863e,b0jlk4j8,high,625,526,532,487,483,248,759,512,101,415,light,45,5,52,25,65,52,65,--/--/Ranged,"","",true,3a15g4n1
+ae06c915-e9af-4192-bea2-0c8c9334aeef,4lnqtu83,high,617,501,413,452,455,252,759,522,103,331,light,46,40,25,13,25,72,72,Blinding/Stunning/Ranged,blinding,stunning,true,3f0lpuko
+8a7f767f-20a8-488f-916a-2cb872d2857a,95qinnva,above_average,324,457,127,274,75,79,755,507,97,219,"",51,-5,-8,-3,-8,-21,-8,Crippling/Intimidation/--,crippling,intimidation,false,3m16hn77
+3a44760f-fef8-4a3c-8030-15ea6a307133,cee3sndr,above_average,77,33,59,448,60,77,479,329,48,22,"",0,4,-44,0,-44,-44,0,--/--/Ranged,"","",true,3pns2nh7
+b2f1d988-6530-480b-87f3-41ce75f0dea8,ulluf4vr,high,752,726,672,346,702,690,625,508,380,632,light,40,50,3,86,86,87,4,--/Strong poison/--,"",strong_poison,false,3pu4m57u
+5b21f0f2-1d6b-4995-97ac-e941a96089bc,cgr187h5,high,501,370,351,327,103,96,692,345,26,317,"",60,-65,-25,-7,-6,-78,-24,Stunning/Intimidation/Ranged,stunning,intimidation,true,3puua75n
+e4c8314b-bef0-4f2e-9104-b7f6a725402f,3p276vn6,above_average,588,398,366,331,292,130,600,337,169,276,"",43,-1,35,91,66,45,16,Knockdown/Stunning/Ranged,knockdown,stunning,true,3qs70vn9
+a47c3879-1379-42b4-b3b9-6a0c4c51c988,t4u74f1f,high,729,576,554,334,562,406,718,511,291,605,light,60,-61,"",15,10,-54,"",--/--/Ranged,"","",true,3tgq7fdo
+e47c2098-6707-4ef1-8969-f2e636d8076d,9u1kegg0,high,156,75,189,313,217,82,800,219,123,157,"",9,-9,-18,-36,-43,-45,-69,Stunning/Crippling/Ranged,stunning,crippling,true,3v31cggh
+7e0a3f43-83ab-4d3b-a922-ba28bee41c49,ge57ef2,above_average,103,26,69,333,65,36,487,329,100,53,"",20,0,27,27,27,-44,-44,--/Intimidation/--,"",intimidation,false,40bfjea0
+034dff68-7860-4420-a7a3-5a6bc3d0f00d,on6p5eak,above_average,3,2,1,332,1,23,658,427,24,13,"",0,0,0,0,0,0,0,--/--/--,"","",false,4231uemm
+c4caecb9-3f6b-4330-899d-27ddf54d79dd,7q12vlbb,above_average,374,94,204,335,112,69,782,506,130,97,"",29,5,2,-68,-99,-99,-5,Crippling/Intimidation/--,crippling,intimidation,false,43t5tl7l
+dca2d527-c649-4a0a-b34d-6498b967808c,bp00kbsf,high,440,182,356,444,111,94,739,446,115,243,"",-4,49,-25,-55,37,-95,-92,Stunning/Intimidation/Ranged,stunning,intimidation,true,44puub03
+14bc63f7-a9b7-4ab4-afbc-dde4ca0a46f1,a3a4gmnl,above_average,620,526,314,320,57,38,758,509,24,323,light,60,-30,-20,-9,-1,-32,-16,Stunning/Intimidation/Ranged,stunning,intimidation,true,45nosm7r
+1dfac477-d1d1-4341-9150-703077387f89,4m0va84v,high,390,176,133,336,98,92,761,514,101,322,"",-1,47,-30,-60,12,-95,-92,Stunning/Intimidation/Ranged,stunning,intimidation,true,481um8sf
+5716e377-9087-4648-ac98-798e3cc48301,om7p7506,high,498,301,224,338,286,108,762,512,104,274,"",28,28,-23,-36,-36,-75,12,Crippling/Blinding/--,crippling,blinding,false,4841q4g7
+c6709d2f-8174-4fc7-a7a5-606342d2e042,m4d12p06,above_average,62,99,61,208,135,140,518,189,42,1,"",10,17,5,5,5,-41,5,Dizzy/--/Ranged,dizzy,"",true,4d651pk3
+9d1244d8-6569-4d71-a914-cc2e55368dad,hqnhfu91,high,398,95,194,338,97,66,762,513,111,96,"",28,6,1,-99,-63,-63,-5,--/Dizzy/Ranged,"",dizzy,true,4klq2udg
+eb2939cc-c768-4beb-ad20-e04d2497a442,8mtqod1d,high,526,404,265,379,115,103,714,511,287,479,"",40,-26,-55,-20,-15,-55,-52,--/Medium disease/--,"",medium_disease,false,4ld7epf0
+ed8de648-f401-4b06-b225-acd877a73ea9,thcgpn3f,above_average,32,7,8,283,5,14,543,281,97,53,"",11,0,15,15,15,"","",--/Intimidation/--,"",intimidation,false,4lg3gn3h
+f287f363-25c5-46d4-baa5-2cf7450fc943,g3ferjj3,average,67,10,21,197,67,12,610,241,23,10,"",9,2,10,10,10,-7,"",--/Intimidation/Ranged,"",intimidation,true,4ls6mjba
+02b66277-c37c-497f-aee3-b13d92882a16,ruoe575k,very_high,614,536,429,246,227,156,734,305,104,371,light,60,-71,-21,-10,-9,-85,-20,Stunning/Intimidation/Ranged,stunning,intimidation,true,4nng67hj
+39f62fbe-2a36-44d6-8ed2-d3e9ba2123d4,sffvsf62,high,88,36,58,339,65,37,628,507,66,65,"",0,0,0,36,0,0,-44,Stunning/--/--,stunning,"",false,4qpe7fap
+295b56e3-4aac-497f-9f91-73b715727f74,bgemqbm1,above_average,613,547,453,332,255,187,761,510,25,405,light,51,37,-61,68,-7,11,71,--/Strong poison/Ranged,"",strong_poison,true,4rc8sbi0
+91f3ba17-eac2-4c7b-8fb6-1f1cdfe49c79,ul7f7uet,high,571,439,409,303,101,47,544,520,27,129,"",59,-62,40,-34,-23,-95,-1,Crippling/Intimidation/--,crippling,intimidation,false,4rpqqv62
+2c775115-e4da-422c-ad73-f562e5551e43,nh84pthv,high,624,530,490,339,224,134,822,513,40,359,light,50,36,-65,65,-3,3,70,Stunning/Strong poison/--,stunning,strong_poison,false,4rt3st55
+c6b05f8f-44d7-4551-a376-ed93d260e507,8aeh0077,high,533,145,311,404,1,15,762,516,101,260,"",51,-53,-28,-10,-8,-68,-26,--/Medium disease/--,"",medium_disease,false,4sr8c0vt
+1e15154c-90c9-4d2c-b0fc-8d6047504210,33kvghtr,above_average,164,103,165,193,128,131,614,1,1,291,"",19,15,10,"",-5,-72,-21,Stunning/Intimidation/Ranged,stunning,intimidation,false,4uphqh1t
+f854df10-f220-4b8c-816f-b717c9ea7549,dtvojdku,high,386,95,203,338,114,69,790,509,75,96,"",28,5,0,-99,-70,-70,-6,Crippling/Intimidation/--,crippling,intimidation,false,5198bdsl
+341e5d48-716d-4ad2-972f-3162dfdf4110,g5tvkl04,above_average,630,516,423,330,361,196,538,503,242,474,light,26,26,42,4,-6,0,25,Stunning/Medium poison/--,stunning,mild_poison,false,552l5ksb
+d5564d9f-8a8b-483a-9ba5-fcee78dd1587,t4e4c36s,above_average,152,26,109,308,77,59,679,305,28,75,"",0,14,0,23,-99,-99,-59,Blinding/Stunning/--,"","",false,5539sdou
+e28e0531-23d7-44cc-b65c-eff41f407fc7,q5m55006,above_average,498,250,527,506,508,298,841,434,29,217,"",25,23,25,23,50,-99,-99,Stunning/--/--,stunning,"",false,56rr20g0
+7ad365b2-d7f6-4688-8685-8f967c28e539,g012j4jt,above_average,126,90,156,354,45,39,697,334,24,30,"",5,-64,5,-64,-64,-64,-64,--/--/--,"","",false,5aq9m470
+3573ff69-d359-460e-9152-48dc4831d8b5,1pkvvf9a,high,679,505,457,329,487,332,581,430,307,546,light,52,-33,-21,16,-14,-32,-24,Stunning/Intimidation/Ranged,stunning,intimidation,true,5b4mrf1i
+a0e81733-8371-4f66-be75-f1aa132ed9a3,9gliqj4q,high,38,16,64,296,90,85,693,289,26,40,"",13,13,0,0,0,0,0,--/--/--,"","",false,5cubijof
+2d5f91a0-3527-4409-8ef6-215e1dc3becf,b8mhk57a,high,662,609,566,389,625,533,687,515,418,622,light,40,50,15,70,85,85,15,--/Dizzy/Ranged,"",dizzy,true,5cvds5ne
+6070b1c5-18f2-4d6a-9634-d318b5972abc,121tivgq,high,393,95,145,331,113,67,786,509,75,95,"",28,5,0,-99,-70,-70,-6,--/Intimidation/--,"",intimidation,false,5l3lcvsr
+43feaa39-13ed-4231-acbf-d44cef6047df,tjca3o89,high,573,510,570,508,521,336,619,504,186,299,"",50,51,75,42,-65,-4,6,Knockdown/Dizzy/Ranged,knockdown,dizzy,true,5lnqeoo4
+de0fbc54-6517-4d98-be5c-b1c88dc17805,407q5bd2,high,557,436,386,297,101,47,760,522,26,137,"",59,-62,40,-34,-23,-88,-1,Crippling/Intimidation/--,crippling,intimidation,false,5pvp7b1u
+66d9115a-4990-4968-9307-d278ee5a5d94,t5p7kgfv,high,154,72,123,343,140,137,694,336,26,64,"",5,-29,5,-29,-29,-29,-29,Dizzy/--/Ranged,dizzy,"",true,602gfn33
+825d8205-3d89-4c63-94a6-301abe25ca92,k82getu9,very_high,384,101,186,344,122,70,791,517,76,98,"",28,5,5,-99,-68,-68,-5,--/Intimidation/--,"",intimidation,false,611kdta8
+829dfeb4-26ef-4c67-bec3-4fed36198ef0,r1jdtuhb,above_average,507,416,473,474,134,85,680,509,41,342,"",40,40,40,-10,-10,-64,-24,Strong poison/Strong disease/--,strong_poison,strong_disease,false,628mqu1m
+2183c387-670b-44d6-a96d-bed4bdefe93e,ctiggpgr,high,632,528,385,347,272,97,760,514,101,383,light,35,36,-2,-15,-2,-81,0,Blinding/Medium disease/--,blinding,medium_disease,false,62q5u5vg
+e35a38ff-f125-4df8-b82d-3aa684bfab9a,d47r28hd,average,4,1,16,276,104,51,515,281,23,12,"",1,0,2,2,2,-4,-4,--/--/--,"","",false,64a7inbs
+34ad50f9-f28f-4dec-b18e-ecbbca9a4769,39k9ghma,above_average,395,140,220,385,71,60,510,332,365,347,"",10,20,-64,33,33,33,-64,--/--/--,"","",false,64v2qh2v
+184416ed-8a54-4303-9794-6f5ba079405a,n3hbo346,high,268,212,130,338,99,55,696,337,33,358,"",20,20,-24,-29,-29,-29,-29,Strong poison/Strong disease/Ranged,strong_disease,strong_poison,true,66h9j346
+a402ce1b-e08c-44e9-b9f4-03983c59bd2c,gl9kjsm2,high,519,430,282,384,118,105,738,508,100,421,"",35,-35,-5,-35,-30,-45,-28,Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,67tomsu8
+80894691-8757-4482-ae20-38835743b0a8,hg28ev68,high,164,87,175,289,137,133,694,174,25,21,"",5,-52,5,-52,-52,-52,-52,Dizzy/--/Ranged,dizzy,"",true,6b979vqt
+7abf155a-70e4-43df-b0d7-d2160c7f41dd,mimktdn1,above_average,514,470,189,264,122,130,715,294,100,417,"",56,-54,-32,-10,-7,-71,-30,Stunning/Intimidation/--,stunning,intimidation,false,6f9lmdbu
+75a2a36c-3879-4e3a-92f8-79d34f5d447d,3jp1ttp5,high,582,525,473,330,529,281,578,508,264,303,light,58,23,69,60,64,-92,-9,Dizzy/Mild poison/Ranged,dizzy,mild_poison,true,6grbbtt4
+843bae91-7653-457e-9b8f-0c4552fab049,eo6t0d5o,high,54,31,59,343,65,77,576,515,26,33,"",4,0,0,-39,-39,-39,-37,Mild disease/--/--,mild_disease,"",false,6hlc2dh1
+e783149b-77f5-4b39-b8d3-a83d775f1244,81khfajq,high,551,463,257,348,17,15,759,512,101,334,"",51,-47,-16,-5,-4,-55,-15,Stunning/Intimidation/--,stunning,intimidation,false,6hucfarf
+3aa5e5da-ec2f-4a65-93e2-64a74bfaccbc,ioucfr65,high,615,455,609,514,618,476,341,318,206,338,"",34,55,-33,87,87,87,-33,--/Intimidation/--,"",intimidation,false,6j048r2a
+2ed6d0b2-c7e1-4fcc-bc1e-9305094bfb98,er9nq4et,high,549,443,3323,311,98,51,760,513,26,139,"",58,-64,-2,-35,-34,-99,40,Crippling/Intimidation/--,crippling,intimidation,false,6ko7k4ql
+2fe0955e-1d04-4a4f-879c-4aa7e3cfd1ea,q7n6q9pa,above_average,344,87,216,331,120,68,785,501,2,94,"",28,5,5,-99,-68,-68,-5,--/Intimidation/--,"",intimidation,false,6krvta9s
+6b712586-04ee-42e2-83ee-86f4a2891f13,qocj2h8k,high,499,205,481,475,470,295,622,338,226,251,"",50,23,25,41,41,-99,-99,Crippling/Intimidation/Ranged,crippling,intimidation,true,6mkbfhco
+ec8adc0d-1d02-4783-9c95-49eb25be5cfa,tho778jf,above_average,7,1,7,254,6,21,574,255,35,28,"",0,0,0,0,0,0,0,--/Crippling/--,"","",false,6mutomu3
+039e125e-8c57-4c8b-ab7f-1797cc2dc3ec,hhji6a80,high,386,98,200,335,117,69,790,514,78,97,"",28,5,5,-99,-69,-69,-55,--/Intimidation/--,"",intimidation,false,6nljrd9q
+71cbca01-4db0-45f3-8b21-cc524f5d2a1c,t1e1bjda,above_average,568,272,440,227,244,169,687,347,26,129,"",50,60,25,25,25,25,25,Stunning/Crippling/--,stunning,crippling,false,6qvncjh2
+88f2f96c-4e5e-4efb-8818-17e5ef99eb54,6h71keks,high,643,559,421,341,383,208,420,347,24,412,light,15,10,-1,16,16,-32,"",Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,6td1segp
+548398e4-8100-4a19-8cda-b1aa564bef84,7jnhjfpr,high,485,424,91,283,16,1,756,512,27,113,"",52,-39,-16,-2,-16,-55,-14,Dizzy/Strong disease/Ranged,dizzy,strong_disease,true,701gl911
+d22de79b-dfc3-4840-9e86-2acfc91c95d8,kaj8gq3t,high,609,443,332,304,142,141,768,522,27,199,"",59,-62,40,-34,-23,-88,-1,--/Intimidation/--,"",intimidation,false,71fd75ss
+341c1da0-cdd4-4512-8d15-c24c869ed67a,dnoc79f5,above_average,633,515,539,416,581,369,692,427,226,510,light,15,8,-40,30,30,30,-39,Dizzy/Strong disease/Ranged,dizzy,strong_disease,true,722pd8fo
+f0401e39-505c-4fd6-a93a-aadd595e9d64,chaofnj2,high,487,442,203,316,15,16,760,515,103,323,"",51,-6,-20,-3,-1,-13,-19,Stunning/Intimidation/--,stunning,intimidation,false,73mpkmr3
+a7a7e92f-d51f-48ca-b336-c23e9000316b,4t68q2pb,above_average,332,93,208,329,113,66,782,513,74,96,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,767fs25r
+a8501008-06eb-4f85-8eac-94898c0af854,5kq61f9k,above_average,573,427,355,433,133,137,757,520,25,45,"",55,-62,40,-9,-11,-63,11,--/Intimidation/--,"",intimidation,false,76l35fh3
+40a89f99-393d-4f3f-9ffd-953fab3adf66,m621m8ul,high,419,94,207,332,119,68,786,512,75,96,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,7703l8uk
+fd6ee918-998f-4878-9197-f88f124e4dcd,4dvicp9c,high,632,444,313,299,92,43,759,515,26,129,"",59,-63,40,-35,-25,-89,-3,Crippling/Intimidation/--,crippling,intimidation,false,77ql8ptu
+0dd5ad98-c365-4ea4-a4d4-fadcdaf94466,ovn4nsid,high,476,451,240,350,36,46,758,510,1,352,"",48,-57,-8,-23,-20,-68,-19,Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,78mq8sed
+8b0ff7bd-4963-469d-8d62-5bc630f70aed,kg19t749,high,181,42,67,336,25,38,688,337,26,143,"",0,-64,0,-64,-63,-63,-64,Dizzy/--/Ranged,dizzy,"",true,796eu7oq
+e502ff8b-0ae6-465a-98aa-6faf0c6b66b5,ap9b343e,high,649,621,596,422,554,388,633,511,281,534,light,42,49,37,45,83,83,37,--/Dizzy/Ranged,"",dizzy,true,7crg94bn
+1d102ee7-d8d0-412a-91c0-09f58ec6476c,niqh3vcn,above_average,370,95,216,333,117,68,780,510,72,93,"",28,5,0,-99,-70,-70,-6,Crippling/--/--,crippling,"",false,7ebgavgf
+374434f9-7869-45ec-aeba-a6691a51c12a,3c968q42,above_average,511,300,547,427,504,375,487,253,212,363,"",17,16,5,59,5,-11,-97,Stunning/Intimidation/--,stunning,intimidation,false,7ejfcq4v
+bb4d63b8-356c-43bb-bfd2-13ab146aa6fb,bgusn1g1,high,645,501,487,409,488,301,764,521,106,305,light,47,40,19,21,19,72,72,Blinding/Stunning/--,blinding,stunning,false,7gp5n10i
+911676bb-b6e8-4fe2-bb13-438ace1876ba,6jpb28m6,high,484,463,266,375,15,13,675,431,100,272,"",51,-53,-28,-10,-8,-68,-26,Stunning/Intimidation/--,stunning,intimidation,false,7hu8m9al
+5e2ad4a9-c3bb-492a-9b95-45339c564037,i8k3icef,above_average,46,9,34,331,44,45,661,334,121,49,"",13,2,7,0,-69,-69,-69,--/Intimidation/--,"",intimidation,false,7k58rcin
+fdc31738-8de6-4020-9614-18d23c77e146,mrc6d28i,high,644,551,558,290,402,325,764,518,102,418,light,60,-78,-17,-6,-5,-86,-16,Stunning/Intimidation/--,stunning,intimidation,false,7l9402sg
+f064c74b-a18f-4665-9c73-ca1a61bfaa02,rjifhctv,above_average,426,260,356,302,95,44,686,342,26,125,"",59,-63,25,-35,-25,-89,-3,Crippling/Dizzy/--,crippling,dizzy,false,7lnnscdt
+95fdd8ff-5ce4-4457-8af7-eb7fedcf6123,p8p9no5v,high,628,445,397,376,100,47,761,521,27,128,"",59,-63,40,-35,-25,-89,-3,Crippling/Intimidation/--,crippling,intimidation,false,7p5lkodh
+522c4178-dcfd-44aa-a55e-79b9d7e51348,u0jr2aed,high,526,319,438,331,627,394,555,511,302,401,"",60,60,29,20,-5,-70,-24,Knockdown/Crippling/Ranged,knockdown,crippling,true,7pg91aic
+f8f430e9-58f4-43cf-af4b-76ac7b3010c9,t7upb6ne,high,626,533,508,415,574,431,757,509,98,466,light,30,30,52,0,25,52,52,Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,7q9dg775
+32681283-ca2c-48a8-b9b2-5d1a47afacb5,jtk7vfj9,high,499,404,347,434,115,102,716,511,286,400,"",40,-26,-55,-20,-15,-55,-52,Stunning/Intimidation/Ranged,stunning,intimidation,true,847ncae9
+f1b8480c-0e6f-42b8-822e-395cb67e2b94,43traveg,above_average,566,441,347,302,94,45,540,515,24,126,"",59,-62,40,-34,-23,-99,-1,--/Intimidation/--,"",intimidation,false,85e26vu9
+5f320efa-268e-4563-8003-bea2bb492512,m9rkqnpj,above_average,179,41,63,332,14,10,691,340,24,129,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,85u8jndh
+2a8349a7-c1d8-4dcb-8394-6832a7222bef,qv6dpdhl,above_average,595,438,361,297,100,44,758,513,25,126,"",59,-63,40,-35,-25,-89,-3,--/Intimidation/--,"",intimidation,false,85v9cd9p
+c15af58d-cbc8-4c9e-8493-9d113dd3acf6,e4lssu7t,very_high,453,226,372,339,265,132,608,342,174,284,"",43,-1,20,91,66,45,16,Knockdown/Blinding/Ranged,knockdown,blinding,true,861hou77
+88ee7027-7450-4268-8e67-6ce090750f6e,1eo7fcdh,above_average,15,4,5,332,4,7,745,333,65,24,"",3,0,2,0,"","","",Stunning/--/--,stunning,"",false,889ljj1u
+2bbb1761-9973-4bae-894a-deb4c9361afc,c0lifum3,high,116,27,170,358,111,123,492,337,27,48,"",18,0,0,0,0,-44,-44,Dizzy/--/--,dizzy,"",false,89bqduic
+728ab4c9-ab29-4c5b-9060-6c0384f25a65,k5vqe9te,high,397,94,211,337,118,69,785,513,72,94,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,8e63pali
+d3b9cb54-486a-4ea6-bb68-235b04138ab3,r035du6v,high,414,93,203,335,123,70,784,508,73,94,"",28,5,5,-99,-68,-99,-5,Crippling/Intimidation/--,crippling,intimidation,false,8i428uuc
+6e46f021-a475-4561-a17c-d13bce2b1c9e,c53ggem6,average,2,2,10,240,2,5,659,255,54,1,"",0,0,0,0,0,0,0,--/--/--,"","",false,8mgpmeev
+a50ce958-25a6-4d5d-926c-a598a5a1b97c,d6cp95ct,above_average,237,39,114,262,180,100,682,506,112,315,"",-1,18,"",-46,-34,-44,8,Knockdown/--/Ranged,knockdown,"",true,8olil5k1
+73b7c07d-1974-4aa2-82c5-b5ebd9088673,nn8gacl4,above_average,451,346,98,333,135,98,752,507,26,244,"",42,-1,-54,-9,-54,-54,-49,Dizzy/Strong disease/Ranged,dizzy,strong_disease,true,8p4fnfdi
+59cf2ace-a1fb-47b6-89c0-c311b163df19,tv59oqf3,high,346,282,137,263,64,28,758,522,99,198,"",20,-1,-34,-1,-1,-34,-1,Knockdown/Intimidation/Ranged,knockdown,intimidation,true,8pe1l50p
+194acc95-69eb-4d65-a7c1-853081cc3e16,i5qap6bg,above_average,564,532,232,314,29,29,758,507,100,358,light,60,-22,-33,-32,-32,-59,-32,Stunning/Intimidation/Ranged,stunning,intimidation,true,8r8v4639
+3af3991f-b8e2-4e31-a051-a1bf67f7b0b8,kna85iol,high,22,9,65,340,93,84,698,339,100,94,"",8,8,0,0,0,0,0,--/Knockdown/--,"",knockdown,false,8r9hsi84
+73b723c1-443c-42ea-b1b4-32324127d5e4,6295lnu3,high,136,56,184,281,140,142,826,475,1,48,"",20,25,5,-56,-56,-55,-50,Stunning/Crippling/--,stunning,crippling,false,8roonn2r
+209b64e7-e341-4253-a91d-3d35e39bbcb8,0h0q8mcg,average,95,21,45,326,7,24,647,328,52,29,"",18,0,25,25,25,-39,-39,--/Intimidation/--,"",intimidation,false,91i98m49
+2f2bb2c9-70b7-435a-a58e-555323fd3fb7,i84eei0o,high,261,179,260,384,233,202,695,340,26,180,"",29,29,5,29,5,5,8,Dizzy/Stunning/Ranged,dizzy,stunning,true,92epbi4d
+5d365b02-8962-4c55-9092-663284972256,jh4lkuoq,high,630,465,438,337,529,338,757,514,102,436,"",48,41,27,-5,27,72,72,Blinding/Stunning/Ranged,blinding,stunning,true,94e0vugf
+6c55c5d6-e474-468c-bc3b-a33f4ccfb024,1tlktrc3,high,612,464,536,422,589,431,694,339,106,423,"",48,41,27,-5,27,72,72,Blinding/Stunning/Ranged,blinding,stunning,true,9615rr0p
+5e27d79d-aace-4c30-ad8a-cf95744cc55c,jspq83vn,above_average,555,441,337,303,77,45,541,522,26,129,"",59,-62,40,-34,-23,-88,-1,Crippling/Dizzy/--,crippling,dizzy,false,97qff336
+343f62d7-834e-418e-95a9-57e4e12d9fbf,ce00apsb,above_average,708,574,578,488,349,300,514,344,101,528,light,60,-87,5,-3,-5,-93,-3,--/Dizzy/Ranged,"",dizzy,true,9avaio04
+e6c18230-d68a-4307-9e34-aef20a255fe3,vk16gh5v,high,701,616,591,503,587,446,554,511,465,575,light,37,53,23,56,76,69,20,--/Dizzy/Ranged,"",dizzy,true,9ftbnh91
+920340c1-d4e2-4eae-bc34-02fbb40ffbd6,obig33vp,high,487,378,416,311,115,60,698,353,26,391,"",60,-74,-20,-7,-6,-84,-19,--/Medium disease/--,"",medium_disease,false,9kfis0vn
+a9d3f4c4-3d6b-4a96-8009-c2ca5abc89b0,4aghbtug,high,575,445,389,304,33,38,542,517,25,126,"",59,-62,40,-34,-23,-89,-1,Crippling/--/--,crippling,"",false,a3td9tam
+89de50d3-9c95-4311-93d2-39b9a29b03f5,bmav9hib,high,560,459,118,279,17,14,759,510,26,145,"",51,-5,-10,-1,-1,-22,-22,Stunning/--/--,stunning,"",false,a9isngin
+4ad872c5-7089-4628-b9ac-675f7fe06b01,637hvvk7,above_average,219,40,69,331,15,18,686,329,47,128,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,ahv8bvor
+f47f2b3a-eeeb-434a-8caa-db38f621e7e7,jaq75nso,high,546,441,349,298,90,42,543,522,26,128,"",59,-62,40,-34,-23,-88,-1,Crippling/Intimidation/--,crippling,intimidation,false,ak2k8ng4
+3499846d-29f5-463f-83a7-9530da0a616c,gm81nbmi,high,612,547,449,327,230,174,761,517,27,335,light,55,37,-52,70,-23,39,74,--/Strong poison/Ranged,"",strong_poison,true,amekmbm1
+005febb1-3803-4642-8250-eb6e4c2d0bf9,kdcgdht7,above_average,130,26,75,335,70,34,691,334,25,61,"",0,-44,0,-44,-44,-44,-44,Dizzy/--/--,dizzy,"",false,aobcmg94
+cec4538a-04c4-47b9-8521-93f40cdfd46e,sho0b4pk,above_average,523,406,162,333,108,99,712,510,290,497,"",40,-6,-69,-10,-5,-30,-66,Stunning/Intimidation/Ranged,stunning,intimidation,true,at8d24tc
+101bbef8-f208-4c9e-a5e8-a5cf83cf4faf,9b99uil9,above_average,566,282,491,467,383,336,687,60,25,46,"",50,60,25,25,25,25,25,Stunning/Crippling/--,stunning,crippling,false,atsfiid3
+928bfd9c-73bf-4c95-a073-dce5488bfdfe,ilvktmfv,high,529,405,171,334,107,33,718,512,127,322,"",40,-6,-69,-10,-5,-30,-66,--/Intimidation/Ranged,"",intimidation,true,b14a4i8b
+cb4e32d5-1a9f-4389-96bc-4b69bc3f0d19,7ob039ah,high,311,136,272,333,129,77,715,341,47,135,"",44,"",10,-99,-68,-68,-5,--/Dizzy/--,"",dizzy,false,b3np596f
+562c178d-9146-4d33-afb3-f6e455a8b28c,sfjejmfd,above_average,218,101,175,374,177,102,618,332,113,68,"",10,10,7,10,27,27,-44,Dizzy/--/--,dizzy,"",false,b8a0cl31
+8b080c23-0ae1-4122-8a19-6802b54a7ebe,6hpsmmeg,average,1,1,1,251,1,10,1000,252,9,5,"",0,0,0,0,0,0,0,Crippling/Medium poison/--,"","",false,b9a7mmi9
+0b8a2d46-3b87-4a1d-8a65-fbaca742d9f8,8rqgaej1,above_average,544,262,553,510,514,343,688,333,25,281,"",50,60,25,25,25,25,25,Stunning/Crippling/--,stunning,crippling,false,bdid1j94
+d01a6e25-36c7-4d10-9245-6cef894baa06,arnq47rm,high,462,434,294,338,29,28,766,505,106,232,"",60,-8,-35,-35,-35,-48,-35,Stunning/Intimidation/Ranged,stunning,intimidation,true,behpe7j5
+8f13675e-e6b5-4f15-be30-4e9068292bcf,ihu3gg0t,above_average,60,42,76,372,43,119,589,338,73,47,"",0,6,-64,0,-64,3,"",Mild disease/Intimidation/Ranged,mild_disease,intimidation,true,bf9gt6fh
+5f1ab653-d3e2-483a-a3e8-aaacb806fe11,4slndd9q,high,567,445,415,305,96,45,764,523,27,137,"",59,-62,40,-34,-24,-88,-19,Crippling/Intimidation/--,crippling,intimidation,false,bhm6l6s5
+e161a6ba-f16b-46a2-9ae7-cfdeb3c82db6,a7gkqvun,above_average,7,2,7,337,32,104,669,335,25,32,"",0,0,6,0,0,0,0,Intimidation/Crippling/--,intimidation,crippling,false,bhqn6sa2
+8c2a9eb5-3581-44b2-b3c2-f9654f3679b6,vi99plrg,average,69,81,1,252,102,43,683,230,41,19,"",5,5,6,5,19,19,-30,--/Intimidation/--,"",intimidation,false,bjr0qlr9
+4a6089f9-286c-4618-97e8-48e07d88a418,pdpfv93f,above_average,6,1,7,255,5,19,570,250,36,27,"",0,0,0,0,0,0,0,--/Crippling/--,"","",false,bmr7ome1
+3f6d2170-3bf2-4656-b336-9f2cdd73d130,6lbckaf3,high,671,576,686,516,672,617,514,514,381,462,light,35,60,5,85,85,85,5,Knockdown/--/--,knockdown,"",false,bp2ns93n
+91cd922a-5a62-458e-9f65-aa397a11c79b,io95cn7j,high,512,445,108,277,17,17,758,512,100,364,"",51,-6,-20,-3,-1,-13,-19,Stunning/Intimidation/--,stunning,intimidation,false,bpfsb3i5
+07019b2d-617c-4a99-a725-dad2a5008310,56okbn5e,very_high,203,43,67,337,16,12,695,334,25,129,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/Ranged,dizzy,"",true,bqk8jnd8
+14b830b5-1ade-42a7-8352-b32d090a0035,r87msnb4,above_average,105,406,170,335,272,251,713,507,187,270,"",41,-1,-29,-10,-29,-54,-27,Crippling/Intimidation/Ranged,crippling,intimidation,true,branrnji
+d951b8d3-bd7a-4e29-b7f9-281da1be5ac1,dldko43r,above_average,510,442,376,309,88,74,607,518,25,271,"",60,-33,-58,-58,-58,-99,-58,--/Intimidation/Ranged,"",intimidation,true,bu1pu47d
+0b64b4b1-6271-4c3e-b14d-621cc90f286d,mlkg2v8u,high,653,529,521,336,350,242,650,499,330,467,light,53,6,42,19,48,-19,20,Dizzy/Crippling/--,dizzy,crippling,false,bvda7vsi
+b76bfc31-309b-44e6-9f6f-e9f05b1248d5,4f99jnbj,high,517,410,155,334,169,170,714,512,291,461,"",40,-6,-69,-10,-5,-30,-66,Stunning/Intimidation/--,stunning,intimidation,false,c02pdnrm
+4b75bb28-9c2d-4ee8-a7bd-8b08c8f00169,gjofca6o,high,290,99,225,336,115,1,789,515,75,29,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,c0cnraai
+5d1e9791-f9e3-43b5-8825-6a9f952013e4,rhsa5i07,high,584,491,121,281,14,10,758,512,102,265,"",56,-42,-18,-2,-1,-48,-17,Stunning/Intimidation/--,stunning,intimidation,false,c2h52ioh
+b7e5031b-6a08-4d6f-bb99-ecf05c4595a5,g2nofbpk,high,408,116,296,386,120,71,773,513,48,97,"",28,16,-40,-60,-14,-30,-8,Dizzy/Intimidation/--,dizzy,intimidation,false,c4l02bpl
+95cc5b3f-0cdf-44e6-8226-5d0aea5bb2ef,ku91ska3,high,134,41,113,312,92,70,1000,349,25,114,"",26,33,0,-33,-33,-85,-78,Stunning/Crippling/Ranged,stunning,crippling,true,c7lgvk6t
+7968f4bf-3c9c-4fd5-a411-fc5aa0752c91,21rjqq8a,high,540,509,179,179,227,68,691,173,25,140,light,48,41,48,32,40,-86,0,Dizzy/Blinding/Ranged,dizzy,blinding,true,c8af851d
+98eed563-6fe2-4f50-a7e7-7a2fdf8f53b2,drq6fvcp,high,560,442,387,306,102,45,546,520,25,130,"",59,-62,40,-34,-23,-88,-1,Crippling/Intimidation/--,crippling,intimidation,false,ccf41vkj
+73da1f25-4f82-4254-a7b0-562236e7e5a6,o84putqr,high,485,423,421,320,120,74,764,512,31,135,"",59,-28,40,-29,-60,-89,-41,--/Intimidation/--,"",intimidation,false,cdujlsnu
+873d6b55-1a7b-4945-a2bc-01de097f35b6,hmqk1lf9,average,3,2,3,325,8,26,591,327,39,16,"",0,0,1,0,0,0,0,--/--/--,"","",false,cf3f2ljl
+7ca243c1-e04f-4562-b6b5-01fb0e2b5bd5,8reehgl4,high,220,43,69,334,15,12,695,338,25,126,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,cfs6pgtd
+b162ddbd-d0d8-4ffd-9571-5bc5d8a7f24e,rfbo4fi0,high,714,636,531,317,609,491,567,521,285,630,light,41,48,25,51,83,83,25,Stunning/Intimidation/Ranged,stunning,intimidation,true,cgknrfav
+ba5d5777-9bf2-4659-aad5-7bc7f9055a61,qvhlrubf,high,451,217,337,336,266,128,609,335,342,448,"",43,-22,20,91,66,45,16,Knockdown/--/Ranged,knockdown,"",true,cj1o2v3n
+9237a972-99da-4123-b9a8-587bd1bb4324,1dr7fpkh,average,402,72,361,325,376,154,326,327,378,222,"",45,5,60,60,60,-99,-99,Crippling/Intimidation/--,crippling,intimidation,false,ctpoc9k2
+1f2ca990-d895-4f73-a422-58603c027a26,b71e641o,high,514,413,259,386,184,172,716,510,296,408,"",40,-6,-69,-10,-5,-30,-66,Stunning/Intimidation/Ranged,stunning,intimidation,true,d0a2o7dt
+0aff612b-cfcd-46a3-8879-2e0ed93266ba,oat3dau1,high,704,695,704,521,699,692,386,302,313,710,"",56,57,57,51,8,16,6,Blinding/Stunning/--,blinding,stunning,false,d5j7caq6
+3a9b82c7-e34d-4380-ba47-828aebd15cbe,52532qhg,above_average,57,3,52,253,56,36,574,259,76,46,"",20,0,10,0,-99,-99,-99,--/Stunning/--,"","",false,d7eno4sq
+6587ada4-4142-4ecb-be65-50b6611d77e0,6macouvi,high,447,226,368,336,298,128,710,511,172,282,"",43,-1,20,91,66,45,16,Knockdown/--/Ranged,knockdown,"",true,d7qrquna
+247ab3e9-6a92-4c61-812d-9fd6b9b09031,lmho8b59,above_average,560,435,391,301,248,151,761,510,23,125,"",59,-62,40,-34,-23,-88,-1,--/Dizzy/--,"",dizzy,false,d8i9lk5v
+f29c6f24-94e3-4338-8021-d06b5b1a8dab,l6unkieo,high,487,460,217,321,16,13,760,511,104,345,"",51,-42,-21,-4,-2,-49,-21,Stunning/Intimidation/--,stunning,intimidation,false,d9fabm4h
+cc4c0804-5e6e-4fba-b5be-18e31d1c930e,eugjrslp,average,257,41,272,254,230,98,272,254,9,149,"",0,30,0,-99,30,-99,0,Stunning/--/--,stunning,"",false,dacl3328
+08179f4f-7637-4ecf-9659-d3abd4e3f78e,la3rhm2d,average,30,4,38,260,103,39,845,259,74,24,"",10,10,0,-49,3,-39,-9,--/--/--,"","",false,dc3bsm2d
+f91f81bf-e4ae-45be-ad9d-96cab696be73,4osbtoc2,above_average,660,542,523,507,263,235,715,507,289,452,light,59,-55,-30,6,10,-55,-28,Stunning/Intimidation/--,stunning,intimidation,false,dcfolokr
+427951b7-1906-41ed-93a1-f914c2a7c4c4,dj3rq0s9,high,580,478,364,333,360,151,813,511,52,370,"",50,-23,45,-4,-9,-44,-22,Knockdown/Strong poison/--,knockdown,strong_poison,false,dcnqk0gj
+71559dae-1dc4-4839-bd41-c99a6d64fc0b,tkn5vvoh,high,410,94,199,337,118,67,785,511,75,95,"",28,5,0,-99,-70,-70,-6,Crippling/Intimidation/--,crippling,intimidation,false,dd64cv09
+d15b24e2-211e-43b9-91a0-42601da53cfd,vhmeamot,above_average,530,457,98,275,16,15,760,510,98,371,"",51,-42,-21,-4,-2,-49,-21,Stunning/Intimidation/Ranged,stunning,intimidation,true,dd7b3m45
+d416fe66-38f7-4bfa-b23c-f28920496b25,m15p59j5,above_average,13,2,7,257,5,19,572,258,9,33,"",6,6,0,0,0,0,0,--/--/--,"","",false,ddsec97p
+b4b9b444-7045-4c99-b5fb-472ef025d98e,8s611ms5,above_average,505,458,206,315,16,15,760,515,99,339,"",51,-42,-21,-4,-2,-49,-21,Stunning/Intimidation/--,stunning,intimidation,false,de8b5mk2
+9dd170fb-9a1b-428d-9b4a-e476f1d5fd62,jn8jn5dc,above_average,565,430,319,264,450,218,495,507,289,421,"",53,43,53,31,31,-99,-22,Dizzy/Blinding/--,dizzy,blinding,false,dede44tu
+78146307-5bee-4bd8-b231-cef065049fee,5u8giv5m,high,389,233,268,361,151,82,762,483,106,202,"",42,52,-8,-34,-11,-11,-1,Stunning/Intimidation/--,stunning,intimidation,false,dfi1gvdb
+b405fdf4-fcf6-4f2a-8683-2219d545cf85,nbfjgqh0,high,635,506,435,325,491,273,593,324,118,473,light,60,-40,14,-20,10,-40,11,Stunning/Intimidation/--,stunning,intimidation,false,dfr7jh02
+b52602a6-953f-4ff2-b6c2-aba6c2122482,v5283rkm,high,567,504,332,294,344,178,630,332,127,281,light,49,41,48,33,40,-90,0,Dizzy/Blinding/--,dizzy,blinding,false,di2ccqkm
+0b941d0f-ffa2-4b7d-ab32-c13ec3fee12b,ht82vvir,above_average,7,2,6,336,5,28,670,338,97,122,"",0,0,6,0,0,0,0,Intimidation/Crippling/--,intimidation,crippling,false,dj5r2sqd
+4cb384a5-eee9-448a-877f-df6da018dcf0,mbgvjk5s,high,280,231,227,275,191,141,696,241,103,415,"",19,17,12,"",-5,-75,-20,Stunning/Intimidation/Ranged,stunning,intimidation,true,dln8ukpf
+85e4816d-903d-4722-a6ba-4cff7b46fb56,c3qfuo8a,above_average,596,507,380,294,366,193,460,338,185,316,light,48,41,52,29,46,-56,11,Dizzy/Blinding/Ranged,dizzy,blinding,true,dodd8r81
+d6000e01-19c1-4b68-935d-43dd1a5e04ed,48sqcvq0,high,389,98,181,334,122,1,787,509,75,95,"",28,5,5,-99,-68,-99,-5,Crippling/Intimidation/--,crippling,intimidation,false,dq388v2f
+f7b6e3ac-3860-4e25-8069-491d5bcb29d6,5qvcnhsd,above_average,116,17,169,374,91,138,755,509,24,75,"",0,0,0,0,0,0,0,Stunning/--/Ranged,stunning,"",true,drvslhsd
+5f635c53-2d72-4d90-b5a3-da105eec225c,p4lb17p2,high,511,408,164,338,105,103,618,271,294,406,"",40,-25,-54,-19,-14,-54,-51,Stunning/Intimidation/Ranged,stunning,intimidation,true,dta2275t
+e06949f9-7b1b-4e65-b9de-cf71ebe7ba2a,l5fvelhh,above_average,338,90,213,337,116,66,784,507,74,93,"",28,5,5,-99,-68,-68,-5,--/Intimidation/--,"",intimidation,false,dvveblt9
+0d620741-acb9-42dc-8e4b-e0884c966130,uvgpg2g6,high,592,446,402,303,98,45,767,517,27,128,"",59,-62,40,-34,-11,-76,-19,--/Dizzy/--,"",dizzy,false,e0dofdgr
+c0d78bff-3137-4754-aeb7-d7c61f1fad92,u3rghl5c,high,585,446,308,214,359,147,695,295,107,232,"",22,16,9,-16,-16,-55,-29,Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,e0egmmd6
+5ac755df-ba8f-4468-9ad2-fc5297fa8a8f,0f02ndch,high,377,99,198,340,115,67,787,509,75,98,"",5,5,0,-99,-70,-70,-6,Crippling/Intimidation/--,crippling,intimidation,false,e27uddsi
+7a1fe559-1053-4c15-adf6-0052333b0e74,6ge8ttcq,high,615,530,503,502,269,210,951,343,1,461,light,60,-68,-15,-7,-5,-77,-10,Stunning/Intimidation/--,stunning,intimidation,false,e2jpptk4
+f6138f40-fe36-40f0-a1a8-8f0ca663185c,vhemdr2d,high,543,397,583,510,521,379,404,403,299,343,"",20,47,-32,79,79,79,-32,Knockdown/--/--,knockdown,"",false,e3rk8rq7
+a065543d-ac83-43fe-9be5-6b2a224db95b,68culal7,high,391,92,219,340,109,69,785,514,75,95,"",28,5,5,-99,-68,-68,-5,--/Intimidation/--,"",intimidation,false,e8qf5ahs
+be805a71-fb80-4ee3-9957-3f8cfb3fe29a,im6iqroa,high,629,502,504,371,470,348,731,402,101,369,light,46,40,30,12,30,72,72,Blinding/Stunning/Ranged,blinding,stunning,true,e9tb5r0n
+8735f9e3-2e76-44e8-b4c8-be62d4dcc3f8,4vmtko08,high,205,44,67,338,15,12,692,337,27,131,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,eap9epkf
+cd85a113-f128-4cca-8f5f-e7d8e17e9b43,ih1gpvdq,high,659,526,535,419,514,319,588,520,371,456,light,60,0,48,76,63,-66,15,Dizzy/Blinding/Ranged,dizzy,blinding,true,ebs8svhk
+5567d495-f7c1-4504-bd79-0dc1a2f147ef,vr25vj5c,high,574,267,485,112,349,175,760,514,27,281,"",50,60,25,25,25,25,25,Stunning/Crippling/--,stunning,crippling,false,ecs7gjd3
+9d409214-c8ce-45de-a04d-22db6dae7442,n55bvqdk,above_average,479,431,243,315,27,29,762,512,100,281,"",60,-62,-20,-19,-19,-84,-19,Stunning/Intimidation/Ranged,stunning,intimidation,true,efbpqr1j
+dcfea413-dc80-4e85-88e2-9ed6ecce3801,gc2phcjr,above_average,503,456,472,271,250,187,758,435,100,429,"",60,-72,-1,-1,-16,-94,-1,Stunning/Intimidation/--,stunning,intimidation,false,efi4mcj3
+8986ee6f-638c-47fd-9cf3-0298f3f24ed4,9r4os34m,high,684,606,578,399,429,309,757,516,103,377,light,60,-91,-6,1,-3,-91,-1,Stunning/Intimidation/--,stunning,intimidation,false,em8mm30g
+aebe0f77-794d-4565-b634-0a734c82dacc,bv3ba45h,very_high,635,542,549,426,628,469,761,518,104,420,light,46,-17,37,41,58,37,58,--/--/Ranged,"","",true,emhu8r6m
+fb001fe1-13fc-4b87-8692-0cd9dac7c0ec,aeda8p11,high,593,445,367,302,107,46,763,520,26,128,"",59,-63,40,"","",-64,"",--/Intimidation/--,"",intimidation,false,env3apdo
+5f7ed66c-ee88-4fb5-84db-1243336a937f,v0g99l6s,high,661,523,535,401,546,388,653,456,140,400,light,43,45,33,25,59,40,0,Stunning/Intimidation/--,stunning,intimidation,false,ermaelaf
+839f04bf-9a20-47b0-a860-4b57c49c14a0,p8csqe2,high,582,443,395,307,89,24,544,529,28,101,"",59,-62,40,-34,-23,-88,-1,Crippling/Intimidation/--,crippling,intimidation,false,f11gpaq4
+463fb679-75c9-4eb1-87b0-5ed2e8840598,9apcdipj,above_average,236,42,73,332,15,11,691,337,24,125,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,f191r12n
+1ad5d5f1-f09d-4e3d-8735-138793db1d21,v06abo9o,high,338,92,193,332,91,65,650,510,110,28,"",28,6,1,-99,-63,-63,-5,--/Intimidation/Ranged,"",intimidation,true,f1eb8o9c
+afa93486-6b39-4efd-a36b-cc9fae4c3147,ftg4kv5q,above_average,554,350,277,321,156,94,715,466,78,298,"",55,60,-2,12,-3,-3,-67,Knockdown/Dizzy/--,knockdown,dizzy,false,f635ivp3
+5c303efd-797d-447c-92b4-f04ce8ec01ae,56vaha7f,above_average,558,434,324,298,101,44,759,521,25,133,"",59,-26,40,-69,-48,-78,-38,--/Intimidation/--,"",intimidation,false,fbeurnr0
+54186c65-c326-46d5-b887-727c50086d22,akv1i1uq,high,587,500,492,416,496,342,532,426,177,397,light,48,-34,44,41,38,-33,11,Dizzy/Stunning/Ranged,dizzy,stunning,true,fbkac2uf
+c841316c-6f04-44ef-b182-e85ce30b0196,hr9q1it5,high,244,220,196,235,181,157,692,114,104,388,"",19,15,10,"",-5,-72,-21,Stunning/Intimidation/Ranged,stunning,intimidation,true,feu7ai5u
+d802484e-c7e4-4161-99b0-6181bf48207f,tcl53oap,high,503,246,511,484,463,244,691,334,104,393,"",40,-11,20,-11,-11,-99,-99,Dizzy/Mild poison/Ranged,dizzy,mild_poison,true,ffi0k8v6
+42da2b1c-d629-48e8-bcea-97edbb88e909,e5otfqj8,above_average,379,92,211,331,112,66,782,509,206,218,"",28,5,5,-99,-68,-68,-5,--/Intimidation/--,"",intimidation,false,fg8vlqv0
+821e2fac-3d1c-40cb-ac56-57a43eddd709,upisjp0f,high,264,74,274,387,300,136,337,337,52,104,"",17,20,-25,-46,-94,-99,-33,Intimidation/--/Ranged,intimidation,"",true,fgpu0pga
+5d6e48ce-5431-4fd5-bfb3-61fcc2aa44c0,e9pnu46l,high,363,95,186,334,128,82,847,507,93,105,"",26,1,-5,-99,-95,-99,5,Crippling/Intimidation/Ranged,crippling,intimidation,true,fiqlo4qk
+64044280-811c-47c2-9171-8ba01f41cb18,c9nda5l3,above_average,523,349,379,333,416,257,566,496,462,478,"",46,42,37,-6,-6,-99,-44,Dizzy/Blinding/--,dizzy,blinding,false,fjaau5dt
+9c234d05-75cf-4401-8071-2bdf38abade5,lsfn0opc,high,408,93,209,337,113,68,785,509,73,94,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,flm2jq4u
+5d4a8261-9c61-4a18-9b7b-28c822687763,ujjp1u22,high,660,611,529,417,559,340,758,511,101,377,light,50,40,0,33,0,74,74,--/--/Ranged,"","",true,flrrcu26
+a938da37-d6d5-4d6a-bbda-71cf7944b1a9,fd08sbkf,high,454,219,165,335,35,39,763,342,104,233,"",-10,55,-60,-54,63,-54,-73,Stunning/Intimidation/Ranged,stunning,intimidation,true,fnn9ob8k
+1441ca8f-5034-4cad-a7cb-7f48bfe9722a,8t7l9clu,above_average,4,2,5,334,17,16,830,332,39,15,"",0,0,0,0,-4,-4,-4,--/--/--,"","",false,fo3qjj9b
+6dca43eb-ef02-4ace-bfeb-439c45c6f607,fefamv1t,above_average,571,372,465,396,430,263,945,522,151,427,"",48,-49,19,-14,-18,-55,40,--/Dizzy/--,"",dizzy,false,focaavts
+220819cc-a9a2-4893-b348-eac0e08011ed,7vb0shel,high,197,49,178,273,137,69,693,171,26,186,"",0,20,-64,33,33,33,-64,--/--/--,"","",false,fp8g0hqk
+347a5421-ea05-4f48-8ff1-82be548e3123,v9lj8p4a,above_average,168,82,93,330,63,123,645,331,40,66,"",10,16,5,5,5,-39,5,Stunning/--/--,stunning,"",false,fq6ifpsj
+14a8116d-ca1c-450b-8b74-ca4397fb043f,ilcckiec,high,591,440,398,304,95,46,760,522,26,125,"",59,-62,40,-34,-11,-76,-19,--/Intimidation/--,"",intimidation,false,fqdnbt6v
+af1254f3-9fb4-4bd5-a9f6-26e80a8a8963,5g13ih5o,above_average,600,543,304,300,105,55,757,485,99,466,light,60,-69,-25,-24,-22,-95,-24,Stunning/Intimidation/Ranged,stunning,intimidation,true,fqhgm6nl
+096fa109-1d92-415d-904b-2e0bef064594,eq0or3ou,above_average,194,41,60,333,17,12,694,339,24,127,"",0,-64,0,-64,-64,-64,-64,--/--/--,"","",false,fr2qp3ov
+4e8f4de7-2233-4d4d-9d26-f1baece5b475,k3v9d8h1,above_average,25,7,72,280,8,16,585,277,39,21,"",11,0,15,15,15,-24,-24,Crippling/Intimidation/--,crippling,intimidation,false,frfksnne
+63afcfca-4006-4c5b-92ca-3c3c0d6f8be6,6pm47hml,above_average,506,378,340,434,107,95,715,512,100,325,"",39,-3,-29,-14,-29,-45,-7,Strong poison/Stunning/Ranged,strong_poison,stunning,true,fspndh62
+a3326fef-4e04-4032-b890-94da64fa375e,59fjkc1h,above_average,397,262,347,301,101,42,686,342,25,124,"",59,-63,25,-35,-25,-89,-3,--/Intimidation/--,"",intimidation,false,fsv7uc9p
+8a5b8c80-5c10-4287-baef-42173ca8c6bf,i4fpgiug,high,490,405,172,334,111,100,717,508,292,500,"",40,-7,-70,-11,-6,-31,-67,Stunning/Intimidation/Ranged,stunning,intimidation,true,fuc2li21
+5bb79300-2f95-4179-95de-140283f576d4,l4m1mgg1,high,571,497,459,338,446,188,693,340,152,405,"",11,-34,17,13,10,13,19,Dizzy/Strong poison/Ranged,dizzy,strong_poison,true,fuql3lhe
+8bf225f6-887a-4d43-9a64-0384ef634093,umd14vo2,high,606,1,385,303,104,45,545,517,27,128,"",59,-62,0,-34,-23,-88,-1,--/Intimidation/--,"",intimidation,false,fv027vck
+44bba81d-0a5f-415e-9220-8c0dab990d01,3mfh4u41,above_average,661,504,592,428,600,452,680,486,146,486,light,44,46,23,30,54,27,-17,Stunning/Intimidation/--,stunning,intimidation,false,fvf96u01
+790293b1-20e4-4989-b2bf-0589ff26827c,c2l0bta2,high,564,440,360,303,98,46,544,522,26,131,"",59,-62,40,-34,-23,-88,-1,Crippling/Intimidation/--,crippling,intimidation,false,g2loata2
+5e2dec6c-5a9b-4343-82aa-5eca7970b79c,r280fuve,above_average,595,563,557,327,514,443,745,508,193,380,light,53,11,-49,56,-24,36,30,Strong poison/Intimidation/--,strong_poison,intimidation,false,g37ndufp
+236a1173-2467-41bb-9396-4333c42caf7b,m5md1815,average,46,1,12,280,51,42,451,278,37,25,"",1,0,2,2,2,-4,-4,--/Stunning/--,"",stunning,false,g4cajnbf
+c6386c2c-60a3-48e6-a1ce-7171f3e6fc58,v5s0edle,above_average,600,440,383,302,86,43,760,516,26,136,"",59,-62,40,-34,-22,-86,-19,Crippling/Dizzy/--,crippling,dizzy,false,g6bu8d55
+57382d27-50bb-4920-a414-4360864e78cb,rkbat9fm,average,3,2,3,329,2,18,681,330,24,11,"",0,0,0,0,0,0,0,--/--/--,"","",false,g6rhpm61
+0a983113-dc28-4c80-9a9d-5643b2f4481f,4fmjgvd9,high,443,253,251,326,84,33,766,499,105,197,"",45,57,-4,-20,-6,-6,-1,Stunning/Intimidation/--,stunning,intimidation,false,gatrbvpc
+6f09dd5e-814e-45df-b3c1-c74bf17c4c4e,0j5mfhvd,high,623,527,407,425,166,177,803,458,27,215,light,60,-78,-12,-11,-11,-91,-14,Stunning/Intimidation/Ranged,stunning,intimidation,true,gfqn6h3i
+06c90eaf-5f0b-472a-bf20-925e7c287cc4,9ca62vlv,high,623,524,490,418,499,346,762,515,101,401,light,56,-38,21,"",17,-37,32,Stunning/Dizzy/Ranged,stunning,dizzy,true,gsek3vtt
+9962115c-ebf6-4c6c-839c-a755c7e7ae7c,32rt0vvb,average,23,3,35,258,11,19,545,258,34,40,"",8,3,0,10,15,-54,-54,Stunning/--/--,"","",false,h21o1vvm
+98b0e076-4bbe-456b-8983-ee650fc080c6,ahap5pr5,above_average,491,451,521,478,456,294,681,330,96,404,"",25,36,-90,60,13,-41,63,Stunning/Strong poison/--,stunning,strong_poison,false,h43fep31
+e9c1396a-b515-4587-8097-c01e120b46ac,nd9te4j6,above_average,217,42,177,256,190,60,509,256,80,113,"",11,0,15,15,-59,"",-99,--/Stunning/--,"","",false,h583d98q
+eebdb397-5ceb-4d44-84a1-30f82010177b,16o47sdl,high,591,454,459,343,468,241,629,485,161,399,"",48,10,23,3,21,-73,-17,Dizzy/Mild poison/--,dizzy,mild_poison,false,h854qtlr
+47f8fd08-24c3-4f72-bf04-c72ee6316a09,dp2ijkqm,above_average,252,163,329,395,317,225,755,505,114,199,"",32,21,-15,-94,-4,-41,15,Dizzy/Blinding/--,dizzy,blinding,false,h96biki4
+c0de2f56-1a42-4d43-937f-6a734f0e4161,7hifu540,above_average,595,439,342,302,89,45,542,521,26,137,"",59,-62,40,-34,-23,-88,-1,Crippling/--/--,crippling,"",false,h993v5od
+e1d18639-13e5-4468-a3ec-acddabd4e5f7,mocu4917,high,404,97,219,335,110,71,788,517,75,99,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,hauh0ahu
+bf32fa33-c91f-46b0-ab7e-3312537dfd12,uoalb5no,average,622,540,484,469,393,249,756,512,25,262,light,36,38,-1,-8,-1,-81,0,Blinding/Medium disease/--,blinding,medium_disease,false,hc6a35ve
+7e473e94-e89b-4b4f-9b15-4d2c8ee10d4e,7s91jbek,high,576,322,413,337,456,213,697,514,191,278,"",36,30,-64,30,-4,-64,-64,Blinding/Stunning/Ranged,blinding,stunning,true,hc9cibm0
+a5c9af52-783c-4d63-8190-48d7319740f7,u3s6pu1s,above_average,482,432,325,334,187,124,625,409,38,262,"",40,40,40,-3,-3,-58,-7,Strong poison/Strong disease/--,strong_poison,strong_disease,false,hm0oju9i
+259b41bc-eb74-483c-817c-606443b7fdca,79ngmqtc,high,602,445,410,316,290,111,763,521,26,149,"",48,-68,40,-4,-4,-69,-4,--/Intimidation/Ranged,"",intimidation,true,hq6thq5k
+662b293c-fdc5-4b4f-8103-4854cf982dbe,59qtrh7i,above_average,611,437,327,299,96,43,538,514,24,128,"",59,-63,40,-35,-25,-89,-3,Crippling/Dizzy/--,crippling,dizzy,false,hr9luhvr
+ccfd63c0-20a8-4671-acbf-d3c417a37ea1,9nqiavjq,high,599,405,356,335,254,126,594,333,275,459,"",43,-22,40,91,66,45,16,Knockdown/Stunning/--,knockdown,stunning,false,hvr3bv7a
+e6764a51-5e65-4feb-b429-bf77c6ed3cb7,65auent1,high,294,87,324,423,363,281,689,201,102,336,"",37,19,5,28,25,-69,25,Strong poison/Blinding/Ranged,strong_poison,blinding,true,i1dnnm1i
+6bbc3cbf-6f8d-4022-bb87-0612b2bfdfc2,cf0aqld8,above_average,342,164,355,397,331,221,616,334,209,345,"",17,11,15,1,1,-59,1,Dizzy/Blinding/Ranged,dizzy,blinding,true,i96n7l9n
+5a94cc00-8384-4ab9-94c4-fed85bdfa9f9,s6714brq,high,701,605,534,425,593,484,719,518,312,611,light,35,49,28,45,72,69,26,--/Dizzy/Ranged,"",dizzy,true,ibisubb0
+a2a47352-0638-4496-aa04-7c781922614a,luv9gr43,above_average,635,507,342,415,145,146,488,306,103,326,light,60,-70,-17,-11,-9,-78,-20,Stunning/Intimidation/--,stunning,intimidation,false,ih37er4d
+cf1c7e5f-717c-4938-890b-5d1f85b65d4f,29agnmp3,high,554,442,416,303,100,44,764,517,1,129,"",59,-62,40,-34,-23,-88,-1,--/--/--,"","",false,iikhgmls
+89e07582-1911-4d16-a168-74a8d2d5ff98,25o6o82q,above_average,134,26,114,323,101,97,829,461,25,1,"",14,18,0,1,-4,-17,-4,Stunning/Knockdown/--,stunning,knockdown,false,imj6v5jk
+dcb5d821-5466-4df9-b190-97c3f073d7c4,ptna3vkt,above_average,593,443,425,379,96,42,606,517,25,137,"",59,-63,40,-35,-25,-89,-3,Crippling/Intimidation/--,crippling,intimidation,false,inbs7vgj
+aa829d6e-7fc2-44b2-96da-1df7e8fe06c9,rtlcbg97,high,203,97,193,364,198,179,341,340,33,78,"",14,5,5,1,18,-44,-39,Dizzy/--/--,dizzy,"",false,io8uhn58
+a0e2158e-0753-42c9-bb57-012dc88f3fab,8d8ea285,above_average,531,256,514,481,458,350,350,338,262,403,"",37,6,16,-44,-22,-91,-99,Intimidation/Crippling/--,intimidation,crippling,false,ipcqj1s7
+ce284c49-629d-4615-bd50-a6ede4f7fd54,u500s8vl,average,210,37,253,303,196,80,644,304,19,100,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/Ranged,dizzy,"",true,iuopq8j9
+149dacba-2bc0-4da2-8cff-e2865d1fd6f5,m07snm7j,high,508,405,260,380,113,103,716,509,292,462,"",40,-1,-69,-30,-5,-10,-56,Stunning/Intimidation/Ranged,stunning,intimidation,true,j1pmlm7s
+42375cb0-1078-4253-ab7c-39e4dbdf36c0,k2lp0a0j,high,387,98,206,336,105,69,787,512,76,97,"",28,5,5,-99,-34,-34,-55,--/Intimidation/--,"",intimidation,false,j6soodhe
+c587807a-d7bb-4682-beff-0d0b287289c2,2nmpk9sc,high,140,1,153,390,154,180,759,508,26,66,"",0,0,0,0,0,0,0,--/Crippling/--,"",crippling,false,j7rql94q
+b13802b4-6ba6-4cfe-8c1c-22155e3c2884,bo727pvi,high,636,509,567,176,547,423,676,431,104,356,light,50,40,0,33,0,74,74,--/--/Ranged,"","",true,j8hi6pnp
+06e1313f-09ac-475f-8c06-c410a48925fd,26ao4v23,high,641,512,475,351,495,229,749,502,56,336,light,52,56,40,46,18,12,11,Stunning/Crippling/Ranged,stunning,crippling,true,j8tqpuq8
+ca99215f-efbe-48cd-9e01-f1f791d5109c,97i7a0a0,high,8,3,5,340,6,28,668,338,26,34,"",0,0,6,0,0,0,0,--/Crippling/--,"",crippling,false,j9cj7euc
+754e8b76-06c6-44fc-94e4-8545f44c5bab,slnr2acb,high,432,100,230,337,112,68,787,512,77,98,"",28,5,0,-99,-70,-70,-6,Crippling/Intimidation/--,crippling,intimidation,false,j9q4ad8s
+a90c8a2a-f391-4059-8a8c-bf760a1d3e60,eb5s6m47,high,380,91,199,333,42,68,784,511,75,94,"",28,5,5,-99,-68,-68,-5,Crippling/--/--,crippling,"",false,jbe77mki
+2ba98c6d-1f61-4e06-b9e5-c5593de88853,vddkkjss,above_average,264,145,241,396,228,228,505,333,26,146,"",29,29,10,10,10,10,-44,Stunning/Medium poison/Ranged,stunning,medium_poison,true,jfkdgjc0
+97403009-232b-4ff4-b21e-9f67cf501179,bl0gog00,high,565,449,454,340,453,212,698,341,101,493,"",40,41,62,-21,62,69,70,Blinding/Stunning/Ranged,blinding,stunning,true,jgb13jcl
+bfba010d-0738-4668-8104-ea45dd5c205d,u4f0vl57,high,656,628,617,508,541,422,912,334,456,587,light,45,51,49,56,32,67,26,Blinding/Stunning/Ranged,blinding,stunning,true,jgbq7aiq
+8c556485-fbae-4b59-a703-2698cb309840,8ufu0jr3,average,3,1,16,207,207,206,394,279,14,12,"",1,0,0,0,0,-4,0,Strong poison/--/Ranged,strong_poison,"",true,jgh9tjrs
+4d058cc5-22d1-477d-afd0-b8d110d4a1f3,8svaaris,high,531,461,112,278,17,16,767,507,104,349,"",51,-9,-21,-21,-19,-32,-21,Stunning/Intimidation/--,stunning,intimidation,false,jjtplh9n
+b57c7994-791b-419d-b547-92bd54990717,s3siaq7a,average,82,41,57,297,18,69,686,221,22,8,"",5,5,0,0,-13,-14,0,Dizzy/Intimidation/--,dizzy,intimidation,false,jmg60k8n
+daef4b08-8c46-4734-97e5-20aa90dadb25,gbmkfvmd,high,486,365,345,431,249,253,736,245,105,401,"",32,-34,-30,-35,-30,-70,-28,Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,jn4j7vqk
+6e6ea8a9-b707-462b-ac2e-2fc09a3bf679,rpuheig1,high,147,105,60,224,107,96,692,171,27,49,"",10,-39,10,-39,-39,-39,-39,Intimidation/--/--,intimidation,"",false,jpn0ei0l
+9f79d9c9-fb2b-4d5c-a909-76bb6b2830f1,oi9q1et7,high,515,411,264,383,113,98,711,509,292,461,"",40,-26,-55,-20,-15,-55,-52,Stunning/Intimidation/Ranged,stunning,intimidation,true,jr1c3c93
+98082e84-2af2-4a18-bd9f-e1e42f1aa4dd,q94633pb,above_average,350,161,158,262,100,91,757,505,35,142,"",27,37,15,15,-94,-29,-4,--/--/Ranged,"","",true,jt8lb3ht
+e4eb04a4-11ff-4fb9-9551-70906f6ed036,6cr7442k,high,378,97,283,392,124,79,846,512,95,107,"",26,1,-5,-99,-95,-99,5,--/Intimidation/Ranged,"",intimidation,true,ju6d14qq
+d4576517-3b3f-46d2-a1a1-466526877e52,h0el9us1,above_average,679,557,586,340,525,384,747,488,188,526,light,45,50,9,51,60,33,-31,Stunning/Intimidation/Ranged,stunning,intimidation,true,jujh5u0f
+16d1e4b0-b337-41cc-8a85-80cb7f79f825,itt0u5pd,above_average,557,332,542,481,519,327,688,300,25,113,"",55,56,27,19,-1,-66,-14,Knockdown/Dizzy/Ranged,knockdown,dizzy,true,k0vd4q9r
+00200987-83e6-49ea-bc8a-ff68d81fdcac,qnsv0ic4,high,200,44,220,301,167,149,690,183,26,48,"",4,-45,0,-50,-50,-50,-57,--/--/Ranged,"","",true,k13qioa
+18d4f0d0-75d4-4135-a101-3d33327d5599,2oi89fdg,high,373,95,220,341,107,69,789,514,75,96,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,k1i4af1g
+e070e2a8-9b8a-4c03-aab4-3e7215e31907,60ehh0vc,high,591,443,322,298,80,45,546,419,25,126,"",59,-62,40,-34,-23,-89,-1,Crippling/--/--,crippling,"",false,k3rlm0f6
+f0a1b6be-87fe-46ba-8a48-1c7c62176302,9em50l3v,above_average,8,2,3,327,2,21,554,328,75,29,"",0,0,6,0,0,0,0,--/--/--,"","",false,k7vv3lnr
+3635bdb3-6b46-4e8e-9193-a1b3fb013067,ghasav8h,above_average,409,90,209,333,112,70,787,511,72,94,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,kamlcv4f
+179e4dc3-1b9c-447f-abea-dddd28a85dcc,c73rs4jc,above_average,206,42,73,334,67,55,582,337,190,106,"",30,0,40,40,40,-64,-64,Crippling/Intimidation/--,crippling,intimidation,false,kb5blbfc
+7e16f923-bffe-423e-88df-1647d399b92f,dhprfn03,average,280,156,256,408,217,174,681,256,23,42,"",25,25,-3,15,-58,-61,15,Dizzy/Intimidation/--,dizzy,intimidation,false,kdu96ns0
+434d1ac6-4449-4c58-b507-09e111d60aea,s8f67vgd,above_average,407,95,192,330,113,65,785,505,73,94,"",28,5,0,-99,-70,-70,-6,--/Intimidation/--,"",intimidation,false,ke5nbvgo
+933d4808-fbec-4b66-b59d-6dd117a2ad1a,ntaak2gr,above_average,379,94,215,335,106,67,781,508,73,95,"",28,5,5,-99,-34,-34,-55,--/--/--,"","",false,kejdi287
+3d77ca24-ab86-4e61-9b53-1d449db7b0f7,n7thn2of,high,144,65,167,401,159,182,1149,338,160,76,"",0,0,0,0,0,0,0,--/Intimidation/--,"",intimidation,false,kg4m924j
+8e4e72ca-14e6-4a5a-9947-8e8a54dd919d,e9uh9pkf,above_average,224,122,227,370,136,136,581,328,105,123,"",16,26,10,10,10,-64,10,Crippling/--/--,crippling,"",false,kh258po1
+e266b38e-d4ce-43f6-b7f5-f37db86bf7c2,kgo6j4jh,above_average,509,434,363,314,97,70,759,337,25,345,"",60,-28,-61,-60,-59,-96,-60,Stunning/Intimidation/Ranged,stunning,intimidation,true,ki77n43e
+6a73c41b-5f50-4a9c-af4c-db2705f9c4ad,jakjt7h2,high,573,408,450,325,436,249,575,511,127,382,light,46,40,33,21,21,-99,-7,Dizzy/--/--,dizzy,"",false,kjvtv7d7
+b3fb0a6f-ee78-42be-ae5a-0b36f3fcf3d6,nplnlipr,high,400,128,342,335,425,279,636,509,248,417,"",18,-17,2,-35,-90,-44,-36,--/--/Ranged,"","",true,kkngvita
+fc936460-88ba-477e-85a7-913f480d62b5,hqm47g0b,above_average,206,89,254,328,273,150,542,330,179,321,"",11,-20,-29,-41,-51,-54,-91,Stunning/--/--,stunning,"",false,krff5ggn
+a4deeffd-bbeb-434a-9aaa-52788403c795,uhk5bdjg,high,458,415,509,238,379,420,692,404,136,474,"",60,-20,-1,-1,-39,-72,-1,Stunning/Intimidation/Ranged,stunning,intimidation,true,kslg1d70
+629300a6-bb7e-4a48-b8ec-40dfb815825b,rbcmnqg0,very_high,564,389,565,344,555,377,344,341,299,532,"",50,47,10,20,20,-42,-94,Stunning/Crippling/--,stunning,crippling,false,ktq9rqor
+2ca9460e-21ca-41a7-94e7-a678505c5057,jbrptuuv,high,206,42,65,339,16,12,696,338,26,130,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,l5alhuan
+52ba82ea-4503-413e-9a12-0ff95e514cff,hk7aokek,high,323,169,321,384,235,183,800,511,139,271,"",31,39,15,-63,-63,-80,-70,Stunning/Crippling/--,stunning,crippling,false,l5s3qkm9
+a434e4ed-23a8-4ead-9d52-883a0ff819e7,ltl4gbue,above_average,537,309,189,228,86,27,582,518,24,98,"",35,30,-57,"",-13,-67,-58,Blinding/Stunning/Ranged,blinding,stunning,true,l664mb27
+2fbb2a0c-d0d6-4d29-8e8f-8dbe7a42640e,2dnh0ud1,above_average,622,482,455,473,475,257,674,513,174,391,"",60,45,47,5,48,-47,19,Blinding/Blinding/Ranged,blinding,blinding,true,l8hurv1i
+bd046ec1-1c58-42d8-8a1b-abfe93ec30f2,8mve42ku,high,665,582,604,504,655,535,676,341,551,558,light,51,53,47,57,22,49,13,Blinding/Stunning/Ranged,blinding,stunning,true,l9glr5k8
+7621deb7-52e2-4af6-a61f-d4f4751b19f6,6ba79u2s,high,23,5,116,235,83,74,689,170,25,10,"",13,6,-30,0,0,-44,-12,Dizzy/Strong poison/--,dizzy,strong_poison,false,leo02u25
+94ce523a-8f5f-40f6-9b72-8ce09f37f071,5gfcdi4p,high,154,93,185,358,91,91,573,335,134,135,"",5,-39,5,-39,-39,-39,-39,Intimidation/--/--,intimidation,"",false,lgedcik9
+f016fbc4-e529-40b3-a391-ced8441df1fd,dbumdpkv,average,84,115,31,198,90,81,643,145,19,27,"",14,22,10,10,10,-55,10,Crippling/--/--,crippling,"",false,ljc7cpo6
+756f473e-da77-4103-bd33-c4e15ed2882c,a2oi6jkc,high,661,629,503,329,491,305,618,442,302,580,light,48,47,45,63,87,39,23,Blinding/--/Ranged,blinding,"",true,ljod5jss
+5ecb05fe-e125-45b5-a7ae-3209256f4be7,rc2afic8,high,575,459,171,316,28,47,757,509,102,314,"",56,-20,-6,-1,-1,-26,-4,Stunning/Intimidation/--,stunning,intimidation,false,lkdmfigf
+4b5426e5-e717-4a29-ab8f-f34a8cc5381e,ridi6chb,high,15,5,25,336,7,8,708,341,41,15,"",3,0,2,0,-24,-24,-24,Stunning/--/--,stunning,"",false,ln9ecch9
+430c43b1-c41a-4028-8c41-6ced1b0880ca,q9mt1glj,high,501,407,407,244,118,105,719,509,293,500,"",40,-12,-70,-67,-62,-87,-67,Stunning/Intimidation/--,stunning,intimidation,false,lnk4d7fn
+dbf0baa2-086d-4fa6-a076-54b263944ddf,23sr62cv,high,494,393,448,377,482,408,689,218,100,329,"",32,35,-62,48,48,28,-94,Stunning/Intimidation/--,stunning,intimidation,false,ls8l920l
+5d64ed30-2421-4408-93b7-20fcf6696e32,gbsi3mg2,above_average,615,437,329,302,93,44,755,517,25,133,"",59,-63,40,-35,-25,-89,-5,Crippling/Intimidation/--,crippling,intimidation,false,ltfpfm8r
+da4591e6-b7e1-4024-8df8-76f27432e570,8oiucjbd,average,179,1,43,324,6,21,640,324,54,28,"",18,0,25,25,25,"","",--/Intimidation/--,"",intimidation,false,lvn43jrf
+3d5cb571-131a-4ba9-956b-a611b421f93c,1fsabhug,high,640,614,608,502,582,476,409,411,725,697,light,60,41,67,92,92,-19,10,--/Dizzy/--,"",dizzy,false,m1j4mg6n
+1ed8ac52-c2db-418a-927e-dc3a3936065a,n8etbuhd,high,551,443,368,303,98,45,547,521,26,129,"",59,-62,40,-34,-23,-88,-1,Crippling/--/--,crippling,"",false,m1uu9ull
+d42cb5b6-ff1c-401d-930d-49837c13e8db,ghm0ukck,average,81,30,44,345,17,80,684,313,24,10,"",4,6,0,0,0,-15,0,--/--/--,"","",false,m27cokks
+950856b7-6731-4c26-9f8a-33117484f110,u2r2d2ss,above_average,633,561,579,492,517,371,686,337,99,399,light,58,-6,13,28,11,-16,5,--/Crippling/--,"",crippling,false,m4ai12ck
+7754df58-73f9-48cc-b30f-c7ca489e30ff,ohrer3os,high,635,570,530,420,542,441,745,511,266,552,light,47,56,27,57,22,49,11,--/Crippling/--,"",crippling,false,mbiiv34o
+a786dc93-9e55-4468-b1c4-9221816835e2,2vi5bqvd,above_average,399,93,206,331,114,70,787,510,74,97,"",28,5,5,-99,-68,-68,-5,--/Intimidation/--,"",intimidation,false,mgickqvt
+2c608127-c16d-4df5-bca2-3386bd137b33,a88i4biu,high,526,466,281,376,1,22,763,520,101,305,"",52,-54,-31,-11,-9,-70,-29,Stunning/Intimidation/Ranged,stunning,intimidation,true,mi9bh9qe
+df36b9a6-e115-4839-953b-94654df3915e,90aj4vr2,above_average,436,216,332,336,441,289,599,337,168,277,"",43,-22,20,91,66,45,16,--/--/Ranged,"","",true,miec1vjg
+7e110cac-b506-42da-aca9-bc47671fba57,6c4h1v46,above_average,401,90,197,329,116,70,785,509,76,95,"",28,5,5,-99,-68,-68,-5,--/Intimidation/--,"",intimidation,false,mkng0vov
+65de1172-b67c-417a-97ec-87e6dcdd19c2,ceh4m90v,above_average,634,552,534,472,380,286,714,518,26,293,light,60,-15,12,9,13,-35,26,Blinding/Blinding/Ranged,blinding,blinding,true,mm8gn9sj
+90075f3e-5c92-4c29-bc52-d97cb93bfbeb,5o5m6fus,high,642,583,442,335,339,261,631,503,181,576,light,60,-87,-5,-2,-2,-92,-10,--/Dizzy/--,"",dizzy,false,mmhkbp03
+b9085ac8-994b-4ef4-900e-c1de48dfe0ba,pa4q3a50,above_average,48,4,50,258,57,36,580,260,11,43,"",0,0,0,40,-99,-99,-99,--/Stunning/--,"","",false,mne1p4kq
+bf81232f-3ea0-4635-830c-595ce803485f,6qbfh5ku,above_average,187,27,132,296,104,54,694,342,131,121,"",20,15,-54,-17,-8,-85,"",Crippling/Stunning/--,crippling,stunning,false,mqlfg5kh
+1cd2dc1e-4f58-4c3f-80aa-90f7e04ed216,un7f3uet,above_average,554,403,273,295,97,38,538,513,23,101,"",49,-62,40,33,10,-34,32,--/Intimidation/--,"",intimidation,false,n2atpvqr
+e882ac05-9fdd-41b3-bc4c-eff6b877af71,la8p0436,average,124,15,112,252,64,39,632,252,47,80,"",10,25,-69,35,4,-99,0,Blinding/--/--,"","",false,n4fcvdo8
+a9bfbbeb-0c70-4236-b86c-26f3ba84da1a,5ubvktrr,high,672,585,535,337,317,173,650,510,181,575,light,60,-19,-40,-1,-1,-36,-65,Stunning/Dizzy/--,stunning,dizzy,false,n7fqntn9
+c24f8a4f-fe00-4580-a349-4e9f4bd00b2e,b3b539tk,high,388,95,222,337,124,70,791,517,77,98,"",28,5,5,-99,-68,-68,-5,Crippling/Intimidation/--,crippling,intimidation,false,naktgalr
+bcce0560-dc46-4066-9ed8-d37af8f8ee6c,ull1q3v1,above_average,626,540,533,415,520,248,696,510,225,396,light,47,42,60,62,85,6,23,Crippling/--/Ranged,crippling,"",true,nbrh64b7
+7443f18a-e2c6-4f57-87f0-bc7c93e4ceec,56viqc59,above_average,561,447,329,300,96,42,754,519,24,138,"",60,-80,40,-19,-14,-94,-2,Crippling/Dizzy/--,crippling,dizzy,false,ncdnfc5g
+8e9e984f-a761-4496-bb19-09e2320c28e2,4do25va5,above_average,157,40,207,285,173,160,685,211,25,32,"",1,-64,0,-65,-65,-65,-67,Dizzy/--/--,dizzy,"",false,ne242va8
+c9ff0c33-2212-40eb-b0e3-cd4988f34ed9,15m49fmu,above_average,104,27,70,334,63,35,419,332,251,166,"",20,0,27,27,27,-44,-44,--/--/--,"","",false,nf58cf2n
+3c01da2c-8fb5-4e86-b958-7149a7cd4a84,1oblm8kq,high,351,157,86,311,127,100,761,159,101,222,"",-6,48,-49,-63,20,-74,-73,Stunning/Intimidation/Ranged,stunning,intimidation,true,nh6ol80c
+b964782b-4f56-4867-bfb6-77cde07f4cd2,vadk8qj2,average,267,128,153,347,40,82,673,326,23,34,"",22,22,10,10,"",10,10,--/--/--,"","",false,njm5aqfv
+887224b7-99c6-45e3-a4a3-e96a2e1d34fe,v7abpav2,average,18,6,11,280,12,37,602,278,29,54,"",0,7,0,32,-99,-99,-99,Dizzy/Stunning/--,"","",false,nkjrf9re
+2f795094-4c3c-46e2-a513-8102cd8869ba,uoest50u,high,402,94,222,340,107,73,787,512,73,97,"",28,5,5,-99,-68,-68,-5,Crippling/--/--,crippling,"",false,nokft503
+79318d9d-298a-4189-b29d-6480cfa42d8c,8sm42pco,high,225,145,70,341,16,11,690,337,26,130,"",10,-64,10,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,norqrpou
+8c656322-196b-4506-8901-02e10a3bd346,brfdmnlr,above_average,196,132,177,276,209,190,688,175,25,32,"",9,3,-21,6,18,-8,-39,Dizzy/--/--,dizzy,"",false,ntplrnlg
+e68cc158-2a4b-4db7-8e81-29b95be127a7,n7he2kjf,high,571,515,114,253,29,29,759,514,26,110,light,60,-26,-25,-24,-24,-55,-25,Stunning/Intimidation/--,stunning,intimidation,false,o2ugonv8
+32b91cf5-5c93-4607-8127-645c3866f746,p4bats7j,above_average,371,91,218,332,131,70,785,508,71,93,"",28,5,5,"","","","",--/Intimidation/--,"",intimidation,false,o4jedp5e
+4914a5f7-490f-4bba-a328-8dd7ed788490,43bvvgrq,high,609,541,403,357,138,114,866,376,27,214,light,60,-81,-13,-12,-12,-95,-16,Stunning/Intimidation/Ranged,stunning,intimidation,true,o547igbt
+55406eec-21a6-4969-8fae-387ef9f59b8e,fv9ptltv,above_average,590,317,557,490,532,327,452,413,301,460,"",60,60,29,20,-5,-70,-24,Knockdown/Crippling/Ranged,knockdown,crippling,true,o97m0aan
+24bbea34-9db1-41b1-adf7-a9de2e4871c4,7mmro1e2,high,8,2,5,337,6,27,749,508,26,35,"",0,0,6,0,0,0,0,--/Crippling/--,"",crippling,false,oj843eiu
+baf2a19a-8899-458a-ace8-27a2e87d6b55,0rgbpj42,high,225,103,216,391,202,121,685,335,104,104,"",10,-44,10,-44,-44,-44,-44,Dizzy/--/Ranged,dizzy,"",true,ok8rmj0e
+63016e74-0216-449c-b973-ea63769f792c,v3kjslnh,above_average,373,90,189,330,127,69,785,510,99,95,"",27,5,5,-89,-99,-99,-5,--/Intimidation/--,"",intimidation,false,okqsilv6
+b2c26a79-604e-45be-a7f2-39aad36a5fef,dld63voi,high,600,441,328,299,106,48,548,519,27,130,"",59,-62,40,-34,-23,-88,-1,--/Intimidation/--,"",intimidation,false,olpc2voo
+140672ca-8ed7-4367-9656-aa3d0b83df0f,pafahqg8,average,25,3,17,254,5,18,605,257,37,15,"",8,8,2,"",0,"",0,--/--/--,"","",false,oms0pmui
+fd41ffb8-1e4d-4dba-bea3-ff9913797527,jcn6ppod,high,553,423,496,413,524,401,408,405,380,431,"",21,31,-94,58,58,58,-94,Stunning/Intimidation/--,stunning,intimidation,false,oohg1pke
+44d77b88-e8cf-433a-b712-7ad54c222a7e,2i64pgct,above_average,508,217,465,468,304,230,685,332,23,131,"",36,35,-1,20,-89,-54,20,--/Dizzy/--,"",dizzy,false,ot1hmgoe
+940de3f3-6791-4b2f-910f-adc22e392ec2,23hm3bd9,above_average,486,344,384,295,100,45,761,522,25,128,"",59,-62,30,-34,-23,-88,-1,Crippling/Intimidation/--,crippling,intimidation,false,otm3ebhq
+98966991-63bc-41ff-b6c4-e1331615bf4a,0a6vrks9,above_average,599,422,445,327,422,181,541,507,140,348,"",46,-38,20,8,-11,-74,-29,Crippling/Medium poison/--,crippling,medium_poison,false,ou4fikk8
+14866eba-5138-437f-b583-ab5a0428c102,8ti527t1,above_average,549,437,429,399,434,328,756,508,101,458,"",42,39,24,-1,-1,-99,-26,Dizzy/Blinding/--,dizzy,blinding,false,ovq577t5
+c08d59ee-fb15-4a12-a113-2f64366d0302,uq73as3j,above_average,642,508,457,377,202,59,758,516,97,337,light,59,-55,-9,-13,-13,-91,4,Crippling/Blinding/--,crippling,blinding,false,p48d6svk
+38653bc6-b16c-4ab8-bbff-27568d43d9f8,r88250fl,high,444,204,419,462,322,267,803,340,165,256,"",38,26,20,38,34,-59,34,Strong poison/Blinding/Ranged,strong_poison,blinding,true,p7p0rn98
+29525b2d-c8af-4957-a836-e4364803a566,npovk50i,high,323,290,40,179,33,8,765,530,105,208,"",20,-1,-34,-1,-1,-34,-1,Knockdown/Intimidation/Ranged,knockdown,intimidation,true,pae3i58p
+1582bcbc-90d1-4cef-87b6-059342092dea,03h5p346,above_average,194,42,62,333,16,11,684,333,26,127,"",0,-64,0,-64,-64,-64,-64,Dizzy/--/--,dizzy,"",false,pbsmi3gg
+fc109899-b6f7-4903-a8dd-599cf9d6ca1f,oaj6tucv,high,652,486,656,506,626,456,622,421,383,534,"",47,48,5,40,45,4,-58,Stunning/Intimidation/--,stunning,intimidation,false,pdefjush
+e4878ad3-0eac-486c-9560-c3b8140628f7,luj2ckeu,above_average,488,193,332,334,327,127,758,510,102,198,"",40,43,15,16,16,-24,16,Stunning/Crippling/Ranged,stunning,crippling,true,pfirekme
+8d5f0ad7-85e7-4b8c-a81c-ccc89ba28171,pk76jpsg,above_average,614,440,521,485,423,160,683,506,491,568,"",45,-5,60,32,32,-99,-33,--/Stunning/Ranged,"",stunning,true,plu7hqkc
+0ddffa28-9917-45be-8fc1-1a9429b83d2f,emas1moq,average,233,202,182,444,47,115,547,331,55,50,"",12,12,-39,25,25,25,-39,--/--/--,"","",false,pnji2m8m
+05efced0-4707-4d18-867f-35aa5551e081,lgfb1q8h,high,560,369,520,270,569,424,338,339,316,356,"",38,38,-46,43,43,14,-94,Stunning/Intimidation/--,stunning,intimidation,false,pqdj5qcg
+d562fca3-43cb-47ba-ba0b-f0d63d39e205,o0p1m4ki,high,584,514,412,339,400,170,866,506,208,594,light,0,-24,0,-64,-24,-24,-24,Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,pro3g48i
+16d8e515-748b-4926-96e5-64e28bd3cd77,7pkhn3e1,above_average,129,19,169,306,93,62,664,311,31,75,"",0,8,0,30,-99,-99,-74,--/Stunning/--,"","",false,pumhbd0k
+791f85f1-4303-4e3b-aa8a-bc4c9a750dcd,o245tsek,above_average,592,537,577,414,481,422,715,287,101,393,light,60,-80,-9,-11,-9,-91,-9,Strong poison/Strong disease/Ranged,strong_poison,strong_disease,true,q440hse4
+ec437320-5fa1-420b-b2e0-c2c901e908df,tjvrqn7o,high,43,149,93,299,394,331,765,513,100,238,"",30,-1,-33,-27,-33,-45,-32,Crippling/Intimidation/--,crippling,intimidation,false,q4glknvv
+01403c05-1b55-4280-9fc5-981bcee1eeae,apmaoa74,high,61,43,35,336,26,30,692,338,27,34,"",7,7,0,0,0,0,0,--/--/--,"","",false,q6ql7jod
+4c7ba20e-d7c3-41a7-b330-2fe5f0f7d531,gd30ma31,high,522,408,275,387,112,106,719,515,292,464,"",40,-25,-54,-19,-14,-54,-51,Stunning/Intimidation/Ranged,stunning,intimidation,true,q86kcan3
+5e2adcc7-acab-4906-958f-996c585272e6,mval7dnv,above_average,518,463,484,299,357,255,694,450,118,424,"",60,-23,1,-1,-51,-90,-1,Stunning/--/Ranged,stunning,"",true,qbdcvc3c
+8592098b-e5fb-48e6-830d-b2c0388b7957,d90p05bd,high,180,45,227,366,216,191,420,326,26,31,"",9,12,0,-34,-37,-2,5,Stunning/Knockdown/--,stunning,knockdown,false,qd5n95rf
+abb50b78-3bad-4d06-8311-f4bccd46c747,o5q3sqjc,high,372,279,126,341,137,98,763,513,27,173,"",20,-1,-34,-1,-1,-34,-1,Knockdown/Intimidation/Ranged,knockdown,intimidation,true,qe77qq72
+76b70606-cebf-49b5-b90c-2385db653de7,87tgk4kr,above_average,52,9,19,309,12,28,577,308,109,75,"",11,0,15,15,15,"","",Stunning/Intimidation/--,stunning,intimidation,false,qkuvjn3m
+259a7891-bc15-44b7-92b2-9d0ae3b26578,f3sak7cn,above_average,137,101,184,353,129,133,583,332,43,63,"",10,-44,10,-44,-44,-44,-44,--/--/Ranged,"","",true,qoavuv6s
+f9c0b630-45b1-4f67-825a-5012a4669d77,fj254r62,high,501,404,161,333,117,101,721,474,293,500,"",40,-12,-70,-67,-62,-87,-67,Stunning/Intimidation/Ranged,stunning,intimidation,true,qrsf5r2d
+e9435e04-bf84-4865-86aa-aca7dfa80692,k2g1v64d,above_average,602,498,610,509,510,364,757,508,99,368,"",36,36,45,-25,45,-75,12,Blinding/Medium disease/--,blinding,medium_disease,false,qtsth68b
+031d9059-c933-4e53-b74f-fc43c989bcc0,95lmf4p9,high,485,247,506,468,417,315,835,323,354,353,"",50,50,21,14,-4,-81,-46,Knockdown/Dizzy/Ranged,knockdown,dizzy,true,qvkha45p
+8963b714-3ce1-4814-b74b-d40a4613ca66,qm4ifjs2,high,619,517,466,329,463,339,577,441,290,542,light,37,44,49,24,74,70,49,Blinding/Stunning/Ranged,blinding,stunning,true,r75gdj42
+72e683b8-0beb-4cf6-88d2-1f9f25c320c5,nmvmbh1e,above_average,1301,15,140,315,58,70,516,316,1,78,"",8,-4,-5,0,"",-7,-15,Intimidation/--/--,intimidation,"",false,r8tfng1v
+542d6d32-eff9-4ca5-8065-f0b2592afb8e,i9l5ea7q,high,582,508,150,287,81,75,687,519,103,163,light,58,-54,-7,-2,-1,-58,-7,Stunning/Intimidation/--,stunning,intimidation,false,ragn8ano
+8ca27815-a35f-4195-a177-1ab9406516ea,li5vfu18,above_average,633,477,430,349,555,411,748,514,177,360,"",57,-37,18,27,36,-15,39,Stunning/Strong poison/Ranged,stunning,strong_poison,true,rc133uda
+25b59fe0-d043-4337-ba8a-384018a6a4c8,cvcihsv7,above_average,480,177,190,337,45,46,757,508,24,159,"",5,-1,-24,-50,-54,-45,-29,--/Blinding/Ranged,"",blinding,true,rfjtgs7o
+9f814811-1c4a-4f46-8985-f7f01d1d6fd8,jk0f6iaq,high,391,97,208,338,107,71,788,513,73,96,"",28,5,5,-99,-34,-34,-55,--/Intimidation/--,"",intimidation,false,rfov0i6m
+3d9dd3be-01cd-4116-8e8f-64aab5a36a17,qds7fl9q,above_average,379,228,381,411,365,135,625,333,195,394,"",14,17,20,-27,-23,-4,4,--/Intimidation/Ranged,"",intimidation,true,rgo5lk9o
+c7aca46d-9e54-465d-80d7-c7dc1ddade84,i74lbmie,average,2,1,1,280,2,15,1048,278,14,8,"",0,0,0,0,0,0,0,Crippling/Medium poison/--,"","",false,rn46bmqu
+c3d2aaa7-c805-4f6f-8343-7ea927c15188,k4vdacpi,above_average,4,2,10,335,33,24,780,334,33,12,"",0,0,0,0,-4,-4,-4,--/--/--,"","",false,rnjicch4
+4e747b01-9637-46f2-abc0-5eb6c26fed4c,ql6nv4b2,high,685,630,626,430,653,550,610,505,269,557,light,31,28,13,52,62,58,16,Dizzy/Strong poison/--,dizzy,strong_poison,false,roal54b4
+06f9d571-69e8-4dbf-8bb0-c8aafd8f8f48,h5f5pgon,high,565,404,504,418,465,315,718,516,384,579,"",27,37,1,51,1,22,49,Strong poison/Stunning/Ranged,strong_poison,stunning,true,rokh3joq
+2a0a0fa2-ff1c-4559-ab97-88d9afdfa6cc,eahf439h,high,199,43,65,335,16,11,700,336,26,131,"",0,-29,0,-29,-29,-29,-29,Dizzy/--/--,dizzy,"",false,rqe453he
+61a62586-472e-4ce2-b87f-666065f327c9,431flea5,above_average,73,11,59,176,49,17,686,60,24,72,"",0,20,-64,33,33,33,-64,--/--/--,"","",false,rrcgkemj
+c90b7d15-93bc-402a-967b-6d8aba7c7a3b,lc33nk2o,high,759,721,714,507,671,649,476,474,615,703,light,41,60,20,93,93,93,20,--/Dizzy/--,"",dizzy,false,rutvjkan
+d67cc18f-9315-4eee-8b42-9e316da26e66,n4mr312u,high,606,484,372,348,342,108,419,340,192,367,"",53,24,64,51,51,-99,-14,Dizzy/Blinding/Ranged,dizzy,blinding,true,s29dv1mh
+a30eeb56-8b6f-403f-a777-9643c71b1352,9bnhj1u1,high,60,34,60,307,30,50,673,317,67,36,"",12,6,-19,-5,-27,-58,-24,Stunning/--/--,stunning,"",false,s4hrs1q2
+59f0f5b1-d4ee-4ba2-995e-00c933154521,c3j5tbl4,high,717,622,531,332,653,469,633,511,283,593,light,42,79,37,45,83,83,37,--/--/Ranged,"","",true,s6o6mq9l
+88f8e3cb-bce5-4399-b40d-4b37b80bd6dd,10uv9v0b,high,3,3,3,338,2,12,757,508,232,49,"",0,0,0,0,0,0,0,--/--/--,"","",false,s8f58vk3
+4d832556-7e91-4608-9de2-97e9451beba4,2m4c9mat,above_average,543,404,179,332,127,107,713,506,127,314,"",40,-1,-34,-1,-1,-59,-74,Stunning/Intimidation/Ranged,stunning,intimidation,true,s98hmhqa
+439b3db0-df9e-4bc9-84f8-0cc15e3145a8,1v48428m,high,654,594,575,294,499,442,542,518,99,344,light,60,-83,-10,3,-4,-83,-1,Stunning/Intimidation/--,stunning,intimidation,false,s9dip3si
+8d355a39-291c-43c7-b613-f98cc006d099,fe0tknvt,above_average,499,453,235,234,23,25,759,496,100,222,"",60,-58,-1,-1,-5,-66,-1,Stunning/Intimidation/--,stunning,intimidation,false,scvq1nb2
+394a13b3-30e8-4c62-acad-a1b739889660,hc9su2t3,above_average,155,26,156,329,184,82,687,330,23,100,"",0,0,0,0,0,0,0,--/--/--,"","",false,sdd7c11h
+540a265c-25d7-4707-b8d2-8e3c8875c955,nok9cig4,high,188,37,150,324,71,62,526,307,42,83,"",2,-46,0,-49,-49,-49,-49,Intimidation/--/--,intimidation,"",false,sea34pj0
+9afcb509-286b-4206-9ac3-3f6d3e2bf435,o51huq74,above_average,589,441,312,300,96,43,763,518,25,135,"",59,-62,40,-34,-23,-88,-1,--/Intimidation/--,"",intimidation,false,sh8r654v
+c9047767-1cae-4972-b84e-bdf53f36326f,g86rpi5e,above_average,558,272,558,551,448,348,684,165,24,129,"",50,60,25,25,25,25,25,Stunning/Crippling/--,stunning,crippling,false,shi2ri9k
+404e6812-03ed-4d21-96ea-120030969017,0991vn8b,average,188,90,208,326,143,142,575,122,40,14,"",14,14,-1,5,-34,-36,5,Dizzy/Intimidation/--,dizzy,intimidation,false,si8ponkb
+b3a08e1d-642f-465c-8092-f6ba9294059a,geibn24d,high,517,408,352,171,176,173,714,510,127,325,"",40,-26,-55,-20,-15,-55,-52,Stunning/Intimidation/--,stunning,intimidation,false,sivif2sr
+e0212bf5-2bcf-4f1d-bdf3-d62540ece4b2,akuv7ic5,above_average,187,93,220,324,202,184,683,188,94,94,"",8,-11,5,-19,-19,-19,-33,--/--/Ranged,"","",true,slrj4sis
+a4036873-168d-440a-a2f7-dfa5f6c26bc3,lv48d92k,average,139,29,143,322,127,164,654,330,48,106,"",22,27,0,2,-7,-32,-7,--/Knockdown/--,"",knockdown,false,sr9rl8u2
+5a67885d-da6a-41d4-8438-831449358523,jl7i1v9p,high,587,532,559,494,524,415,865,447,101,344,light,45,11,11,17,51,-14,52,Stunning/Dizzy/Ranged,stunning,dizzy,true,sv8d5vte
+892f52b0-efc7-4299-8e89-01a52335ce17,tlm8eata,high,586,438,330,303,107,47,763,531,26,135,"",58,-62,49,-34,-23,-88,-1,--/Intimidation/--,"",intimidation,false,t098kb95
+fea06f1a-1cf1-4be3-b909-430753e3b874,67huiva6,above_average,373,90,176,332,118,67,782,506,72,94,"",28,5,5,-99,-68,-99,-5,--/Intimidation/--,"",intimidation,false,t9m9fvql
+07a1163d-cbfc-4806-aa80-d29aa3f1dcd2,s9rbmbds,above_average,535,430,358,296,101,42,754,519,24,134,"",59,-62,40,-34,-23,-88,-1,Crippling/Dizzy/--,crippling,dizzy,false,tbu9ibtu
+8d299db0-d49b-4c1a-a7e4-8a232c4509a6,j5bs5s5n,very_high,446,207,264,394,223,197,826,440,138,304,"",37,44,-24,-29,-34,-34,-29,Stunning/Intimidation/--,stunning,intimidation,false,tfm11sh9
+90a21e04-e816-488a-8ba5-14d80a7ab645,jt4h2ejq,above_average,136,91,84,330,113,90,832,333,58,128,"",8,14,5,-39,-39,-42,-38,--/--/--,"","",false,thcca9ff
+18dbcce6-2712-4d09-bca7-bf7e3a0211ee,9qaufpsl,above_average,161,95,190,344,102,97,652,336,43,85,"",10,16,5,5,5,-37,5,Stunning/--/Ranged,stunning,"",true,tqmnepsb
+1ed699be-a3ac-46ce-b141-8278a1566e95,gr5auh7c,above_average,487,432,394,467,255,225,1084,184,25,244,"",50,-56,-25,-22,-22,-84,-35,Stunning/Intimidation/Ranged,stunning,intimidation,true,tudi4fnf
+d557da32-a6cf-4b40-8cd9-801764783284,nvee2kco,average,193,63,140,384,30,78,645,325,40,23,"",10,16,5,5,5,-39,5,--/--/--,"","",false,u0ktsk45
+ccdb3b9a-a49a-4827-a9e8-adb5e94a7ab7,oo66780c,high,374,129,174,341,103,91,764,511,50,137,"",-25,46,-40,-90,37,-75,-62,Knockdown/Intimidation/Ranged,knockdown,intimidation,true,u1ha58s7
+04695a55-6451-460f-b570-d69c1f2bbd24,p04k2fmn,above_average,87,33,57,334,60,36,487,334,64,66,"",0,0,0,36,0,0,-44,Stunning/--/--,stunning,"",false,u26q6fmm
+ce1e11e8-46e2-458c-811b-f9e863aa7ebb,kc9jpnto,high,89,39,72,376,66,122,349,339,53,31,"",0,4,-44,0,-44,-44,0,--/Intimidation/--,"",intimidation,false,u5k7rn9m
+cba353da-813b-465b-a031-7b6f1a39433d,4betso9v,high,664,611,646,509,610,377,627,519,190,419,light,55,-15,6,36,37,-5,10,--/Dizzy/--,"",dizzy,false,ud38hopq
+841efc90-00d3-4c3a-8b84-5d2ea9d6ccb2,0mf1030f,high,577,458,346,336,275,148,706,513,211,372,"",38,-20,45,45,-4,-4,-21,Knockdown/Strong poison/--,knockdown,strong_poison,false,un8s33gs
+e8f2cff8-5516-45f4-9b6a-1e0c1290f00b,60t3bauq,above_average,483,250,172,226,81,23,541,515,24,53,"",33,25,-38,-31,-37,-76,-43,Blinding/Intimidation/--,blinding,intimidation,false,updi8ai2
+31d6d4e0-ce51-40a1-849f-5977ea78dc62,bs0mlnj7,high,518,409,160,336,29,100,716,507,294,395,"",40,-6,-69,-10,-5,-30,-66,Stunning/Intimidation/--,stunning,intimidation,false,utbsmn32
+513631d5-1205-46a0-9779-8583780d519e,a2n853jg,above_average,589,438,335,298,96,43,539,519,25,128,"",59,-62,40,-34,-23,-88,-1,--/Dizzy/--,"",dizzy,false,uud0c3vt
+2dfd65a5-60a5-4baa-81eb-5b9e37e7df8b,22v0bdgi,high,583,440,391,301,95,45,762,519,26,129,"",59,-12,40,-30,-10,-79,-26,--/--/--,"","",false,uuqo2dcg
+6680a42a-010c-4951-9c44-7f43e4f9b49a,jsgesgqm,high,658,684,612,330,526,427,519,484,590,721,light,52,50,35,95,95,20,15,--/Dizzy/--,"",dizzy,false,uurkogaj
+f31f410c-a484-4b9e-bf37-1a37a68d9362,ggi3od08,high,403,93,205,337,109,70,788,516,76,98,"",5,5,0,-99,-70,-70,-6,Crippling/Intimidation/--,crippling,intimidation,false,v22scdcg
+528bedef-c4e0-4f36-944c-fa6e268a00d6,gp6n9s3p,above_average,627,541,571,415,399,334,717,508,291,530,light,60,-53,-25,6,-1,-50,-20,Stunning/Intimidation/--,stunning,intimidation,false,v298fsve
+a0fed197-6e00-469a-b217-2787af1bfcb9,7isnumfm,high,121,82,169,350,69,140,577,511,37,69,"",26,-35,12,-64,-12,-12,-64,--/Intimidation/--,"",intimidation,false,v427jm7p
+83233f6f-ecc9-43a5-bc38-e1de068df096,b4q7f40j,above_average,612,528,517,412,460,298,614,501,624,610,light,60,29,85,78,74,-99,-24,Stunning/--/Ranged,stunning,"",true,vdbfc4kr
+96a2fd72-6b49-4947-b366-ca2130502adc,bmd9k586,above_average,661,564,586,494,557,365,749,506,263,497,light,47,46,27,57,22,49,11,Stunning/Crippling/Ranged,stunning,crippling,true,vh90b5ck
+d7e20c7f-4a00-4a79-8905-b5b3faa32bf2,j5u7hikf,high,185,58,85,274,97,107,591,173,26,124,"",29,-4,5,-7,-7,-64,-64,Dizzy/Mild poison/--,dizzy,mild_poison,false,vhpu9j0s
+c8b99004-ad93-42fe-95c1-75a5ca4321a2,h9637vv4,above_average,414,219,507,505,271,124,600,331,168,275,"",43,-10,20,91,66,45,16,Knockdown/--/--,knockdown,"",false,viiv1vje
+f8916d8b-5f3f-4db4-a77e-1c3029201cb9,k3s28gkk,high,156,102,183,361,124,125,695,340,26,64,"",10,-44,10,-44,-44,-44,-44,Dizzy/--/Ranged,dizzy,"",true,vlglkoqg
+05eb6f81-7d4a-4238-b4a8-b6558e51e2d6,bnmdof1t,average,20,1,24,273,24,33,282,282,14,40,"",15,0,0,0,0,0,0,--/Crippling/Ranged,"",crippling,true,vpdg43qo
+b8fb14fe-0f9e-4666-b0cb-c2ed994f7666,tnsf3p90,above_average,564,561,562,506,427,359,1149,334,392,551,light,50,50,100,50,-99,20,20,Blinding/Stunning/--,blinding,stunning,false,vpubvp98
+2f7a8a12-e642-4967-9fc8-5b112f1cd6c2,clc8408r,above_average,616,406,628,510,656,427,336,332,70,308,"",46,52,12,39,39,-5,-54,Stunning/Crippling/--,stunning,crippling,false,vt3f50sc
+aa5002ab-cb26-4006-8b72-cf3c1f41805b,dni0f7d3,above_average,609,504,477,447,534,308,689,339,102,425,"",47,49,39,34,34,30,19,Stunning/Intimidation/Ranged,stunning,intimidation,true,vv94u6te

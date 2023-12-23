@@ -1,0 +1,462 @@
+creature_id,final_experimentation_id,skin,creature_level,health,action,mind,speed,to_hit,damage_low,damage_high,armor,kinetic,energy,blast,heat,cold,electricity,acid,stun,sa1,sa2,ranged
+00pas7q5,266f04mq,durni,10,10227,5614,3442,1.98,0.23,120,130,"",58,-64,-2,-35,-34,-99,44,-99,crippling,intimidation,true
+019pdtas,qoodetmk,gnort,15,6188,3424,2975,1.98,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,"",false
+01oatm1v,7pc5dm95,falumpaset,32,9832,6960,6817,2.28,0.32,360,370,"",24,16,5,4,3,4,6,4,dizzy,strong_poison,true
+04anubgq,ar63gbss,gurrcat,18,8055,6081,3083,1.98,0.26,260,270,"",-16,47,-65,-31,52,-31,-92,-99,stunning,intimidation,true
+06tjc3dn,ntktb3hj,durni,18,5758,2670,1773,2.08,0.24,220,230,"",21,31,-4,-29,-90,-10,8,-87,stunning,"",false
+07hb7unl,7cm51u3m,torton,22,11412,9276,6763,2.16,0.38,310,330,"",59,-55,6,10,10,-55,-28,-99,stunning,intimidation,true
+08scmn1f,t8gm7n59,narglatch,25,9563,4124,6278,2.3,0.27,150,160,light,18,12,"",8,8,-42,-8,-29,strong_poison,strong_disease,true
+094fpaem,ah3rpail,razor cat,10,9796,5470,3137,1.97,0.22,120,130,"",59,-62,43,-34,-23,-88,-1,-99,"",intimidation,false
+0el9tnqd,tdiiqnau,narglatch,13,1539,1611,1827,2.16,0.23,45,50,"",13,15,1,-82,-82,-14,54,-16,stunning,crippling,false
+0enc7p4r,slsk0pou,bantha,13,1593,1306,2042,2.38,0.27,30,40,"",17,9,1,20,-39,-53,-39,-98,"","",false
+0etpojrb,7t6nuj36,bantha,10,9760,5488,3281,2.13,0.23,130,140,"",60,-64,45,-34,-23,-88,-1,-99,"",dizzy,false
+0f5spo4n,0vct7vc2,narglatch,29,11125,11089,11340,2.02,0.2,270,280,light,57,-77,0,"","",-69,"",-99,dizzy,mild_poison,true
+0iafqb8b,st8mfbgg,rancor,48,11232,10981,11214,2.01,0.5,330,340,"",35,60,47,90,90,90,47,47,knockdown,"",false
+0ifvf46h,qk0b25um,razor cat,46,11125,9617,9348,1.98,0.36,450,460,light,37,37,27,15,67,67,27,27,stunning,intimidation,true
+0lddsdcp,lui6bds6,gnort,34,11161,9509,9599,1.99,0.43,280,290,"",47,32,-12,50,50,-99,-5,-64,dizzy,mild_poison,true
+0pct89s1,top6b9cr,veermok,10,642,606,373,1.99,0.22,55,65,"",2,2,0,0,3,0,0,-35,"",intimidation,false
+0vd5dclr,01071ce5,gnort,4,462,247,193,2.16,0.2,30,40,"",6,0,4,0,-39,-39,-39,-99,stunning,"",false
+10pq6ihd,6e2lqi1g,razor cat,22,7140,7463,7158,2.16,0.31,330,340,"",20,-19,-21,"",-5,-24,-44,-59,intimidation,dizzy,true
+15bh6u6r,rau49ui1,gnort,14,6135,2401,3101,1.98,0.24,80,90,"",28,5,9,-99,-68,-99,-5,-99,"",intimidation,false
+1f7bgk2q,s53glk68,rancor,52,11250,11143,10658,2.02,0.5,390,400,light,33,50,-59,78,78,78,-59,-59,stunning,intimidation,false
+1f8gec1e,idmmbc11,kima,25,8307,3496,3604,2.18,0.26,190,200,"",37,36,29,-2,52,49,22,25,blinding,stunning,true
+1fk6r499,ktvcu4hc,squall,36,9958,9599,9689,2.02,0.4,210,220,"",55,56,27,19,-1,-66,-14,-1,knockdown,dizzy,true
+1gnl98ni,saqec934,razor cat,30,9850,8666,6099,1.99,0.35,350,360,"",14,9,-29,29,22,23,-33,-34,dizzy,stunning,false
+1jq3rnnq,u6ctganm,brackaset,10,9527,5273,3227,1.97,0.22,120,130,"",59,-26,44,-69,-34,-64,-38,-99,crippling,intimidation,false
+1lc95n55,5gj0fnlq,falumpaset,30,9312,5901,7714,2.38,0.32,240,250,"",20,1,8,6,5,6,9,6,dizzy,strong_poison,true
+1na8hoqd,36gdjoig,razor cat,11,3819,3334,1629,2.16,0.23,120,130,"",4,-64,4,-64,-64,-64,-64,-29,dizzy,"",false
+1unq6blk,cts10b51,kaadu,9,9437,5417,3191,1.97,0.22,120,130,"",59,-59,-14,-21,-5,-75,-3,-99,dizzy,"",false
+21eedu6e,7n85hv2t,razor cat,11,1270,911,1055,2.16,0.21,35,45,"",11,9,-44,1,1,-44,1,-99,"",strong_poison,false
+24soei87,cr940ikd,gurrcat,12,9312,5399,3011,1.97,0.21,200,210,"",60,-70,-19,-2,-1,-76,-18,-99,stunning,intimidation,false
+259neltg,bij40lld,razor cat,23,5758,5237,5865,2.07,0.28,330,340,"",21,17,17,20,"",-99,-29,-99,stunning,medium_poison,true
+26v5a9oh,fcfdd9r6,cu pa,12,3442,3424,3029,2.24,0.23,80,90,"","","","","",-99,"",-99,-99,"","",false
+2akr1dhq,5rnr3aci,ikopi,15,6242,3640,2796,1.98,0.24,90,110,"",28,5,9,-99,-69,-69,-55,-99,crippling,"",false
+2elfjs7r,7lm5lsrq,cu pa,18,6655,4250,2311,1.99,0.24,80,90,"",1,1,21,21,21,21,21,-69,"",stunning,false
+2ikrl4j0,97pdf4f6,razor cat,54,11196,9186,10425,2.08,0.47,420,430,light,38,51,27,72,90,71,17,17,crippling,"",true
+2jp5lhn6,nm37iiur,gurreck,10,10030,6153,3227,1.97,0.23,120,130,"",59,-62,44,-34,-11,-76,-19,-99,"",intimidation,false
+2jr5bm82,svppin03,cu pa,13,3927,3981,3245,2.34,0.3,30,40,"",7,7,"",1,-13,-24,-2,-92,dizzy,intimidation,false
+3058sjj6,cb0naj3k,bantha,6,1234,2939,337,2.2,0.21,30,40,"",6,10,0,0,0,-24,0,-99,"","",false
+30ctgn9q,hkfo9gda,bantha,19,4088,1809,3622,2.16,0.31,120,130,"",21,13,-39,20,20,20,-39,-94,"","",true
+3524f44a,b54lf44p,razor cat,10,9150,4950,2850,2.12,0.22,130,140,"",56,-59,-18,-5,-2,-94,"",-99,crippling,stunning,false
+38u9raer,nn314aml,gnort,15,6476,37693,2886,1.99,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+3a15g4n1,b0jlk4j8,rancor,44,10981,9437,9132,1.98,0.36,340,350,light,45,5,52,25,65,52,65,52,"","",true
+3f0lpuko,4lnqtu83,gurrcat,34,10514,7589,8701,1.97,0.36,270,280,"",46,40,25,13,25,72,72,51,blinding,stunning,true
+3m16hn77,95qinnva,dewback,8,5273,2168,2132,1.99,0.25,180,190,"",51,-5,-8,-3,-8,-21,-8,-87,crippling,intimidation,false
+3pns2nh7,cee3sndr,bageraset,10,1378,1109,1162,2.17,0.25,30,40,"",3,4,-44,3,-44,-44,3,-99,"","",true
+3pu4m57u,ulluf4vr,kimogila,75,13297,12202,12794,1.99,0.64,510,520,light,40,50,3,86,86,87,4,3,"",strong_poison,false
+3puua75n,cgr187h5,dune lizard,16,8594,5596,3083,2.15,0.26,260,270,"",60,-65,-25,-7,-6,-78,-24,-99,stunning,intimidation,true
+3qs70vn9,3p276vn6,woolamander,21,9940,6386,6170,2.16,0.28,230,240,"",43,-1,39,91,66,45,16,-5,knockdown,stunning,true
+3tgq7fdo,t4u74f1f,razor cat,48,12597,10012,10622,1.98,0.46,490,500,light,60,-61,"",15,10,-54,"",-94,"","",true
+3v31cggh,9u1kegg0,narglatch,13,2939,3514,3747,2.28,0.25,130,140,"",9,-9,-18,-36,-43,-45,-69,-41,stunning,crippling,true
+40bfjea0,ge57ef2,falumpaset,13,1791,1270,1324,2.17,0.22,50,55,"",20,2,27,27,27,-44,-44,-99,"",intimidation,false
+4231uemm,on6p5eak,piket,25,85,67,67,2.07,0.21,30,40,"",0,0,0,0,0,0,0,-99,"","",false
+43t5tl7l,7q12vlbb,gnort,15,6242,3424,2832,1.99,0.24,90,110,"",29,9,2,-68,-99,-99,-5,-99,crippling,intimidation,false
+44puub03,bp00kbsf,gurrcat,18,7696,5704,3011,2.05,0.26,200,210,"",-4,49,-25,-55,37,-95,-92,-99,stunning,intimidation,true
+45nosm7r,a3a4gmnl,razor cat,23,10263,4914,2742,1.99,0.22,260,270,light,60,-30,-20,-9,-1,-32,-16,-99,stunning,intimidation,true
+481um8sf,4m0va84v,gurrcat,18,6278,2329,2670,1.98,0.25,260,270,"",-1,47,-30,-60,12,-95,-92,-99,stunning,intimidation,true
+4841q4g7,om7p7506,zucca boar,21,8163,4250,5811,1.98,0.27,230,240,"",28,28,-23,-36,-36,-75,12,-75,crippling,blinding,false
+4d651pk3,m4d12p06,bantha,13,1144,1360,2239,2.31,0.29,30,40,"",10,17,9,9,9,-41,9,-97,dizzy,"",true
+4klq2udg,hqnhfu91,gnort,15,6583,3227,2688,1.98,0.24,80,90,"",28,6,1,-99,-63,-63,-5,-99,"",dizzy,true
+4ld7epf0,8mtqod1d,gurrcat,15,8701,4358,3334,1.98,0.26,390,400,"",40,-26,-55,-20,-15,-55,-52,-99,"",medium_disease,false
+4lg3gn3h,thcgpn3f,bantha,6,552,175,211,2.21,0.2,50,55,"",11,0,15,15,15,"","",-99,"",intimidation,false
+4ls6mjba,g3ferjj3,bantha,9,1109,552,1252,2.25,0.2,30,40,"",9,2,10,10,10,-7,"",-59,"",intimidation,true
+4nng67hj,ruoe575k,razor cat,27,10514,7140,5273,2.19,0.3,300,310,light,60,-71,-21,-10,-9,-85,-20,-99,stunning,intimidation,true
+4qpe7fap,sffvsf62,falumpaset,11,1539,1109,1270,1.99,0.22,70,75,"",3,3,3,36,3,3,-44,-99,stunning,"",false
+4rc8sbi0,bgemqbm1,razor cat,35,10568,7589,5686,1.99,0.32,320,350,light,51,37,-61,68,-7,11,71,-51,"",strong_poison,true
+4rpqqv62,ul7f7uet,brackaset,11,9814,6458,3263,1.98,0.23,120,130,"",59,-62,43,-34,-23,-95,-1,-99,crippling,intimidation,false
+4rt3st55,nh84pthv,razor cat,31,10837,8037,5255,1.98,0.24,240,250,light,50,36,-65,65,-3,3,70,-60,stunning,strong_poison,false
+4sr8c0vt,8aeh0077,brackaset,17,8953,4699,1647,1.98,0.2,210,220,"",51,-53,-28,-10,-8,-68,-26,-99,"",medium_disease,false
+4uphqh1t,33kvghtr,razor cat,18,2993,2886,2455,2.49,0.28,240,250,"",19,15,10,"",-5,-72,-21,-97,stunning,intimidation,false
+5198bdsl,dtvojdku,snorbal,15,6422,3424,2904,1.99,0.24,80,90,"",28,5,9,-99,-70,-70,-6,-99,crippling,intimidation,false
+552l5ksb,g5tvkl04,narglatch,35,10730,7445,7319,1.99,0.32,380,390,light,26,26,42,4,-6,1,25,-6,stunning,mild_poison,false
+5539sdou,t4e4c36s,cu pa,12,2634,1898,1647,2.19,0.23,70,75,"","","","","",-99,-99,-59,-59,"","",false
+56rr20g0,q5m55006,torton,28,9060,9437,9132,2.06,0.39,180,190,"",25,23,25,23,50,-99,-99,-27,stunning,"",false
+5aq9m470,g012j4jt,falumpaset,8,2401,2509,1091,2.16,0.22,30,40,"",9,-64,9,-64,-64,-64,-64,-29,"","",false
+5b4mrf1i,1pkvvf9a,razor cat,35,11573,8342,9366,2.07,0.41,440,450,light,52,-33,-21,16,-14,-32,-24,-74,stunning,intimidation,true
+5cubijof,9gliqj4q,dewback,12,803,1270,1503,2.21,0.25,40,45,"",13,13,1,1,1,1,1,-99,"","",false
+5cvds5ne,b8mhk57a,kimogila,60,11645,10371,11376,1.98,0.54,500,510,light,40,50,15,70,85,85,15,15,"",dizzy,true
+5l3lcvsr,121tivgq,cu pa,15,6350,2545,2904,1.99,0.24,80,90,"",28,5,9,-99,-70,-70,-6,-99,"",intimidation,false
+5lnqeoo4,tjca3o89,razor cat,43,10317,10119,9545,1.99,0.41,250,260,light,50,51,75,42,-65,-4,6,61,knockdown,dizzy,true
+5pvp7b1u,407q5bd2,bantha,11,9527,6117,3227,1.97,0.23,120,130,"",59,-62,43,-34,-23,-88,-1,-99,crippling,intimidation,false
+602gfn33,t5p7kgfv,cu pa,12,2706,2293,2598,2.16,0.28,55,65,"",7,-29,7,-29,-29,-29,-29,-69,dizzy,"",true
+611kdta8,k82getu9,gnort,14,6350,3191,3011,1.98,0.24,90,110,"",28,5,10,-99,-68,-68,-5,-99,"",intimidation,false
+628mqu1m,r1jdtuhb,durni,22,9042,7517,3568,1.99,0.25,280,290,"",41,41,41,-10,-10,-64,-24,-64,strong_poison,strong_disease,false
+62q5u5vg,ctiggpgr,razor cat,28,10640,6619,6009,1.98,0.26,305,320,light,35,36,-2,-15,-2,-81,6,-17,blinding,medium_disease,false
+64a7inbs,d47r28hd,bantha,5,157,588,1611,2.21,0.23,30,40,"",1,0,2,2,2,-4,-4,-99,"","",false
+64v2qh2v,39k9ghma,falumpaset,20,6547,3281,2293,2.16,0.23,280,290,"",14,20,-64,33,33,33,-64,-99,"","",false
+66h9j346,n3hbo346,slice hound,19,4447,2275,2329,2.16,0.23,290,300,"",21,21,-24,-29,-29,-29,-29,-29,strong_disease,strong_poison,true
+67tomsu8,gl9kjsm2,gurrcat,13,8648,4609,3352,1.99,0.26,340,350,"",35,-35,-5,-35,-30,-45,-28,-75,strong_poison,strong_disease,true
+6b979vqt,hg28ev68,cu pa,11,3011,3065,2580,2.32,0.28,30,40,"",8,-52,8,-52,-52,-52,-52,-44,dizzy,"",true
+6f9lmdbu,mimktdn1,gurrcat,13,8289,3227,3406,0,0,0,0,"",56,-54,-32,-10,-7,-71,-30,-99,stunning,intimidation,false
+6grbbtt4,3jp1ttp5,narglatch,40,10155,8701,9689,1.99,0.38,250,260,light,58,23,69,60,64,-92,-9,"",dizzy,mild_poison,true
+6hlc2dh1,eo6t0d5o,kima,10,1019,1127,1180,1.98,0.25,35,40,"",4,3,3,-39,-39,-39,-37,-99,mild_disease,"",false
+6hucfarf,81khfajq,squall,9,9060,3945,1952,1.98,0.2,270,280,"",51,-47,-16,-5,-4,-55,-15,-99,stunning,intimidation,false
+6j048r2a,ioucfr65,rancor,48,11071,10999,11125,2.18,0.5,280,290,"",34,55,-33,87,87,87,-33,-33,"",intimidation,false
+6ko7k4ql,er9nq4et,cu pa,10,9240,5309,3155,1.98,0.23,120,130,"",58,-64,-2,-35,-34,-99,44,-99,crippling,intimidation,false
+6krvta9s,q7n6q9pa,bantha,15,5829,3640,2868,1.99,0.24,80,90,"",28,5,8,-99,-68,-68,-5,-99,"",intimidation,false
+6mkbfhco,qocj2h8k,graul,30,8953,8648,8558,2.16,0.39,210,220,"",50,23,25,41,41,-99,-99,-99,crippling,intimidation,true
+6mutomu3,tho778jf,dune lizard,5,175,157,157,2.24,0.21,30,40,"","","","","","","","","","","",false
+6nljrd9q,hhji6a80,ikopi,15,6422,3388,2939,1.98,0.24,90,110,"",28,5,9,-99,-69,-69,-55,-99,"",intimidation,false
+6qvncjh2,t1e1bjda,gurreck,30,9850,7355,5399,2.15,0.3,120,130,"",50,60,27,27,27,27,27,27,stunning,crippling,false
+6td1segp,6h71keks,narglatch,33,10927,7481,7696,21.4,0.33,330,340,light,15,10,-1,16,16,-32,"",-19,strong_poison,strong_disease,true
+701gl911,7jnhjfpr,dune lizard,7,7571,1450,1737,1.98,0.2,90,110,"",52,-39,-16,-2,-16,-55,-14,-99,dizzy,strong_disease,true
+71fd75ss,kaj8gq3t,razor cat,13,10137,5435,3981,1.97,0.29,170,180,"",59,-62,44,-34,-23,-88,-1,-99,"",intimidation,false
+722pd8fo,dnoc79f5,graul,44,11125,9850,10622,2.07,0.43,410,420,light,15,8,-40,30,30,30,-39,-40,dizzy,strong_disease,true
+73mpkmr3,chaofnj2,bolle bol,10,7930,3119,1719,1.98,0.21,260,270,"",51,-6,-20,-3,-1,-13,-19,-99,stunning,intimidation,false
+767fs25r,4t68q2pb,gnort,15,5632,3496,2724,1.98,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+76l35fh3,5kq61f9k,razor cat,12,9671,5758,3747,1.98,0.28,45,50,"",55,-62,42,-9,-11,-63,11,-74,"",intimidation,false
+7703l8uk,m621m8ul,gnort,15,6924,3496,3083,1.98,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+77ql8ptu,4dvicp9c,razor cat,10,10425,5004,3316,1.98,0.22,120,130,"",59,-63,44,-35,-25,-89,-3,-99,crippling,intimidation,false
+78mq8sed,ovn4nsid,bantha,10,6835,3747,1791,1.99,0.22,290,300,"",48,-57,-8,-23,-20,-68,-19,-87,strong_poison,strong_disease,true
+796eu7oq,kg19t749,bantha,10,2957,1127,965,2.16,0.22,120,130,"",4,-64,4,-64,-63,-63,-64,-19,dizzy,"",true
+7crg94bn,ap9b343e,gnort,58,11538,10622,10263,1.98,0.45,430,440,light,42,49,37,45,83,83,37,37,"",dizzy,true
+7ebgavgf,niqh3vcn,razor cat,15,6224,3622,2904,1.99,0.24,80,90,"",28,5,9,-99,-70,-70,-6,-99,crippling,"",false
+7ejfcq4v,3c968q42,merek,34,9330,9725,9114,2.24,0.44,300,310,"",17,16,5,59,5,-11,-97,-53,stunning,intimidation,false
+7gp5n10i,bgusn1g1,gurrcat,40,11143,8791,9276,1.97,0.39,250,260,light,47,40,19,21,19,72,72,48,blinding,stunning,false
+7hu8m9al,6jpb28m6,brackaset,8,8073,4070,1719,2.06,0.2,220,230,"",51,-53,-28,-10,-8,-68,-26,-99,stunning,intimidation,false
+7k58rcin,i8k3icef,razor cat,10,839,678,839,2.16,0.22,50,55,"",13,2,7,0,-69,-69,-69,-99,"",intimidation,false
+7l9402sg,mrc6d28i,rancor,35,11340,9599,7983,1.98,0.41,340,350,light,60,-78,-17,-6,-5,-86,-16,-99,stunning,intimidation,false
+7lnnscdt,rjifhctv,bantha,15,7481,5650,2742,2.15,0.22,120,130,"",59,-63,26,-35,-25,-89,-3,-99,crippling,dizzy,false
+7p5lkodh,p8p9no5v,razor cat,11,10622,6278,3424,1.97,0.23,120,130,"",59,-63,44,-35,-25,-89,-3,-99,crippling,intimidation,false
+7pg91aic,u0jr2aed,mott,40,9222,8468,10999,1.98,0.45,315,340,"",60,60,29,20,-5,-70,-24,-5,knockdown,crippling,true
+7q9dg775,t7upb6ne,gurreck,48,10927,9366,10496,1.99,0.48,380,390,light,30,30,52,3,25,52,52,52,strong_poison,strong_disease,true
+847ncae9,jtk7vfj9,gurrcat,14,8540,5578,3263,1.98,0.26,330,340,"",40,-26,-55,-20,-15,-55,-52,-99,stunning,intimidation,true
+85e26vu9,43traveg,brackaset,10,9545,5506,3137,1.98,0.22,120,130,"",59,-62,44,-34,-23,-99,-1,-99,"",intimidation,false
+85u8jndh,m9rkqnpj,bantha,10,2904,1019,785,2.16,0.2,120,130,"",4,-64,4,-64,-64,-64,-64,-29,dizzy,"",false
+85v9cd9p,qv6dpdhl,razor cat,10,10030,5740,3316,1.98,0.22,120,130,"",59,-63,43,-35,-25,-89,-3,-99,"",intimidation,false
+861hou77,e4lssu7t,woolamander,24,7930,6404,5363,2.15,0.28,230,240,"",43,-1,22,91,66,45,16,-5,knockdown,blinding,true
+889ljj1u,1eo7fcdh,gnort,3,283,121,139,2.16,0.2,30,40,"",3,0,2,0,"","","",-99,stunning,"",false
+89bqduic,c0lifum3,razor cat,13,2293,2922,2042,2.16,0.27,45,50,"",18,2,2,2,2,-44,-44,-99,dizzy,"",false
+8e63pali,k5vqe9te,bantha,15,6619,3550,2993,1.98,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+8i428uuc,r035du6v,gnort,15,6835,3442,3119,1.99,0.24,80,90,"",28,5,9,-99,-68,-99,-5,-99,crippling,intimidation,false
+8mgpmeev,c53ggem6,thune,15,103,193,85,2.24,0.2,30,40,"",0,0,0,0,0,0,0,-99,"","",false
+8olil5k1,d6cp95ct,razor cat,17,3927,2293,3442,1.99,0.26,260,270,"",-1,18,"",-46,-34,-44,8,-94,knockdown,"",true
+8p4fnfdi,nn8gacl4,guf drolg,13,7086,1916,3406,1.99,0.26,200,210,"",42,-1,-54,-9,-54,-54,-49,-99,dizzy,strong_disease,true
+8pe1l50p,tv59oqf3,razor cat,11,5632,2275,2042,1.97,0.21,170,180,"",20,-1,-34,-1,-1,-34,-1,-74,knockdown,intimidation,true
+8r8v4639,i5qap6bg,kima,23,9168,3604,2168,1.99,0.21,290,300,light,60,-22,-33,-32,-32,-59,-32,-99,stunning,intimidation,true
+8r9hsi84,kna85iol,kaadu,8,570,1288,1503,2.16,0.25,80,90,"",8,8,0,0,0,0,0,-99,"",knockdown,false
+8roonn2r,6295lnu3,narglatch,15,2634,3209,2545,2.02,0.29,45,50,"",20,25,5,-56,-56,-55,-50,-62,stunning,crippling,false
+91i98m49,0h0q8mcg,bantha,11,1593,732,426,2.18,0.21,30,40,"",18,2,25,25,25,-39,-39,-99,"",intimidation,false
+92epbi4d,i84eei0o,kima,24,4717,4627,4304,2.16,0.33,150,160,"",29,29,17,29,17,17,8,-54,dizzy,stunning,true
+94e0vugf,jh4lkuoq,dune lizard,38,10784,8181,9832,1.98,0.41,350,360,"",48,41,27,-5,27,72,72,52,blinding,stunning,true
+9615rr0p,1tlktrc3,dune lizard,42,10802,9814,10676,2.16,0.48,340,350,"",48,41,27,-5,27,72,72,52,blinding,stunning,true
+97qff336,jspq83vn,gurrcat,10,9348,5309,2850,1.97,0.22,120,130,"",59,-62,44,-34,-23,-88,-1,-99,crippling,dizzy,false
+9avaio04,ce00apsb,graul,37,12363,9725,7373,2.15,0.39,385,480,light,60,-87,7,-3,-5,-93,-3,-94,"",dizzy,true
+9ftbnh91,vk16gh5v,choku,61,12291,10640,10927,1.98,0.48,460,470,light,37,53,23,56,76,69,20,20,"",dizzy,true
+9kfis0vn,obig33vp,brackaset,16,8576,6601,3227,2.14,0.23,320,330,"",60,-74,-20,-7,-6,-84,-19,-99,"",medium_disease,false
+a3td9tam,4aghbtug,gurrcat,10,9814,5955,2257,1.98,0.22,120,130,"",59,-62,44,-34,-23,-89,-1,-99,crippling,"",false
+a9isngin,bmav9hib,gurrcat,6,8773,1862,1970,1.99,0.2,120,130,"",51,-5,-10,-1,-1,-22,-22,-99,stunning,"",false
+ahv8bvor,637hvvk7,carrion spat,10,3532,1127,929,2.17,0.21,120,130,"",4,-64,4,-64,-64,-64,-64,-29,dizzy,"",false
+ak2k8ng4,jaq75nso,kaadu,10,9258,5524,3029,1.97,0.22,120,130,"",59,-62,44,-34,-23,-88,-1,-99,crippling,intimidation,false
+amekmbm1,gm81nbmi,razor cat,34,10532,7445,5309,1.98,0.31,270,280,light,55,37,-52,70,-23,39,74,-39,"",strong_poison,true
+aobcmg94,kdcgdht7,razor cat,10,2204,1378,1486,2.16,0.22,55,65,"",2,-44,2,-44,-44,-44,-44,-54,dizzy,"",false
+at8d24tc,sho0b4pk,rancor,35,8342,2796,3227,1.99,0.26,400,410,"",40,-6,-69,-10,-5,-30,-66,-99,stunning,intimidation,true
+atsfiid3,9b99uil9,gurnaset,33,9976,8540,7463,2.44,0.41,45,50,"",50,60,28,28,28,28,28,28,stunning,crippling,false
+b14a4i8b,ilvktmfv,kaadu,11,8468,2922,3227,1.98,0.22,260,270,"",40,-6,-69,-10,-5,-30,-66,-99,"",intimidation,true
+b3np596f,7ob039ah,bearded jax,15,5506,4501,2904,2.15,0.25,120,130,"",44,"",13,-99,-68,-68,-5,-99,"",dizzy,false
+b8a0cl31,sfjejmfd,cu pa,14,3819,3191,3334,2.16,0.26,70,75,"",10,10,7,10,27,27,-44,-99,dizzy,"",false
+b9a7mmi9,6hpsmmeg,dune lizard,5,67,67,67,2.24,0.2,30,40,"","","","","","","","",-99,"","",false
+bdid1j94,8rqgaej1,gurreck,40,9832,9850,9366,2.16,0.42,230,240,"",50,60,26,26,26,26,26,26,stunning,crippling,false
+behpe7j5,arnq47rm,dewback,10,7840,4519,1862,1.99,0.21,190,200,"",60,-8,-35,-35,-35,-48,-35,-99,stunning,intimidation,true
+bf9gt6fh,ihu3gg0t,cu pa,11,1162,1306,857,2.16,0.27,45,50,"",4,6,-64,4,-64,"",3,-99,mild_disease,intimidation,true
+bhm6l6s5,4slndd9q,razor cat,10,9760,6529,3173,1.97,0.22,120,130,"",59,-62,44,-34,-24,-88,-19,-99,crippling,intimidation,false
+bhqn6sa2,a7gkqvun,durni,6,175,247,534,2.16,0.26,30,40,"",0,0,6,0,0,0,0,-99,intimidation,crippling,false
+bjr0qlr9,vi99plrg,cu pa,10,1073,355,1773,2.27,0.22,30,40,"",8,8,6,8,19,19,-30,-99,"",intimidation,false
+bmr7ome1,pdpfv93f,dune lizard,5,157,157,139,2.25,0.21,30,40,"","","","","","","","","","","",false
+bp2ns93n,6lbckaf3,rancor,63,12130,12309,12094,1.98,0.6,370,380,light,35,60,7,85,85,85,7,7,knockdown,"",false
+bpfsb3i5,io95cn7j,dewback,10,8019,1701,1827,1.98,0.21,300,310,"",51,-6,-20,-3,-1,-13,-19,-99,stunning,intimidation,false
+bqk8jnd8,56okbn5e,razor cat,10,3281,1073,893,2.16,0.2,120,130,"",4,-64,4,-64,-64,-64,-64,-29,dizzy,"",true
+branrnji,r87msnb4,gurrcat,15,2114,3406,4429,1.99,0.36,220,230,"",41,-1,-29,-10,-29,-54,-27,-59,crippling,intimidation,true
+bu1pu47d,dldko43r,brackaset,11,8791,5937,2886,1.98,0.24,220,230,"",60,-33,-58,-58,-58,-99,-58,-99,"",intimidation,true
+bvda7vsi,mlkg2v8u,graul,40,11376,8881,7230,2,0.35,380,390,light,53,6,42,19,48,-19,20,0,dizzy,crippling,false
+c02pdnrm,4f99jnbj,gurreck,16,8235,2868,4124,1.98,0.31,370,380,"",40,-6,-69,-10,-5,-30,-66,-99,stunning,intimidation,false
+c0cnraai,gjofca6o,gnort,12,5058,3747,2634,1.98,0.2,30,40,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+c2h52ioh,rhsa5i07,gurreck,7,9132,1898,2006,1.98,0.2,220,230,"",56,-42,-18,-2,-1,-48,-17,-99,stunning,intimidation,false
+c4l02bpl,g2nofbpk,huurton,16,7032,4824,3065,1.98,0.24,90,110,"",28,16,-40,-60,-14,-30,-8,-99,dizzy,intimidation,false
+c7lgvk6t,ku91ska3,narglatch,16,2383,2006,1827,2.15,0.24,90,110,"",26,33,4,-33,-33,-85,-78,-99,stunning,crippling,true
+c8af851d,21rjqq8a,choku,26,8648,3406,5058,2.32,0.24,120,130,light,48,41,48,32,40,-86,0,0,dizzy,blinding,true
+ccf41vkj,drq6fvcp,bol,10,9581,6135,3245,1.98,0.22,120,130,"",59,-62,44,-34,-23,-88,-1,-99,crippling,intimidation,false
+cdujlsnu,o84putqr,huurton,11,8558,6691,3281,1.98,0.24,120,130,"",59,-28,42,-29,-60,-89,-41,-99,"",intimidation,false
+cf3f2ljl,hmqk1lf9,bearded jax,3,103,103,175,2.17,0.21,30,40,"",0,0,1,0,0,0,0,-99,"","",false
+cfs6pgtd,8reehgl4,cu pa,10,3532,1127,929,2.16,0.2,120,130,"",4,-64,4,-64,-64,-64,-64,-29,dizzy,"",false
+cgknrfav,rfbo4fi0,rancor,62,12309,9814,11286,1.97,0.51,510,520,light,41,48,25,51,83,83,25,25,stunning,intimidation,true
+cj1o2v3n,qvhlrubf,woolamander,26,7804,5883,5363,2.16,0.28,360,370,"",43,-22,21,91,66,45,16,-5,knockdown,"",true
+ctpoc9k2,1dr7fpkh,cu pa,25,7140,6565,6871,2.17,0.3,180,190,"",45,7,60,60,60,-99,-99,-99,crippling,intimidation,false
+d0a2o7dt,b71e641o,dune lizard,15,8504,4465,4340,1.99,0.31,330,340,"",40,-6,-69,-10,-5,-30,-66,-99,stunning,intimidation,true
+d5j7caq6,oat3dau1,gurreck,70,12686,12668,12597,2.19,0.64,480,670,light,56,57,57,51,8,16,6,12,blinding,stunning,false
+d7eno4sq,52532qhg,vir vur,7,1055,983,1055,2.24,0.22,45,50,"","","","","",-99,-99,-99,-99,"","",false
+d7qrquna,6macouvi,woolamander,24,7822,6440,5829,1.98,0.28,230,240,"",43,-1,22,91,66,45,16,-5,knockdown,"",true
+d8i9lk5v,lmho8b59,bantha,13,9581,6637,5435,1.99,0.29,120,130,"",59,-62,43,-34,-23,-88,-1,-99,"",dizzy,false
+d9fabm4h,l6unkieo,razor cat,10,7983,3334,1737,1.98,0.2,280,290,"",51,-42,-21,-4,-2,-49,-21,-99,stunning,intimidation,false
+dacl3328,eugjrslp,bantha,17,4699,4806,4250,2.24,0.26,130,140,"",4,30,4,-99,30,-99,"","",stunning,"",false
+dc3bsm2d,la3rhm2d,dune lizard,6,606,911,1665,2.24,0.22,30,40,"","","","",-49,"",-39,-9,-99,"","",false
+dcfolokr,4osbtoc2,razor cat,31,11484,8648,5955,1.99,0.35,345,400,light,59,-55,-30,6,10,-55,-28,-99,stunning,intimidation,false
+dcnqk0gj,dj3rq0s9,razor cat,15,9814,6565,7158,1.98,0.29,300,310,"",50,-23,47,-4,-9,-44,-22,-44,knockdown,strong_poison,false
+dd64cv09,tkn5vvoh,bantha,15,6763,3370,3029,1.98,0.24,80,90,"",28,5,9,-99,-70,-70,-6,-99,crippling,intimidation,false
+dd7b3m45,vhmeamot,gurrcat,10,8271,1557,1862,1.99,0.2,300,310,"",51,-42,-21,-4,-2,-49,-21,-99,stunning,intimidation,true
+ddsec97p,m15p59j5,dewback,5,265,157,157,2.24,0.21,35,40,"","","","","","","","","","","",false
+de8b5mk2,8s611ms5,gurrcat,10,8217,3173,1791,1.98,0.2,280,290,"",51,-42,-21,-4,-2,-49,-21,-99,stunning,intimidation,false
+dede44tu,jn8jn5dc,durni,30,9455,6153,8468,1.99,0.34,340,350,"",53,43,53,31,31,-99,-22,-22,dizzy,blinding,false
+dfi1gvdb,5u8giv5m,mott,21,6655,4501,3460,2.01,0.25,170,180,"",42,52,-8,-34,-11,-11,-1,-36,stunning,intimidation,false
+dfr7jh02,nbfjgqh0,razor cat,33,10837,8019,9294,2.17,0.37,380,390,light,60,-40,14,-20,10,-40,11,-50,stunning,intimidation,false
+di2ccqkm,v5283rkm,choku,32,9509,6045,6888,2.16,0.31,230,240,light,49,41,48,33,40,-90,0,0,dizzy,blinding,false
+dj5r2sqd,ht82vvir,durni,6,157,139,139,2.16,0.21,120,130,"",0,0,6,0,0,0,0,-99,intimidation,crippling,false
+dln8ukpf,mbgvjk5s,razor cat,22,4914,4016,3729,2.25,0.29,340,350,"",19,17,12,"",-5,-75,-20,-99,stunning,intimidation,true
+dodd8r81,c3qfuo8a,choku,34,10102,6817,7301,2.16,0.32,260,270,light,48,41,52,29,46,-56,11,11,dizzy,blinding,true
+dq388v2f,48sqcvq0,gnort,14,6404,3119,3029,1.99,0.24,80,90,"",28,5,9,-99,-68,-99,-5,-99,crippling,intimidation,false
+drvslhsd,5qvcnhsd,cu pa,13,2275,2850,1755,1.99,0.28,70,75,"",1,1,1,1,1,1,1,-99,stunning,"",true
+dta2275t,p4lb17p2,dune lizard,13,818,2814,3137,2.22,0.26,330,340,"",40,-25,-54,-19,-14,-54,-51,-99,stunning,intimidation,true
+dvveblt9,l5fvelhh,bearded jax,15,5740,3568,2796,1.99,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,"",intimidation,false
+e0dofdgr,uvgpg2g6,kaadu,10,10102,6350,3281,1.98,0.22,120,130,"",59,-62,44,-34,-11,-76,-19,-99,"",dizzy,false
+e0egmmd6,u3rghl5c,eopie,21,9707,5722,7158,2.2,0.29,190,200,"",22,16,9,-16,-16,-55,-29,-45,strong_poison,strong_disease,true
+e27uddsi,0f02ndch,boar wolf,15,6278,3352,2886,1.99,0.24,90,110,"",28,5,9,-99,-70,-70,-6,-99,crippling,intimidation,false
+e2jpptk4,6ge8ttcq,razor cat,29,10748,8378,5901,2.15,0.33,350,410,light,60,-68,-15,-7,-5,-77,-10,-99,stunning,intimidation,false
+e3rk8rq7,vhemdr2d,durni,37,9904,10317,9455,2.09,0.44,280,290,"",20,47,-32,79,79,79,-32,-32,knockdown,"",false
+e8qf5ahs,68culal7,bantha,15,6547,3640,2850,1.98,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,"",intimidation,false
+e9tb5r0n,im6iqroa,gurrcat,43,10963,8989,8953,2.09,0.42,300,310,light,46,40,30,12,30,72,72,53,blinding,stunning,true
+eap9epkf,4vmtko08,dewback,10,3316,1091,875,2.16,0.2,120,130,"",4,-64,4,-64,-64,-64,-64,-99,dizzy,"",false
+ebs8svhk,ih1gpvdq,narglatch,47,11502,9581,9707,1.98,0.4,370,380,light,60,0,48,76,63,-66,15,2,dizzy,blinding,true
+ecs7gjd3,vr25vj5c,gurreck,33,10084,8342,6978,1.98,0.31,230,240,"",50,60,26,26,26,26,26,26,stunning,crippling,false
+efbpqr1j,n55bvqdk,cu pa,11,7930,3765,1880,1.98,0.21,230,240,"",60,-62,-20,-19,-19,-84,-19,-99,stunning,intimidation,true
+efi4mcj3,gc2phcjr,gurrcat,17,8971,7858,5291,2.06,0.32,350,360,"",60,-72,-1,-1,-16,-94,-1,-94,stunning,intimidation,false
+em8mm30g,9r4os34m,kimogila,40,12004,9976,8504,1.98,0.4,310,320,light,60,-91,-6,1,-3,-91,-1,-96,stunning,intimidation,false
+emhu8r6m,bv3ba45h,durni,46,11179,10137,11340,1.98,0.5,340,350,light,46,-17,37,41,58,37,58,37,"","",true
+env3apdo,aeda8p11,cu pa,10,10012,5847,3424,1.98,0.22,120,130,"",59,-63,44,"","",-64,"",-64,"",intimidation,false
+ermaelaf,v0g99l6s,gurrcat,49,11538,9671,10191,2.04,0.45,330,340,light,43,45,33,25,59,40,4,38,stunning,intimidation,false
+f11gpaq4,p8csqe2,razor cat,10,9922,6224,3119,1.97,0.21,90,110,"",59,-62,44,-34,-23,-88,-1,-99,crippling,intimidation,false
+f191r12n,9apcdipj,cu pa,10,3783,1180,965,2.16,0.2,120,130,"",4,-64,4,-64,-64,-64,-64,-29,dizzy,"",false
+f1eb8o9c,v06abo9o,cu pa,13,5668,3209,2419,1.99,0.24,30,40,"",28,6,1,-99,-63,-63,-5,-99,"",intimidation,true
+f635ivp3,ftg4kv5q,mott,25,9150,4645,4034,2.03,0.26,240,250,"",55,60,-2,12,-3,-3,-67,-3,knockdown,dizzy,false
+fbeurnr0,56vaha7f,razor cat,10,9366,5183,3227,1.97,0.22,120,130,"",59,-26,43,-69,-48,-78,-38,-99,"",intimidation,false
+fbkac2uf,akv1i1uq,graul,34,10299,8881,9222,2.07,0.42,320,330,light,48,-34,44,41,38,-33,11,-22,dizzy,stunning,true
+feu7ai5u,hr9q1it5,razor cat,22,4286,3514,3478,2.38,0.3,320,330,"",19,15,10,"",-5,-72,-21,-97,stunning,intimidation,true
+ffi0k8v6,tcl53oap,shear mite,24,9096,9078,8468,2.16,0.35,320,330,"",40,-11,24,-11,-11,-99,-99,-99,dizzy,mild_poison,true
+fg8vlqv0,e5otfqj8,razor cat,17,6350,3532,2850,1.99,0.24,180,190,"",28,5,9,-99,-68,-68,-5,-99,"",intimidation,false
+fgpu0pga,upisjp0f,razor cat,17,4806,5040,5327,2.16,0.28,90,110,"",17,20,-25,-46,-94,-99,-33,"",intimidation,"",true
+fiqlo4qk,e9pnu46l,kaadu,15,6027,3209,3047,1.99,0.25,90,110,"",26,1,-5,-99,-95,-99,9,-99,crippling,intimidation,true
+fjaau5dt,c9nda5l3,choku,31,9007,6960,7822,2,0.36,390,400,"",46,42,37,-6,-6,-99,-44,-44,dizzy,blinding,false
+flm2jq4u,lsfn0opc,gnort,15,6763,3514,2957,1.99,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+flrrcu26,ujjp1u22,dune lizard,47,11502,9635,10371,1.98,0.37,310,320,light,50,40,1,33,1,74,74,40,"","",true
+fnn9ob8k,fd08sbkf,razor cat,18,7319,2616,1916,1.98,0.22,190,200,"",-10,55,-60,-54,63,-54,-73,-99,stunning,intimidation,true
+fo3qjj9b,8t7l9clu,gnort,3,121,175,301,2.16,0.21,30,40,"",0,0,0,0,-4,-4,-4,-99,"","",false
+focaavts,fefamv1t,slice hound,25,9976,8289,8181,1.97,0.37,350,360,"",48,-49,19,-14,-18,-55,40,-51,"",dizzy,false
+fp8g0hqk,7vb0shel,falumpaset,15,3514,3119,2688,2.32,0.24,160,170,"",4,20,-64,33,33,33,-64,-99,"","",false
+fq6ifpsj,v9lj8p4a,bantha,14,2832,1629,1486,2.16,0.27,70,75,"",10,16,9,9,9,-39,9,-69,stunning,"",false
+fqdnbt6v,ilcckiec,slice hound,10,10066,6278,3327,1.97,0.22,120,130,"",59,-62,44,-34,-11,-76,-19,-99,"",intimidation,false
+fqhgm6nl,5g13ih5o,kima,25,9922,4896,3406,2.01,0.23,380,390,light,60,-69,-25,-24,-22,-95,-24,-99,stunning,intimidation,true
+fr2qp3ov,eq0or3ou,dewback,10,3119,983,875,2.16,0.2,120,130,"",4,-64,4,-64,-64,-64,-64,-34,"","",false
+frfksnne,k3v9d8h1,bantha,5,624,1144,229,2.18,0,30,40,"",11,0,15,15,15,-24,-24,-99,crippling,intimidation,false
+fspndh62,6pm47hml,choku,14,8630,5452,3155,1.98,0.26,270,280,"",39,-3,-29,-14,-29,-45,-7,-51,strong_poison,stunning,true
+fsv7uc9p,59fjkc1h,dewback,15,7014,5542,2742,2.15,0.22,120,130,"",59,-63,26,-35,-25,-89,-3,-99,"",intimidation,false
+fuc2li21,i4fpgiug,huurton,15,7894,2939,3173,1.99,0.26,400,410,"",40,-7,-70,-11,-6,-31,-67,-99,stunning,intimidation,true
+fuql3lhe,l4m1mgg1,durni,24,9958,8235,8414,2.16,0.32,330,340,"",11,-34,17,13,10,13,19,14,dizzy,strong_poison,true
+fv027vck,umd14vo2,bol,15,10263,6117,3406,1.98,0.22,120,130,"",59,-62,0,-34,-23,-88,-1,-99,"",intimidation,false
+fvf96u01,3mfh4u41,gurrcat,50,11699,10694,10999,2.01,0.41,390,400,light,44,46,23,30,54,27,-17,29,stunning,intimidation,false
+g2loata2,c2l0bta2,gurrcat,10,9563,5722,3191,1.97,0.22,120,130,"",59,-62,44,-34,-23,-88,-1,-99,crippling,intimidation,false
+g37ndufp,r280fuve,rancor,47,10604,9904,9509,1.99,0.48,310,320,light,53,11,-49,56,-24,36,30,-25,strong_poison,intimidation,false
+g4cajnbf,m5md1815,bantha,5,175,373,821,2.22,0.22,30,40,"",1,0,2,2,2,-4,-4,-69,"",stunning,false
+g6bu8d55,v5s0edle,bolle bol,10,10155,6027,3119,1.98,0.22,120,130,"",59,-62,44,-34,-22,-86,-19,-99,crippling,dizzy,false
+g6rhpm61,rkbat9fm,dune lizard,5,103,85,85,2.17,0.21,30,40,"","","","","","","","","","","",false
+gatrbvpc,4fmjgvd9,mott,20,7427,4052,2616,2,0.22,160,170,"",45,57,-4,-20,-6,-6,-1,-21,stunning,intimidation,false
+gfqn6h3i,0j5mfhvd,torton,23,10586,6619,4393,2.04,0.31,180,190,light,60,-78,-12,-11,-11,-91,-14,-95,stunning,intimidation,true
+gsek3vtt,9ca62vlv,narglatch,37,10820,8863,9366,1.98,0.42,330,340,light,56,-38,21,"",17,-37,32,-36,stunning,dizzy,true
+h21o1vvm,32rt0vvb,dune lizard,6,498,606,283,2.24,0.21,40,45,"","","","","","",-54,-54,-99,"","",false
+h43fep31,ahap5pr5,durni,32,8953,9204,8324,2.17,0.39,330,340,"",25,36,-90,60,13,-41,63,-60,stunning,strong_poison,false
+h583d98q,nd9te4j6,cu pa,13,3819,3263,3532,2.24,0.23,90,110,"","","","","",-59,"",-99,-99,"","",false
+h854qtlr,16o47sdl,gnort,30,10263,8307,8809,2.01,0.35,320,330,"",48,10,23,3,21,-73,-17,-30,dizzy,mild_poison,false
+h96biki4,dp2ijkqm,narglatch,22,4788,5919,5542,1.99,0.34,170,180,"",32,21,-15,-94,-4,-41,15,-99,dizzy,blinding,false
+h993v5od,7hifu540,falumpaset,10,9958,5417,3155,1.97,0.22,120,130,"",59,-62,43,-34,-23,-88,-1,-99,crippling,"",false
+hauh0ahu,mocu4917,bantha,15,6745,3640,2904,1.98,0.24,90,110,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+hc6a35ve,uoalb5no,razor cat,31,10802,8450,7786,1.98,0.36,220,230,light,36,38,-1,-8,-1,-81,3,-9,blinding,medium_disease,false
+hc9cibm0,7s91jbek,ikopi,26,9886,7589,8594,1.98,0.33,230,240,"",36,32,-64,32,-4,-64,-64,-64,blinding,stunning,true
+hm0oju9i,u3s6pu1s,durni,20,8217,5470,4286,1.99,0.28,220,230,"",43,43,43,-3,-3,-58,-7,-58,strong_poison,strong_disease,false
+hq6thq5k,79ngmqtc,razor cat,12,10281,7050,6188,1.97,0.27,130,140,"",48,-68,44,-4,-4,-69,-4,-64,"",intimidation,true
+hr9luhvr,59qtrh7i,gurreck,10,10155,5219,3298,1.98,0.22,120,130,"",59,-63,43,-35,-25,-89,-3,-99,crippling,dizzy,false
+hvr3bv7a,9nqiavjq,woolamander,24,10066,6135,5632,2.16,0.28,370,380,"",43,-22,40,91,66,45,16,-25,knockdown,stunning,false
+i1dnnm1i,65auent1,razor cat,28,5417,5973,6350,2.29,0.38,280,290,"",37,19,8,28,25,-69,25,-91,strong_poison,blinding,true
+i96n7l9n,cf0aqld8,razor cat,25,6224,6350,6009,2.16,0.34,280,290,"",17,11,16,1,1,-59,1,-99,dizzy,blinding,true
+ibisubb0,s6714brq,narglatch,58,12130,9796,11017,1.98,0.51,490,500,light,35,49,28,45,72,69,26,26,"",dizzy,true
+ih37er4d,luv9gr43,razor cat,23,10568,5596,4106,2.19,0.29,270,280,light,60,-70,-17,-11,-9,-78,-20,-99,stunning,intimidation,false
+iikhgmls,29agnmp3,bantha,10,9581,6565,3191,1.98,0.22,120,130,"",59,-62,44,-34,-23,-88,-1,-99,"","",false
+imj6v5jk,25o6o82q,razor cat,13,2383,2042,1952,2.03,0.26,30,40,"",14,18,2,1,-4,-17,-4,-99,stunning,knockdown,false
+inbs7vgj,ptna3vkt,kaadu,10,10191,6691,3245,1.98,0.22,120,130,"",59,-63,44,-35,-25,-89,-3,-99,crippling,intimidation,false
+io8uhn58,rtlcbg97,bantha,16,3657,3514,3604,2.16,0.31,70,75,"",14,5,9,1,18,-44,-39,-44,dizzy,"",false
+ipcqj1s7,8d8ea285,merek,32,9527,9096,8486,2.16,0.42,330,340,"",37,6,16,-44,-22,-91,-99,25,intimidation,crippling,false
+iuopq8j9,u500s8vl,cu pa,12,3945,4411,3604,2.19,0.25,90,110,"",3,-64,3,-64,-64,-64,-64,-9,dizzy,"",true
+j1pmlm7s,m07snm7j,dune lizard,14,8414,4268,3245,1.99,0.26,370,380,"",40,-1,-69,-30,-5,-10,-56,-99,stunning,intimidation,true
+j6soodhe,k2lp0a0j,ikopi,15,6440,3442,2778,1.98,0.24,90,110,"",28,5,9,-99,-34,-34,-55,-99,"",intimidation,false
+j7rql94q,2nmpk9sc,veermok,14,2598,2796,2760,1.99,0.31,70,75,"",2,2,0,0,0,0,0,-25,"",crippling,false
+j8hi6pnp,bo727pvi,dune lizard,47,11250,10155,10119,2.13,0.47,290,300,light,50,40,0,33,0,74,74,40,"","",true
+j8tqpuq8,26ao4v23,razor cat,41,11053,8630,9366,1.99,0.34,270,280,light,52,56,40,46,18,12,11,22,stunning,crippling,true
+j9cj7euc,97i7a0a0,durni,4,175,139,157,2.16,0.21,35,40,"",0,0,6,0,0,0,0,-99,"",crippling,false
+j9q4ad8s,slnr2acb,vesp,15,7194,3819,3011,1.98,0.24,90,110,"",28,5,10,-99,-70,-70,-6,-99,crippling,intimidation,false
+jbe77mki,eb5s6m47,gnort,14,6314,3137,1809,1.98,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,"",false
+jfkdgjc0,vddkkjss,bantha,21,4717,4322,4250,2.16,0.34,120,130,"",29,29,14,14,14,14,-44,-54,stunning,medium_poison,true
+jgb13jcl,bl0gog00,rancor,35,9850,8181,8504,2.15,0.33,400,410,"",40,41,62,-21,62,69,70,67,blinding,stunning,true
+jgbq7aiq,u4f0vl57,kimogila,56,11699,10891,10102,2.16,0.47,415,540,light,45,51,49,56,32,67,26,49,blinding,stunning,true
+jgh9tjrs,8ufu0jr3,bantha,9,139,893,3155,2.2,0.33,30,40,"",1,0,0,0,0,-4,0,-99,strong_poison,"",true
+jjtplh9n,8svaaris,squall,9,8324,1773,1880,1.99,0.21,280,290,"",51,-9,-21,-21,-19,-32,-21,-99,stunning,intimidation,false
+jmg60k8n,s3siaq7a,cu pa,9,1432,947,552,2.27,0.24,30,40,"",5,5,4,4,-13,-14,4,-94,dizzy,intimidation,false
+jn4j7vqk,gbmkfvmd,dune lizard,20,8342,5955,5219,2.25,0.36,330,340,"",32,-34,-30,-35,-30,-70,-28,-75,strong_poison,strong_disease,true
+jpn0ei0l,rpuheig1,cu pa,10,2419,1252,2078,2.32,0.26,50,55,"",10,-39,10,-39,-39,-39,-39,-54,intimidation,"",false
+jr1c3c93,oi9q1et7,gurrcat,14,8540,4322,3281,1.99,0.26,370,380,"",40,-26,-55,-20,-15,-55,-52,-99,stunning,intimidation,true
+jt8lb3ht,q94633pb,durni,19,5758,2706,2580,1.99,0.25,120,130,"",27,37,16,16,-94,-29,-4,-74,"","",true
+ju6d14qq,6cr7442k,kaadu,15,6547,4645,3029,1.98,0.25,90,110,"",26,1,-5,-99,-95,-99,9,-99,"",intimidation,true
+jujh5u0f,h0el9us1,choku,50,11950,10371,9922,2.01,0.44,420,430,light,45,50,9,51,60,33,-31,15,stunning,intimidation,true
+k0vd4q9r,itt0u5pd,razor cat,33,9994,9707,9473,2.2,0.41,90,110,"",55,56,27,19,-1,-66,-14,-1,knockdown,dizzy,true
+k13qioa,qnsv0ic4,razor cat,12,3693,3837,3137,2.31,0.29,45,50,"",4,-45,4,-50,-50,-50,-57,-40,"","",true
+k1i4af1g,2oi89fdg,razor cat,15,6278,3657,2760,1.98,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+k3rlm0f6,60ehh0vc,bantha,10,9850,5093,3011,1.98,0.22,120,130,"",59,-62,44,-34,-23,-89,-1,-99,crippling,"",false
+k7vv3lnr,9em50l3v,bearded jax,2,175,85,103,2.17,0.21,30,40,"",0,0,6,0,0,0,0,-99,"","",false
+kamlcv4f,ghasav8h,gnort,15,6781,3496,2939,1.98,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+kb5blbfc,c73rs4jc,razor cat,15,3334,1342,1665,2.16,0.23,90,110,"",30,4,40,40,40,-64,-64,-99,crippling,intimidation,false
+kdu96ns0,dhprfn03,cu pa,18,5004,4519,4124,2.24,0.31,45,50,"",25,25,-3,15,-58,-61,15,-82,dizzy,intimidation,false
+ke5nbvgo,s8f67vgd,dewback,15,6709,3245,2957,1.99,0.24,80,90,"",28,5,9,-99,-70,-70,-6,-99,"",intimidation,false
+kejdi287,ntaak2gr,ikopi,15,6350,3568,2760,1.99,0.24,80,90,"",28,5,9,-99,-34,-34,-55,-99,"","",false
+kg4m924j,n7thn2of,kahmurra,16,2688,3011,2850,2.16,0.31,70,75,"",6,6,6,6,6,6,6,-99,"",intimidation,false
+kh258po1,e9uh9pkf,bantha,18,4070,3837,2742,2.17,0.28,120,130,"",16,26,12,12,12,-64,12,-64,crippling,"",false
+ki77n43e,kgo6j4jh,brackaset,13,8737,5758,3011,1.98,0.24,280,290,"",60,-28,-61,-60,-59,-96,-60,-99,stunning,intimidation,true
+kjvtv7d7,jakjt7h2,choku,34,9958,8073,8271,1.98,0.36,310,320,light,46,40,33,21,21,-99,-7,-7,dizzy,"",false
+kkngvita,nplnlipr,razor cat,24,7050,6422,7589,1.99,0.38,340,350,"",18,-17,2,-35,-90,-44,-36,-59,"","",true
+krff5ggn,hqm47g0b,narglatch,17,3891,4663,4734,2.17,0.29,260,270,"",11,-20,-29,-41,-51,-54,-91,-11,stunning,"",false
+kslg1d70,uhk5bdjg,gurrcat,25,8414,8791,7086,2.09,0.47,380,390,"",60,-20,-1,-1,-39,-72,-1,-74,stunning,intimidation,true
+ktq9rqor,rbcmnqg0,merek,42,10173,10155,10030,2.15,0.44,430,440,"",50,47,10,20,20,-42,-94,24,stunning,crippling,false
+l5alhuan,jbrptuuv,bantha,10,3316,1055,893,2.16,0.2,120,130,"",4,-64,4,-64,-64,-64,-64,-59,dizzy,"",false
+l5s3qkm9,hk7aokek,narglatch,24,5829,5542,4519,1.98,0.31,220,230,"",31,39,16,-63,-63,-80,-70,-99,stunning,crippling,false
+l664mb27,ltl4gbue,razor cat,16,8648,3119,2939,1.98,0.21,90,110,"",35,30,-57,"",-13,-67,-58,-67,blinding,stunning,true
+l8hurv1i,2dnh0ud1,gnort,33,10712,8271,9007,1.98,0.36,320,330,"",60,45,47,5,48,-47,19,-14,blinding,blinding,true
+l9glr5k8,8mve42ku,gurreck,59,11789,11035,11825,2.15,0.54,400,510,light,51,53,47,57,22,49,13,30,blinding,stunning,true
+leo02u25,6ba79u2s,hermit spider,9,732,2024,1360,2.33,0.24,30,40,"",13,6,-30,0,0,-44,-12,-99,dizzy,strong_poison,false
+lgedcik9,5gfcdi4p,cu pa,11,2904,3083,1862,2.16,0.25,120,130,"",9,-39,9,-39,-39,-39,-39,-54,intimidation,"",false
+ljc7cpo6,dbumdpkv,bantha,13,1396,768,1647,2.35,0.25,30,40,"",14,22,11,11,11,-55,11,-65,crippling,"",false
+ljod5jss,a2oi6jkc,kwi,54,11430,9042,9366,2.05,0.39,470,480,light,48,47,45,63,87,39,23,23,blinding,"",true
+lkdmfigf,rc2afic8,gurrcat,10,9150,2688,2186,1.99,0.23,260,270,"",56,-20,-6,-1,-1,-26,-4,-96,stunning,intimidation,false
+ln9ecch9,ridi6chb,gnort,4,337,444,193,2.15,0.2,30,40,"",3,0,2,0,-24,-24,-24,-99,stunning,"",false
+lnk4d7fn,q9mt1glj,woolamander,15,8271,4052,3298,1.99,0.26,400,410,"",40,-12,-70,-67,-62,-87,-67,-99,stunning,intimidation,false
+ls8l920l,23sr62cv,merek,33,8773,8181,8737,2.28,0.46,270,280,"",32,35,-62,48,48,28,-94,-58,stunning,intimidation,false
+ltfpfm8r,gbsi3mg2,slice hound,10,10227,5237,3281,1.98,0.22,120,130,"",59,-63,43,-35,-25,-89,-5,-99,crippling,intimidation,false
+lvn43jrf,8oiucjbd,bantha,8,2850,696,660,2.17,0.21,30,40,"",18,0,25,25,25,"","","","",intimidation,false
+m1j4mg6n,1fsabhug,narglatch,63,11430,10873,10658,2.08,0.5,560,570,light,60,41,67,92,92,-19,11,11,"",dizzy,false
+m1uu9ull,n8etbuhd,razor cat,10,9384,5847,3155,1.97,0.22,120,130,"",59,-62,44,-34,-23,-88,-1,-99,crippling,"",false
+m27cokks,ghm0ukck,cu pa,9,1378,750,534,2.18,0.25,30,40,"",4,6,3,3,3,-15,3,-99,"","",false
+m4ai12ck,u2r2d2ss,woolamander,40,11250,10245,9671,2.16,0.44,315,340,light,58,-6,13,28,11,-16,5,-29,"",crippling,false
+mbiiv34o,ohrer3os,merek,53,11125,9599,10048,1.98,0.48,395,500,light,47,56,27,57,22,49,11,23,"",crippling,false
+mgickqvt,2vi5bqvd,razor cat,15,6619,3460,2939,1.99,0.24,90,110,"",28,5,9,-99,-68,-68,-5,-99,"",intimidation,false
+mi9bh9qe,a88i4biu,durni,9,8755,4250,1629,1.98,0.21,250,260,"",52,-54,-31,-11,-9,-70,-29,-99,stunning,intimidation,true
+miec1vjg,90aj4vr2,woolamander,28,7553,6332,7948,2.16,0.38,230,240,"",43,-22,21,91,66,45,16,-5,"","",true
+mkng0vov,6c4h1v46,gnort,15,6637,3334,2975,1.99,0.24,80,90,"",28,5,9,-99,-68,-68,-5,-99,"",intimidation,false
+mm8gn9sj,ceh4m90v,kimogila,40,10909,8127,7624,1.98,0.38,240,250,light,60,-15,12,9,13,-35,26,-31,blinding,blinding,true
+mmhkbp03,5o5m6fus,graul,33,10963,7660,7032,1.99,0.36,410,530,light,60,-87,-5,-2,-2,-92,-10,-99,"",dizzy,false
+mne1p4kq,pa4q3a50,dewback,6,911,965,1037,2.24,0.22,45,50,"","","","","",-99,-99,-99,-99,"","",false
+mqlfg5kh,6qbfh5ku,razor cat,14,3227,2329,2150,2.15,0.23,120,130,"",20,15,-54,-17,-8,-85,"",-99,crippling,stunning,false
+n2atpvqr,un7f3uet,bantha,14,9150,4411,3155,1.98,0.22,90,110,"",49,-62,40,33,10,-34,32,-34,"",intimidation,false
+n4fcvdo8,la8p0436,cu pa,14,2239,1916,1378,2.24,0.22,80,90,"","","",-69,"","",-99,"",-59,"","",false
+n7fqntn9,5ubvktrr,rancor,35,11699,8989,6799,1.99,0.31,460,470,light,60,-19,-40,-1,-1,-36,-65,-99,stunning,dizzy,false
+naktgalr,b3b539tk,bantha,15,6512,3729,3065,1.98,0.24,90,110,"",28,5,9,-99,-68,-68,-5,-99,crippling,intimidation,false
+nbrh64b7,ull1q3v1,gnort,45,10999,9563,9689,1.99,0.36,320,330,light,47,42,60,62,85,6,23,23,crippling,"",true
+ncdnfc5g,56viqc59,kima,10,9419,5255,3155,1.98,0.22,120,130,"",60,-80,44,-19,-14,-94,-2,-99,crippling,dizzy,false
+ne242va8,4do25va5,cu pa,12,3011,3657,3101,2.28,0.3,30,40,"",1,-64,4,-65,-65,-65,-67,-29,dizzy,"",false
+nf58cf2n,15m49fmu,falumpaset,14,1809,1270,1288,2.16,0.22,140,150,"",20,2,27,27,27,-44,-44,-99,"","",false
+nh6ol80c,1oblm8kq,razor cat,16,5542,1701,2993,2.34,0.26,180,190,"",-6,48,-49,-63,20,-74,-73,-99,stunning,intimidation,true
+njm5aqfv,vadk8qj2,cu pa,15,4501,2455,1432,2.17,0.25,35,40,"",22,22,12,12,"",12,"","","","",false
+nkjrf9re,v7abpav2,dewback,5,337,247,283,2.22,0.22,50,55,"","","","","",-99,-99,-99,-99,"","",false
+nokft503,uoest50u,gnort,15,6727,3675,2850,1.98,0.24,90,110,"",28,5,9,-99,-68,-68,-5,-99,crippling,"",false
+norqrpou,8sm42pco,cu pa,10,3622,1144,947,2.16,0.2,120,130,"",14,-64,14,-64,-64,-64,-64,-99,dizzy,"",false
+ntplrnlg,brfdmnlr,bageraset,15,3496,3316,3747,2.32,0.32,30,40,"",9,3,-21,6,18,-8,-39,-71,dizzy,"",false
+o2ugonv8,n7he2kjf,gurrcat,19,8917,1827,2186,1.98,0.21,90,110,light,60,-26,-25,-24,-24,-55,-25,-99,stunning,intimidation,false
+o4jedp5e,p4bats7j,bearded jax,15,6242,3693,3119,1.99,0.24,80,90,"",28,5,9,"","","","","","",intimidation,false
+o547igbt,43bvvgrq,torton,21,10353,6476,3927,2.12,0.27,180,190,light,60,-81,-13,-12,-12,-95,-16,-99,stunning,intimidation,true
+o97m0aan,fv9ptltv,choku,42,10532,9958,9760,2.08,0.41,350,410,"",60,60,29,20,-5,-70,-24,-5,knockdown,crippling,true
+oj843eiu,7mmro1e2,durni,4,175,139,157,1.99,0.21,35,40,"",0,0,6,0,0,0,0,-99,"",crippling,false
+ok8rmj0e,0rgbpj42,razor cat,12,4052,3837,3729,2.16,0.27,90,110,"",10,-44,10,-44,-44,-44,-44,-54,dizzy,"",true
+okqsilv6,v3kjslnh,gnort,14,6188,3245,3065,1.99,0.24,80,90,"",27,9,9,-89,-99,-99,-5,-99,"",intimidation,false
+olpc2voo,dld63voi,bol,10,9994,5273,3424,1.98,0.23,120,130,"",59,-62,44,-34,-23,-88,-1,-99,"",intimidation,false
+oms0pmui,pafahqg8,dune lizard,5,462,319,193,2.24,0.21,30,40,"","","","","","","","","","","",false
+oohg1pke,jcn6ppod,merek,36,9796,9025,9527,2.09,0.46,350,360,"",21,31,-94,58,58,58,-94,-94,stunning,intimidation,false
+ot1hmgoe,2i64pgct,cu pa,25,9025,7912,6117,2.16,0.34,120,130,"",36,35,-1,21,-89,-54,21,-59,"",dizzy,false
+otm3ebhq,23hm3bd9,bantha,14,8468,6081,2993,1.97,0.22,120,130,"",59,-62,34,-34,-23,-88,-1,-99,crippling,intimidation,false
+ou4fikk8,0a6vrks9,narglatch,19,10335,7965,8145,1.99,0.31,280,290,"",46,-38,20,8,-11,-74,-29,-74,crippling,medium_poison,false
+ovq577t5,8ti527t1,ikopi,30,9545,7750,8181,1.99,0.41,370,380,"",42,39,24,-1,-1,-99,-26,-26,dizzy,blinding,false
+p48d6svk,uq73as3j,woolamander,23,11017,7481,4976,1.98,0.23,280,290,light,59,-55,-9,-13,-13,-91,4,-91,crippling,blinding,false
+p7p0rn98,r88250fl,razor cat,28,7930,7265,6188,2.16,0.37,210,220,"",38,26,20,38,34,-59,34,-89,strong_poison,blinding,true
+pae3i58p,npovk50i,razor cat,10,4986,732,1503,1.97,0.2,170,180,"",20,-1,-34,-1,-1,-34,-1,-74,knockdown,intimidation,true
+pbsmi3gg,03h5p346,kaadu,10,3137,1019,857,2.16,0.2,120,130,"",4,-64,4,-64,-64,-64,-64,-34,dizzy,"",false
+pdefjush,oaj6tucv,razor cat,49,11753,11735,11358,2.07,0.49,430,440,"",47,48,5,40,45,4,-58,14,stunning,intimidation,false
+pfirekme,luj2ckeu,narglatch,24,8342,5991,6386,1.99,0.28,170,180,"",40,43,19,16,16,-24,16,-99,stunning,crippling,true
+plu7hqkc,pk76jpsg,durni,24,10784,9096,8199,1.99,0.3,460,470,"",45,-5,60,32,32,-99,-33,-8,"",stunning,true
+pnji2m8m,emas1moq,cu pa,16,4070,2904,1450,2.16,0.27,50,55,"",12,12,-39,25,25,25,-39,-99,"","",false
+pqdj5qcg,lgfb1q8h,merek,37,9976,9527,10227,2.16,0.47,290,300,"",38,38,-46,43,43,14,-94,-40,stunning,intimidation,false
+pro3g48i,o0p1m4ki,graul,29,10012,7409,7768,1.99,0.31,480,490,light,1,-24,1,-64,-24,-24,-24,-39,strong_poison,strong_disease,true
+pumhbd0k,7pkhn3e1,cu pa,13,2473,2850,1827,2.18,0.24,70,75,"","","","","",-99,-99,-74,-74,"","",false
+q440hse4,o245tsek,vesp,37,10622,10119,9007,2.21,0.47,320,330,light,60,-80,-9,-11,-9,-91,-9,-92,strong_poison,strong_disease,true
+q4glknvv,tjvrqn7o,kima,20,965,2616,6063,1.98,0.41,200,210,"",30,-1,-33,-27,-33,-45,-32,-87,crippling,intimidation,false
+q6ql7jod,apmaoa74,kima,9,1055,642,606,2.16,0.21,35,40,"",7,7,4,4,4,4,4,-99,"","",false
+q86kcan3,gd30ma31,gurrcat,15,8666,4483,3281,1.98,0.26,380,390,"",40,-25,-54,-19,-14,-54,-51,-99,stunning,intimidation,true
+qbdcvc3c,mval7dnv,gurrcat,20,9240,8342,6924,2.05,0.36,340,350,"",60,-23,1,-1,-51,-90,-1,-91,stunning,"",true
+qd5n95rf,d90p05bd,bantha,14,3406,4088,3819,2.17,0.32,30,40,"",9,12,4,-34,-37,-2,5,-99,stunning,knockdown,false
+qe77qq72,o5q3sqjc,razor cat,12,5991,2329,3209,1.98,0.26,150,160,"",20,-1,-34,-1,-1,-34,-1,-74,knockdown,intimidation,true
+qkuvjn3m,87tgk4kr,bantha,7,875,355,373,2.19,0.21,70,75,"",11,0,15,15,15,"","",-99,stunning,intimidation,false
+qoavuv6s,f3sak7cn,razor cat,11,2634,3173,2383,2.16,0.28,55,65,"",10,-44,10,-44,-44,-44,-44,-54,"","",true
+qrsf5r2d,fj254r62,gurrcat,15,8019,2796,3298,2.02,0.26,400,410,"",40,-12,-70,-67,-62,-87,-67,-99,stunning,intimidation,true
+qtsth68b,k2g1v64d,bearded jax,36,10873,10694,9473,1.99,0.43,300,310,"",36,36,49,-25,49,-75,12,-25,blinding,medium_disease,false
+qvkha45p,95lmf4p9,torton,34,8809,8863,7732,2.17,0.4,290,300,"",50,50,21,14,-4,-81,-46,10,knockdown,dizzy,true
+r75gdj42,qm4ifjs2,kliknik,48,10694,8396,8827,2.05,0.42,440,450,light,37,44,49,24,74,70,49,49,blinding,stunning,true
+r8tfng1v,nmvmbh1e,razor cat,12,2006,2311,1216,2.162,0.24,70,75,"",8,-4,-5,1,"",-7,-15,-83,intimidation,"",false
+ragn8ano,i9l5ea7q,cu pa,17,9204,2527,2993,1.98,0.24,140,150,light,58,-54,-7,-2,-1,-58,-7,-99,stunning,intimidation,false
+rc133uda,li5vfu18,gnort,29,10802,8127,10245,1.98,0.46,290,300,"",57,-37,18,27,36,-15,39,-46,stunning,strong_poison,true
+rfjtgs7o,cvcihsv7,vir vur,11,7786,3011,2150,1.99,0.22,130,140,"",5,-1,-24,-50,-54,-45,-29,-54,"",blinding,true
+rfov0i6m,jk0f6iaq,ikopi,15,6512,3478,2814,1.98,0.24,80,90,"",28,5,9,-99,-34,-34,-55,-99,"",intimidation,false
+rgo5lk9o,qds7fl9q,razor cat,24,6853,6835,6637,2.16,0.28,320,330,"",14,17,22,-27,-23,-4,4,-99,"",intimidation,true
+rn46bmqu,i74lbmie,dune lizard,5,67,67,85,2.22,0.2,30,40,"","","","","","","","",-99,"","",false
+rnjicch4,k4vdacpi,gnort,4,139,283,552,2.16,0.21,30,40,"",0,0,0,0,-4,-4,-4,-99,"","",false
+roal54b4,ql6nv4b2,kimogila,60,12166,11358,11861,1.99,0.55,450,460,light,31,28,13,52,62,58,16,13,dizzy,strong_poison,false
+rokh3joq,h5f5pgon,rancor,39,9994,8971,8683,1.98,0.4,470,480,"",27,37,1,51,1,22,49,20,strong_poison,stunning,true
+rqe453he,eahf439h,huurton,10,3209,1055,875,2.16,0.2,120,130,"",4,-29,4,-29,-29,-29,-29,-69,dizzy,"",false
+rrcgkemj,431flea5,falumpaset,13,1306,1073,1001,2.44,0.21,70,75,"",1,20,-64,33,33,33,-64,-99,"","",false
+rutvjkan,lc33nk2o,rancor,77,13530,12722,12345,2.02,0.62,560,570,light,41,60,22,93,93,93,22,22,"",dizzy,false
+s29dv1mh,n4mr312u,durni,26,10227,6637,6978,2.16,0.27,300,310,"",53,24,64,51,51,-99,-14,-7,dizzy,blinding,true
+s4hrs1q2,9bnhj1u1,slice hound,10,1127,1037,678,2.18,0.23,35,45,"",12,6,-19,-5,-27,-58,-24,-99,stunning,"",false
+s6o6mq9l,c3j5tbl4,rancor,63,12363,9940,11950,1.98,0.5,480,490,light,42,49,37,34,83,83,37,37,"","",true
+s8f58vk3,10uv9v0b,durni,3,103,85,85,1.99,0.2,50,55,"",0,0,0,0,0,0,0,-99,"","",false
+s98hmhqa,2m4c9mat,gurrcat,12,8701,3101,3568,1.99,0.26,260,270,"",40,-1,-34,-1,-1,-59,-74,-99,stunning,intimidation,true
+s9dip3si,1v48428m,kimogila,41,11538,10137,9455,1.98,0.48,280,290,light,60,-83,-10,3,-4,-83,-1,-92,stunning,intimidation,false
+scvq1nb2,fe0tknvt,gurrcat,9,8217,3622,1880,2,0.21,180,190,"",60,-58,-1,-1,-5,-66,-1,-96,stunning,intimidation,false
+sdd7c11h,hc9su2t3,cu pa,13,2832,2922,3263,2.17,0.25,90,110,"",2,2,2,2,2,2,2,-99,"","",false
+sea34pj0,nok9cig4,cu pa,11,3298,2491,1665,2.19,0.24,80,90,"",2,-46,3,-49,-49,-49,-49,-48,intimidation,"",false
+sh8r654v,o51huq74,dewback,10,9778,5004,3245,1.98,0.22,120,130,"",59,-62,44,-34,-23,-88,-1,-99,"",intimidation,false
+shi2ri9k,g86rpi5e,gurreck,36,10066,9725,8414,2.33,0.42,120,130,"",50,60,27,27,27,27,27,27,stunning,crippling,false
+si8ponkb,0991vn8b,cu pa,14,3478,3586,2742,2.37,0.29,30,40,"",14,14,-1,9,-34,-36,9,-88,dizzy,intimidation,false
+sivif2sr,geibn24d,falumpaset,15,8827,5829,4214,1.99,0.31,270,280,"",40,-26,-55,-20,-15,-55,-52,-99,stunning,intimidation,false
+slrj4sis,akuv7ic5,razor cat,14,3496,3945,3622,2.32,0.31,80,90,"",8,-11,9,-19,-19,-19,-33,-65,"","",true
+sr9rl8u2,lv48d92k,razor cat,18,2545,2563,2365,2.17,0.3,90,110,"",22,27,2,2,-7,-32,-7,-99,"",knockdown,false
+sv8d5vte,jl7i1v9p,narglatch,44,10496,9976,9635,2.05,0.46,280,290,light,45,11,11,17,51,-14,52,-10,stunning,dizzy,true
+t098kb95,tlm8eata,bantha,11,9796,5291,3388,1.96,0.23,120,130,"",58,-62,43,-34,-23,-88,-1,-99,"",intimidation,false
+t9m9fvql,67huiva6,gnort,15,6153,3029,2922,1.99,0.24,80,90,"",28,5,9,-99,-68,-99,-5,-99,"",intimidation,false
+tbu9ibtu,s9rbmbds,razor cat,10,9114,5704,3155,1.98,0.22,120,130,"",59,-62,43,-34,-23,-88,-1,-99,crippling,dizzy,false
+tfm11sh9,j5bs5s5n,mott,24,7499,4663,4717,2.05,0.32,250,260,"",37,44,-24,-29,-34,-34,-29,-34,stunning,intimidation,false
+thcca9ff,jt4h2ejq,dewback,13,2329,1629,2132,2.16,0.25,120,130,"",8,14,9,-39,-39,-42,-38,-34,"","",false
+tqmnepsb,9qaufpsl,bantha,14,3011,3191,2042,2.16,0.26,80,90,"",10,16,9,9,9,-37,9,-99,stunning,"",true
+tudi4fnf,gr5auh7c,torton,20,8504,6691,5309,2.31,0.34,200,210,"",50,-56,-25,-22,-22,-84,-35,-99,stunning,intimidation,true
+u0ktsk45,nvee2kco,cu pa,13,3352,2221,1073,2.17,0.25,30,40,"",10,16,6,6,6,-39,6,-99,"","",false
+u1ha58s7,oo66780c,gurrcat,16,6153,2957,2706,1.98,0.25,120,130,"",-25,46,-40,-90,37,-75,-62,-99,knockdown,intimidation,true
+u26q6fmm,p04k2fmn,falumpaset,11,1521,1073,1198,2.16,0.22,70,75,"",3,3,3,36,3,3,-44,-99,stunning,"",false
+u5k7rn9m,kc9jpnto,bageraset,11,1593,1324,1288,2.16,0.27,30,40,"",3,4,-44,3,-44,-44,3,-99,"",intimidation,false
+ud38hopq,4betso9v,kwi,49,11914,11538,11161,1.98,0.44,340,350,light,55,-15,6,36,37,-5,10,-43,"",dizzy,false
+un8s33gs,0mf1030f,slice hound,16,9707,6045,5883,1.98,0.29,300,310,"",38,-20,45,45,-4,-4,-21,-44,knockdown,strong_poison,false
+updi8ai2,60t3bauq,razor cat,14,7786,2850,2706,1.98,0.21,50,55,"",33,25,-38,-31,-37,-76,-43,-76,blinding,intimidation,false
+utbsmn32,bs0mlnj7,dewback,13,8271,2527,2024,1.99,0.26,320,330,"",40,-6,-69,-10,-5,-30,-66,-99,stunning,intimidation,false
+uud0c3vt,a2n853jg,cu pa,10,9850,5345,3245,1.98,0.22,120,130,"",59,-62,43,-34,-23,-88,-1,-99,"",dizzy,false
+uuqo2dcg,22v0bdgi,dewback,10,9940,6170,3209,1.98,0.22,120,130,"",59,-12,44,-30,-10,-79,-26,-69,"","",false
+uurkogaj,jsgesgqm,kima,65,11717,10766,9886,2.01,0.47,580,590,light,52,50,35,95,95,20,18,18,"",dizzy,false
+v22scdcg,ggi3od08,fambaa,30,6691,3442,2886,1.98,0.24,90,110,"",28,5,9,-99,-70,-70,-6,-99,crippling,intimidation,false
+v298fsve,gp6n9s3p,kimogila,40,11125,9778,7894,1.99,0.41,430,440,light,60,-53,-25,6,15,-50,-20,-99,stunning,intimidation,false
+v427jm7p,7isnumfm,bantha,14,2365,2778,1432,1.98,0.29,70,75,"",26,-35,12,-64,-12,-12,-64,-94,"",intimidation,false
+vdbfc4kr,b4q7f40j,graul,46,10748,9150,8755,1.99,0.39,490,500,light,60,29,85,78,74,-99,-24,-39,stunning,"",true
+vh90b5ck,bmd9k586,bearded jax,52,11681,10478,10353,1.99,0.43,365,440,light,47,56,27,57,22,49,11,23,stunning,crippling,true
+vhpu9j0s,j5u7hikf,cu pa,13,3065,1611,2042,2.32,0.26,120,130,"",29,-4,5,-7,-7,-64,-64,-99,dizzy,mild_poison,false
+viiv1vje,h9637vv4,woolamander,24,7750,8432,5327,2.16,0.28,230,240,"",43,-10,21,91,66,45,16,-5,knockdown,"",false
+vlglkoqg,k3s28gkk,razor cat,11,2922,3155,2365,2.16,0.28,55,65,"",10,-44,10,-44,-44,-44,-44,-54,dizzy,"",true
+vpdg43qo,bnmdof1t,bantha,5,409,480,462,2.21,0.22,40,45,"",15,0,0,0,0,0,0,-99,"",crippling,true
+vpubvp98,tnsf3p90,kima,49,10155,9725,8109,2.16,0.43,395,500,light,50,50,100,50,-99,20,20,100,blinding,stunning,false
+vt3f50sc,clc8408r,kliknik,43,11143,11394,11699,2.16,0.47,250,260,"",46,52,12,39,39,-5,-54,22,stunning,crippling,false
+vv94u6te,dni0f7d3,kimogila,43,10586,8773,9850,2.16,0.4,330,370,light,47,49,39,34,34,30,19,27,stunning,intimidation,true
