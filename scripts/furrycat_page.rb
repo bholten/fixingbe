@@ -31,6 +31,7 @@ class FurryCatPage
     results = field_str.scan(/(\w+): (\d+)/)
 
     experiment_data = { experiment_number: experiment_number }
+
     results.each do |abbr, value|
       full_name = @@ABBREV[abbr]
       experiment_data[full_name] = value.to_i if full_name
@@ -64,7 +65,7 @@ class FurryCatPage
       to_hit: final_creature[7].text,
       damage_low: final_creature[8].text.split('-')[0].strip,
       damage_high: final_creature[8].text.split('-')[1].strip,
-      armor: StrUtils.to_snake_case(final_creature[9].text),
+      armor: StrUtils.is_light_armor(final_creature[9].text),
       kinetic: final_creature[10].text,
       energy: final_creature[11].text,
       blast: final_creature[12].text,
@@ -77,9 +78,6 @@ class FurryCatPage
       sa2: if attacks[1] == '--' then '' else StrUtils.to_snake_case(attacks[1]) end,
       ranged: attacks[2] != '--'
     }
-
-    # @creature = Creature.new(creature_args)
-    puts creature_args
 
     # Final Combine
     final_experiment_args = {
@@ -96,7 +94,7 @@ class FurryCatPage
       courage: final_experiment[9].text,
       fierceness: final_experiment[10].text,
       power: final_experiment[11].text,
-      armor: StrUtils.to_snake_case(final_experiment[12].text),
+      armor: StrUtils.is_light_armor(final_experiment[12].text),
       kinetic: final_experiment[13].text,
       energy: final_experiment[14].text,
       blast: final_experiment[15].text,
@@ -110,9 +108,6 @@ class FurryCatPage
       ranged: attacks[2] != '--',
       used: StrUtils.to_snake_case(final_experiment[22].text)
     }
-
-    # @final_combine = FinalCombine.new(final_experiment_args)
-    puts final_experiment_args
 
     # Get experiments
     experiments = experiment_table.css('tr')[2...-1].map do |row|
@@ -133,7 +128,7 @@ class FurryCatPage
         courage: experiment[9].text,
         fierceness: experiment[10].text,
         power: experiment[11].text,
-        armor: StrUtils.to_snake_case(experiment[12].text),
+        armor: StrUtils.is_light_armor(experiment[12].text),
         experiment_number: experiment_step[:experiment_number],
         physique: experiment_step.fetch(:physique, 0),
         prowess: experiment_step.fetch(:prowess, 0),
@@ -142,8 +137,6 @@ class FurryCatPage
         aggression: experiment_step.fetch(:aggression, 0),
       }
     end
-
-    puts experiments
 
     # Samples
     samples = html.css('table:nth-of-type(3)')
@@ -171,7 +164,7 @@ class FurryCatPage
         courage: sample[9].text,
         fierceness: sample[10].text,
         power: sample[11].text,
-        armor: StrUtils.to_snake_case(sample[12].text),
+        armor: StrUtils.is_light_armor(sample[12].text),
         kinetic: sample[13].text,
         energy: sample[14].text,
         blast: sample[15].text,
@@ -186,12 +179,11 @@ class FurryCatPage
       }
     end
 
-    puts sample_list
-
     # Assembly
     assembly_row = experiment_table.css('tr')[-1].css('td')
 
-    assembly_args = {
+    assembly_args = if assembly_row[13].text == 'Initial combine'
+      {
         experiment_id: SecureRandom.uuid,
         serial: assembly_row[0].text, # changed
         quality: StrUtils.to_snake_case(assembly_row[1].text),
@@ -205,7 +197,7 @@ class FurryCatPage
         courage: assembly_row[9].text,
         fierceness: assembly_row[10].text,
         power: assembly_row[11].text,
-        armor: StrUtils.to_snake_case(assembly_row[12].text),
+        armor: StrUtils.is_light_armor(assembly_row[12].text),
         # Note that data without samples is invalid for us
         # However, Furrycat's dataset does indeed have some
         # pages without samples -- just the final combine
@@ -215,8 +207,9 @@ class FurryCatPage
         psychology: sample_list[3]&.[](:sample_id),
         aggression: sample_list[4]&.[](:sample_id)
       }
-
-    puts assembly_args
+    else
+      {}
+    end
 
     FurryCatPage.new({
     creature: creature_args,

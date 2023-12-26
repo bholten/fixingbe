@@ -1,0 +1,24 @@
+---
+title: "Fixing Bio-Engineer"
+output: html_document
+---
+
+# Introduction
+
+The Massively Multiplayer Online Game, Star Wars: Galaxies was released over 20 years ago. The game was shut down on December 15, 2011; but from at least late-2006, an on-going emulation project has been attempting to recreate the game.
+
+# Data
+
+All data is scraped from Furrycat's archives. The raw data has been archived to this git repository, and scripts to construct CSVs and import in R as dataframes are provided in the `scripts/` folder.
+
+# Attribute Analysis
+
+- [Health Analysis](health_analysis.html)
+- [Action Analysis](action_analysis.html)
+- [Mind Analysis](mind_analysis.html)
+- [Speed Analysis](speed_analysis.html)
+- [To-Hit Analysis](to_hit_analysis.html)
+- [Damage Analysis](damage_analysis.html)
+- [Armor Analysis](armor_analysis.html)
+- [Resists Analysis](resists_analysis.html)
+- [Creature Level Analysis](creature_level_analysis.html)

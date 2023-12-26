@@ -1,0 +1,98 @@
+---
+title: "Mind Analysis"
+output: html_document
+---
+
+# Data
+
+The GBM of Furrycat's data shows a strong relationship between mind and both intellect and hardiness.
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(magrittr)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(gbm)
+
+# Some of these are obvious typos -- fix later
+bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
+              "er9nq4et", "38u9raer", "6ko7k4ql",  # weird action/dex
+              "6td1segp", "6f9lmdbu",              # bad speed
+              "frfksnne",                          # Maybe bad to-hit but interesting...
+              "kjvtv7d7",                          # has fortitude < 500 AND light armor?
+              "4231uemm",                          # trash mob in piket skin (min cl 25) that throws off CL calculations
+              "at8d24tc",                          # rancor skin (min cl 35) also throwing off cl calculations
+              "8mgpmeev",                          # thune skin also throwing off cl
+              "v22scdcg",                          # fambaa
+              "ceh4m90v",                          # kimogila
+              "mm8gn9sj"                           # kimogila
+)
+creatures <- read_csv("data/clean/furrycat/creature.csv") %>%
+  filter(!creature_id %in% bad_data)
+final_exp <- read_csv("data/clean/furrycat/final_experiment.csv")
+combined_data <- inner_join(creatures, final_exp, by = c("final_experimentation_id" = "serial"))
+normalized_df <- combined_data %>%
+  mutate_at(
+    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
+    ~ ifelse(. < 0, -99, .)
+  ) %>%
+  mutate_at(
+    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
+    ~ ifelse(is.na(.), 0, .)
+  )
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+gbm_model <- gbm(
+  mind ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
+  data = normalized_df,
+  distribution = "gaussian",
+  n.trees = 500,
+  interaction.depth = 3,
+  n.minobsinnode = 5,
+  bag.fraction = 0.5,
+  cv.folds = 10
+)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+summary(gbm_model, plotit = FALSE)
+```
+
+And GBM shows a linear relationships.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot.gbm(gbm_model, i.var = "intellect", n.trees = 500)
+```
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot.gbm(gbm_model, i.var = "hardiness", n.trees = 500)
+```
+
+
+The linear model shows high correlation and low residuals.
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=TRUE}
+model <- lm(mind ~ intellect + hardiness, data = normalized_df)
+summary(model)
+```
+
+And looks like this.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+normalized_df$predicted_mind <- predict.lm(model, newdata = normalized_df)
+
+ggplot(normalized_df, aes(x = mind, y = predicted_mind)) +
+  geom_point() +
+  geom_smooth(method = lm, color = "blue") +
+  ggtitle("Linear Model Predicted Mind vs Actual")
+
+```
+
+
+# Conclusion
+
+Mind is roughly captured by the following formula, $mind \approx 40 + 15 * intellect + 3 * hardiness$.

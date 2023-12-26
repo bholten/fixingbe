@@ -1,0 +1,203 @@
+---
+title: "Damage Analysis"
+output: html_document
+---
+
+# Data
+
+The GBM of Furrycat's data shows a strong relationship between damage and power.
+
+```{r setup}
+library(magrittr)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(gbm)
+```
+
+```{r}
+
+# Some of these are obvious typos -- fix later
+bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
+              "er9nq4et", "38u9raer", "6ko7k4ql",  # weird action/dex
+              "6td1segp", "6f9lmdbu",              # bad speed
+              "frfksnne",                          # Maybe bad to-hit but interesting...
+              "kjvtv7d7",                          # has fortitude < 500 AND light armor?
+              "4231uemm",                          # trash mob in piket skin (min cl 25) that throws off CL calculations
+              "at8d24tc",                          # rancor skin (min cl 35) also throwing off cl calculations
+              "8mgpmeev",                          # thune skin also throwing off cl
+              "v22scdcg",                          # fambaa
+              "ceh4m90v",                          # kimogila
+              "mm8gn9sj"                           # kimogila
+)
+creatures <- read_csv("data/clean/furrycat/creature.csv") %>%
+  filter(!creature_id %in% bad_data)
+final_exp <- read_csv("data/clean/furrycat/final_experiment.csv")
+combined_data <- inner_join(creatures, final_exp, by = c("final_experimentation_id" = "serial"))
+normalized_df <- combined_data %>%
+  mutate_at(
+    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
+    ~ ifelse(. < 0, -99, .)
+  ) %>%
+  mutate_at(
+    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
+    ~ ifelse(is.na(.), 0, .)
+  )
+
+gbm_model_low <- gbm(
+  damage_low ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
+  data = normalized_df,
+  distribution = "gaussian",
+  n.trees = 500,
+  interaction.depth = 3,
+  n.minobsinnode = 5,
+  bag.fraction = 0.5,
+  cv.folds = 10
+)
+gbm_model_high <- gbm(
+  damage_high ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
+  data = normalized_df,
+  distribution = "gaussian",
+  n.trees = 500,
+  interaction.depth = 3,
+  n.minobsinnode = 5,
+  bag.fraction = 0.5,
+  cv.folds = 10
+)
+```
+
+```{r}
+summary(gbm_model_low)
+```
+
+```{r}
+summary(gbm_model_high)
+```
+
+
+The linear model shows high correlation and low residuals.
+
+
+```{r}
+model_low <- lm(damage_low ~ power, data = normalized_df)
+summary(model_low)
+```
+
+```{r}
+model_high <- lm(damage_high ~ power, data = normalized_df)
+summary(model_high)
+```
+
+And looks like this.
+
+
+```{r}
+normalized_df$predicted_damage_low <- predict.lm(model_low, newdata = normalized_df)
+normalized_df$predicted_damage_high <- predict.lm(model_high, newdata = normalized_df)
+
+ggplot(normalized_df, aes(x = damage_low, y = predicted_damage_low)) +
+  geom_point() +
+  geom_smooth(method = lm, color = "blue") +
+  ggtitle("Linear Model Predicted Damage_low vs Actual")
+
+```
+
+```{r}
+ggplot(normalized_df, aes(x = damage_high, y = predicted_damage_high)) +
+  geom_point() +
+  geom_smooth(method = lm, color = "blue") +
+  ggtitle("Linear Model Predicted Damage_High vs Actual")
+
+```
+
+
+# Outliers
+
+The predictions above show some outliers, however it seems that high and low damage are flipped in the existing data set.
+
+```{r}
+residuals_low <- normalized_df$damage_low - normalized_df$predicted_damage_low
+qqnorm(residuals_low)
+qqline(residuals_low)
+```
+
+```{r}
+residuals_high <- normalized_df$damage_high - normalized_df$predicted_damage_high
+qqnorm(residuals_high)
+qqline(residuals_high)
+```
+
+```{r}
+standardized_residuals <- rstandard(model_low)
+outlier_indices <- which(abs(standardized_residuals) > 2)
+outlier_records <- normalized_df[outlier_indices, ]
+outlier_records %>% select(creature_id, skin, creature_level, damage_low, predicted_damage_low, power, fierceness)
+```
+
+```{r}
+standardized_residuals <- rstandard(model_high)
+outlier_indices <- which(abs(standardized_residuals) > 2)
+outlier_records <- normalized_df[outlier_indices, ]
+outlier_records %>% select(creature_id, skin, creature_level, damage_high, predicted_damage_high, power, fortitude)
+```
+
+
+# Rounding and Clamping
+
+Speed displays both rounding and clamping, as shown by the Gradient Boosting Model above.
+
+```{r}
+plot.gbm(gbm_model_low, i.var = "power")
+```
+
+```{r}
+plot.gbm(gbm_model_high, i.var = "power")
+```
+# GBM Model Performance
+
+It may be that at a certain threshold, high and low damage are flipped. GBM would be better equipped to predict this. Does it do any better?
+
+```{r}
+normalized_df$predicted_damage_low_gmb <- predict(gbm_model_low, newdata = normalized_df, n.trees = 500)
+normalized_df$predicted_damage_high_gbm <- predict(gbm_model_high, newdata = normalized_df, n.trees = 500)
+```
+
+```{r}
+ggplot(normalized_df, aes(x = damage_low, y = predicted_damage_low_gmb)) +
+  geom_point() +
+  geom_smooth(method = lm, color = "blue") +
+  ggtitle("Linear Model Predicted Damage_low GBM vs Actual")
+```
+
+```{r}
+ggplot(normalized_df, aes(x = damage_high, y = predicted_damage_high_gbm)) +
+  geom_point() +
+  geom_smooth(method = lm, color = "blue") +
+  ggtitle("Linear Model Predicted Damage_low vs Actual")
+```
+
+GBM does substantially better -- nearly perfect -- so there is likely something else going on here.
+
+# The Role of Fierceness and... Fortitude?
+
+The next variable GBM predicts as important for low damage is fierceness, and for high damage it is... fortitude? When viewed as an independent variable, it shows something interesting.
+
+```{r}
+plot.gbm(gbm_model_low, i.var = "fierceness")
+```
+
+```{r}
+plot.gbm(gbm_model_high, i.var = "fortitude")
+```
+
+There is some threshold at which point fierceness adds about 15 to damage_low and fortitude adds about 10 to damage_high. This appears to be between 400 and 550 for both attributes. From the graphs above it looks almost as if the slopes flip.
+
+# Conclusion
+
+Minimum Damage is roughly captured by the following formula, $damage_{low} \approx 14 + 0.76784 * power$.
+
+Maximum Damage is roughly captured by the following formula, $damage_{max} \approx 21 + 0.794045 * power$.
+
+Both attributes seem to be rounded to the nearest 5.
+
+The exact algorithm for damage is likely complicated by rounding and clamping. Furthermore, there is evidence that some threshold at about 400 fierceness effects the minimum damage calculation; and a threshold at 500 fortitude effects the maximum damage calculation. More investigation is needed.

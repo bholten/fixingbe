@@ -1,0 +1,25 @@
+name: Deploy site to GH Pages
+
+on:
+  push:
+    branches: [master]
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Run Docker and Generate HTML
+        run: docker run --rm -v ${{ github.workspace }}:/fixingbe -w /fixingbe rocker/r-rmd make all
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          folder: html

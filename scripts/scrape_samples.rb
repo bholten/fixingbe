@@ -41,6 +41,8 @@ def parse_files
                 samples_csv << furrycat_page.samples.first.keys
               end
 
+              puts "Adding creature: #{furrycat_page.creature[:creature_id]}"
+
               creatures_csv << furrycat_page.creature.values
               final_experiments_csv << furrycat_page.final_experiment.values
               assemblies_csv << furrycat_page.assembly.values
