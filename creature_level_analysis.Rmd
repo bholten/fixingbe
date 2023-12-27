@@ -1,0 +1,107 @@
+---
+title: "Creature Level Analysis"
+output: html_document
+---
+
+# Data
+
+The GBM of Furrycat's data shows a strong relationship between creature level and, well, nearly everything.
+
+
+## The Problems with Creature Level
+
+There are several big problems with attempting to reverse-engineer the creature level algorithm:
+
+- Bio-Engineers created pets for market demand, so the data set is heavily biased, preferring kinetic resists, optimizing for health, action, and mind -- in that order -- etc.
+- So-called "vulnerability stacking" complicates things considerably and it was, at best, an oversight; and at worst, a bug
+
+# The Creature Level Algorithm is Probably Multiplicative
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(magrittr)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(gbm)
+
+# Some of these are obvious typos -- fix later
+bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
+              "er9nq4et", "38u9raer", "6ko7k4ql",  # weird action/dex
+              "6td1segp", "6f9lmdbu",              # bad speed
+              "frfksnne",                          # Maybe bad to-hit but interesting...
+              "kjvtv7d7",                          # has fortitude < 500 AND light armor?
+              "4231uemm",                          # trash mob in piket skin (min cl 25) that throws off CL calculations
+              "at8d24tc",                          # rancor skin (min cl 35) also throwing off cl calculations
+              "8mgpmeev",                          # thune skin also throwing off cl
+              "v22scdcg",                          # fambaa
+              "ceh4m90v",                          # kimogila
+              "mm8gn9sj"                           # kimogila
+)
+creatures <- read_csv("data/clean/furrycat/creature.csv") %>%
+  filter(!creature_id %in% bad_data)
+final_exp <- read_csv("data/clean/furrycat/final_experiment.csv")
+combined_data <- inner_join(creatures, final_exp, by = c("final_experimentation_id" = "serial"))
+normalized_df <- combined_data %>%
+  mutate_at(
+    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
+    ~ ifelse(is.na(.), 0, .)
+  )
+```
+
+
+Let's consider "non-vulnerable" creatures for the moment -- this is simply to cut out "vuln stacking" as a complication.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+non_vuln <- normalized_df %>% 
+  filter(kinetic.x >= 0, 
+         energy.x >= 0, 
+         blast.x >= 0, 
+         heat.x >= 0, 
+         cold.x >= 0, 
+         electricity.x >= 0, 
+         acid.x >= 0, 
+         stun.x >= 0)
+```
+
+This very interestingly fits a Gamma distribution!
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+gamma_model <- glm(creature_level ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +electricity.x + acid.x + stun.x, data = non_vuln, family = Gamma())
+
+residuals <- resid(gamma_model)
+qqnorm(residuals)
+qqline(residuals)
+```
+
+And the Shapiro-Wilks test for this is:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+shapiro.test(residuals)
+```
+
+Which is very suggestive that the residuals are normally distributed -- meaning, the variations in creature level are very likely simply due to random variations in assembly, experimentation, and so on.
+
+# Further
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+gbm_model <- gbm(
+  creature_level ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
+  data = normalized_df,
+  distribution = "gaussian",
+  n.trees = 500,
+  interaction.depth = 3,
+  n.minobsinnode = 10,
+  bag.fraction = 0.3,
+  cv.folds = 10
+)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+summary(gbm_model, plotit = FALSE)
+```
+
+The GBM shows several relationships, however, it is likely that not all are valid given biases in the data set.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot.gbm(gbm_model, i.var = "intellect", n.trees = 500)
+```
