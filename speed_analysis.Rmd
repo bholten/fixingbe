@@ -7,15 +7,13 @@ output: html_document
 
 The GBM of Furrycat's data shows a strong relationship between speed and courage.
 
-```{r setup}
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
 library(magrittr)
 library(dplyr)
 library(readr)
 library(ggplot2)
 library(gbm)
-```
-
-```{r}
 
 # Some of these are obvious typos -- fix later
 bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
@@ -44,6 +42,9 @@ normalized_df <- combined_data %>%
     ~ ifelse(is.na(.), 0, .)
   )
 
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 gbm_model <- gbm(
   speed ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
   data = normalized_df,
@@ -56,14 +57,20 @@ gbm_model <- gbm(
 )
 ```
 
-```{r}
-summary(gbm_model)
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+summary(gbm_model, plotit = FALSE)
+```
+
+And GBM shows a linear relationships.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot.gbm(gbm_model, i.var = "courage", n.trees = 500)
 ```
 
 The linear model shows high correlation and low residuals.
 
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=TRUE}
 model <- lm(speed ~ courage, data = normalized_df)
 summary(model)
 ```
@@ -71,7 +78,7 @@ summary(model)
 And looks like this.
 
 
-```{r}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 normalized_df$predicted_speed <- predict.lm(model, newdata = normalized_df)
 
 ggplot(normalized_df, aes(x = speed, y = predicted_speed)) +
@@ -81,33 +88,7 @@ ggplot(normalized_df, aes(x = speed, y = predicted_speed)) +
 
 ```
 
-# Outliers
-
-The predictions above show some interesting outliers.
-
-```{r}
-residuals <- normalized_df$speed - normalized_df$predicted_speed
-qqnorm(residuals)
-qqline(residuals)
-```
-```{r}
-standardized_residuals <- rstandard(model)
-outlier_indices <- which(abs(standardized_residuals) > 2)
-outlier_records <- normalized_df[outlier_indices, ]
-outlier_records %>% select(creature_id, skin, creature_level, speed, predicted_speed, courage)
-```
-
-# Rounding and Clamping
-
-Speed displays both rounding and clamping, as shown by the Gradient Boosting Model above.
-
-```{r}
-plot.gbm(gbm_model, i.var = "courage")
-```
-
 
 # Conclusion
 
 Speed is roughly captured by the following formula, $speed \approx 2.5 - courage / 1000$.
-
-The exact algorithm for speed is likely complicated by rounding and clamping. Courage below 100 and above 500 do not appear to have an effect on speed. The reason for the outliers is unknown at this time, but at least one may have been due to capping speed, as courage far exceeded 500; the others are not known at this time.

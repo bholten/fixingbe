@@ -5,17 +5,15 @@ output: html_document
 
 # Data
 
-The GBM of Furrycat's data shows a strong relationship between to-hit and cleverness.
+The GBM of Furrycat's data shows a strong relationship between to-hit and cleverness
 
-```{r setup}
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
 library(magrittr)
 library(dplyr)
 library(readr)
 library(ggplot2)
 library(gbm)
-```
-
-```{r}
 
 # Some of these are obvious typos -- fix later
 bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
@@ -44,6 +42,9 @@ normalized_df <- combined_data %>%
     ~ ifelse(is.na(.), 0, .)
   )
 
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 gbm_model <- gbm(
   to_hit ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
   data = normalized_df,
@@ -56,14 +57,20 @@ gbm_model <- gbm(
 )
 ```
 
-```{r}
-summary(gbm_model)
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+summary(gbm_model, plotit = FALSE)
+```
+
+And GBM shows a linear relationships.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot.gbm(gbm_model, i.var = "cleverness", n.trees = 500)
 ```
 
 The linear model shows high correlation and low residuals.
 
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=TRUE}
 model <- lm(to_hit ~ cleverness, data = normalized_df)
 summary(model)
 ```
@@ -71,7 +78,7 @@ summary(model)
 And looks like this.
 
 
-```{r}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 normalized_df$predicted_to_hit <- predict.lm(model, newdata = normalized_df)
 
 ggplot(normalized_df, aes(x = to_hit, y = predicted_to_hit)) +
@@ -81,33 +88,7 @@ ggplot(normalized_df, aes(x = to_hit, y = predicted_to_hit)) +
 
 ```
 
-# Outliers
-
-The predictions above show some interesting outliers.
-
-```{r}
-residuals <- normalized_df$to_hit - normalized_df$predicted_to_hit
-qqnorm(residuals)
-qqline(residuals)
-```
-```{r}
-standardized_residuals <- rstandard(model)
-outlier_indices <- which(abs(standardized_residuals) > 2)
-outlier_records <- normalized_df[outlier_indices, ]
-outlier_records %>% select(creature_id, skin, creature_level, to_hit, predicted_to_hit, cleverness)
-```
-
-# Rounding and Clamping
-
-Speed displays both rounding and clamping, as shown by the Gradient Boosting Model above.
-
-```{r}
-plot.gbm(gbm_model, i.var = "cleverness")
-```
-
-
-
 
 # Conclusion
 
-To-Hit is roughly captured by the following formula, $to_hit \approx 1.95 + 0.0006458 * cleverness$. GBM shows clear rounding happening, so discrepancies may be due to that. Also, GBM shows that cleverness has no effect on to-hit after 500 or so.
+To-Hit is roughly captured by the following formula, $tohit \approx 0.195 + 0.0006458 * cleverness$. Furthermore, there is strong statistical evidence that to-hit is capped after around 500 cleverness and is especially sensitive to rounding.
