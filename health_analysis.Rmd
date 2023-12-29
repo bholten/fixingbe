@@ -28,25 +28,51 @@ bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
               "ceh4m90v",                          # kimogila
               "mm8gn9sj"                           # kimogila
 )
-creatures <- read_csv("data/clean/furrycat/creature.csv") %>%
-  filter(!creature_id %in% bad_data)
-final_exp <- read_csv("data/clean/furrycat/final_experiment.csv")
-combined_data <- inner_join(creatures, final_exp, by = c("final_experimentation_id" = "serial"))
+creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
+  filter(!serial %in% bad_data)
+templates <- read_csv("data/clean/furrycat/templates.csv")
+combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial))
 normalized_df <- combined_data %>%
   mutate_at(
-    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
-    ~ ifelse(. < 0, -99, .)
-  ) %>%
-  mutate_at(
-    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
+    vars("kinetic.effective.x",
+         "kinetic.special.x",
+         "energy.effective.x",
+         "energy.special.x",
+         "blast.effective.x",
+         "blast.special.x",
+         "heat.effective.x",
+         "heat.special.x",
+         "cold.effective.x",
+         "cold.special.x",
+         "electricity.effective.x",
+         "electricity.special.x",
+         "acid.effective.x",
+         "acid.special.x",
+         "stun.effective.x",
+         "stun.special.x"),
     ~ ifelse(is.na(.), 0, .)
   )
 
+experiments <- read_csv("data/clean/furrycat/experiments.csv")
+samples <- read_csv("data/clean/furrycat/samples.csv")
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 gbm_model <- gbm(
-  health ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
+  health ~ 
+    hardiness + fortitude +
+    dexterity + endurance +
+    intellect + cleverness +
+    courage + dependability +
+    fierceness + power +
+    kinetic.special.x + kinetic.effective.x +
+    energy.special.x + energy.effective.x +
+    blast.special.x + blast.effective.x +
+    heat.special.x + heat.effective.x +
+    cold.special.x + cold.effective.x +
+    electricity.special.x + electricity.effective.x +
+    acid.special.x + acid.effective.x +
+    stun.special.x + stun.effective.x,
   data = normalized_df,
   distribution = "gaussian",
   n.trees = 500,

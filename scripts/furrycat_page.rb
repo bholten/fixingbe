@@ -1,11 +1,11 @@
 require 'securerandom'
 require 'uri'
+require 'pry'
 
 require_relative 'str_utils'
 
 class FurryCatPage
-  attr_accessor :creature, :final_experiment, :assembly,
-                :experiments, :samples
+  attr_accessor :creature, :template, :experiments, :samples
 
   @@ABBREV = {
     'Phy' => :physique,
@@ -17,8 +17,7 @@ class FurryCatPage
 
   def initialize(args = {})
     @creature = args[:creature]
-    @final_experiment = args[:final_experiment]
-    @assembly = args[:assembly]
+    @template = args[:template]
     @experiments = args[:experiments]
     @samples = args[:samples]
   end
@@ -40,6 +39,32 @@ class FurryCatPage
     experiment_data
   end
 
+
+  def self.parse_resist(name, resist_element)
+
+  end
+
+  def self.get_swgemu_resist(element, start_idx, obj = {})
+    resists = {}
+
+    [:kinetic, :energy, :blast, :heat, :cold, :electricity, :acid, :stun].each.with_index do |resist, idx|
+      resist_element = element[start_idx + idx]
+      name_eff = "#{resist}.effective"
+      name_spec = "#{resist}.special"
+      res = resist_element.text.to_i
+      part =
+        if !resist_element.css('strong').empty? || res.negative?
+          {name_spec => res, name_eff => 0}
+        else
+          {name_spec => 0, name_eff => res}
+        end
+
+      resists.merge!(part)
+    end
+
+    obj.merge(resists)
+  end
+
   def self.from_html(html)
     # Get creature out of the first table
     creature_table = html.css('table:nth-of-type(1)')
@@ -49,65 +74,95 @@ class FurryCatPage
     # Get experiment/assembly table
     experiment_table = html.css('table:nth-of-type(2)')
 
-    # Final experiment for ID to reference in Creature table
-    final_experiment = experiment_table.css('tr')[1].css('td')
+    # The template is the last entry in the experiment table
+    # Many pages do not have experiments, and just show the
+    # final template
+    template = experiment_table.css('tr')[1].css('td')
 
     # Creature args
     creature_args = {
-      creature_id: final_creature[0].text,
-      final_experimentation_id: final_experiment[0].text,
+      serial: final_creature[0].text,
+      template_id: template[0].text,
       skin: final_creature[1].text,
-      creature_level: final_creature[2].text,
-      health: final_creature[3].text,
-      action: final_creature[4].text,
-      mind: final_creature[5].text,
-      speed: final_creature[6].text,
-      to_hit: final_creature[7].text,
-      damage_low: final_creature[8].text.split('-')[0].strip,
-      damage_high: final_creature[8].text.split('-')[1].strip,
-      armor: StrUtils.is_light_armor(final_creature[9].text),
-      kinetic: final_creature[10].text,
-      energy: final_creature[11].text,
-      blast: final_creature[12].text,
-      heat: final_creature[13].text,
-      cold: final_creature[14].text,
-      electricity: final_creature[15].text,
-      acid: final_creature[16].text,
-      stun: final_creature[17].text,
+      level: final_creature[2].text.to_i,
+      health: final_creature[3].text.to_i,
+      action: final_creature[4].text.to_i,
+      mind: final_creature[5].text.to_i,
+      speed: final_creature[6].text.to_f,
+      to_hit: final_creature[7].text.to_f,
+      damage_low: final_creature[8].text.split('-')[0].strip.to_i,
+      damage_high: final_creature[8].text.split('-')[1].strip.to_i,
+      armor: StrUtils.is_light_armor(final_creature[9].text).to_i,
       sa1: if attacks[0] == '--' then '' else StrUtils.to_snake_case(attacks[0]) end,
       sa2: if attacks[1] == '--' then '' else StrUtils.to_snake_case(attacks[1]) end,
       ranged: attacks[2] != '--'
     }
 
+    creature_args = get_swgemu_resist(final_creature, 10, creature_args)
+
+    # Samples
+    samples = html.css('table:nth-of-type(3)')
+
+    sample_list = samples.css('tr')[1..-1].map do |row|
+      sample = row.css('td')
+      attacks = sample[21].text.split('/')
+
+      s = {
+        sample_id: SecureRandom.uuid,
+        creature_serial: final_creature[0].text,
+        source: StrUtils.to_snake_case(sample[0].text),
+        generation: if sample[0].at_css('a') then
+            URI(sample[0].at_css('a')['href']).query.split('=')[0]
+          else
+            ''
+          end,
+        quality: StrUtils.to_snake_case(sample[1].text),
+        hardiness: sample[2].text.to_i,
+        fortitude: sample[3].text.to_i,
+        dexterity: sample[4].text.to_i,
+        endurance: sample[5].text.to_i,
+        intellect: sample[6].text.to_i,
+        cleverness: sample[7].text.to_i,
+        dependability: sample[8].text.to_i,
+        courage: sample[9].text.to_i,
+        fierceness: sample[10].text.to_i,
+        power: sample[11].text.to_i,
+        armor: StrUtils.is_light_armor(sample[12].text),
+        sa1: if attacks[0] == '--' then '' else StrUtils.to_snake_case(attacks[0]) end,
+        sa2: if attacks[1] == '--' then '' else StrUtils.to_snake_case(attacks[1]) end,
+        ranged: attacks[2] != '--'
+      }
+      get_swgemu_resist(sample, 13, s)
+    end
+
     # Final Combine
-    final_experiment_args = {
+    template_args = {
       id: SecureRandom.uuid,
-      serial: final_experiment[0].text, ## changed
-      quality: StrUtils.to_snake_case(final_experiment[1].text),
-      hardiness: final_experiment[2].text,
-      fortitude: final_experiment[3].text,
-      dexterity: final_experiment[4].text,
-      endurance: final_experiment[5].text,
-      intellect: final_experiment[6].text,
-      cleverness: final_experiment[7].text,
-      dependability: final_experiment[8].text,
-      courage: final_experiment[9].text,
-      fierceness: final_experiment[10].text,
-      power: final_experiment[11].text,
-      armor: StrUtils.is_light_armor(final_experiment[12].text),
-      kinetic: final_experiment[13].text,
-      energy: final_experiment[14].text,
-      blast: final_experiment[15].text,
-      heat: final_experiment[16].text,
-      cold: final_experiment[17].text,
-      electricity: final_experiment[18].text,
-      acid: final_experiment[19].text,
-      stun: final_experiment[21].text,
+      serial: template[0].text, ## changed
+      quality: StrUtils.to_snake_case(template[1].text),
+      hardiness: template[2].text.to_i,
+      fortitude: template[3].text.to_i,
+      dexterity: template[4].text.to_i,
+      endurance: template[5].text.to_i,
+      intellect: template[6].text.to_i,
+      cleverness: template[7].text.to_i,
+      dependability: template[8].text.to_i,
+      courage: template[9].text.to_i,
+      fierceness: template[10].text.to_i,
+      power: template[11].text.to_i,
+      armor: StrUtils.is_light_armor(template[12].text),
       sa1: if attacks[0] == '--' then '' else StrUtils.to_snake_case(attacks[0]) end,
       sa2: if attacks[1] == '--' then '' else StrUtils.to_snake_case(attacks[1]) end,
       ranged: attacks[2] != '--',
-      used: StrUtils.to_snake_case(final_experiment[22].text)
+      used: StrUtils.to_snake_case(template[22].text),
+      physique: sample_list[0]&.[](:sample_id),
+      prowess: sample_list[1]&.[](:sample_id),
+      mental: sample_list[2]&.[](:sample_id),
+      psychology: sample_list[3]&.[](:sample_id),
+      aggression: sample_list[4]&.[](:sample_id)
     }
+
+    template_args = get_swgemu_resist(template, 13, template_args)
 
     # Get experiments
     experiments = experiment_table.css('tr')[2...-1].map do |row|
@@ -118,18 +173,19 @@ class FurryCatPage
         experiment_id: SecureRandom.uuid,
         serial: experiment[0].text, # changed
         quality: StrUtils.to_snake_case(experiment[1].text),
-        hardiness: experiment[2].text,
-        fortitude: experiment[3].text,
-        dexterity: experiment[4].text,
-        endurance: experiment[5].text,
-        intellect: experiment[6].text,
-        cleverness: experiment[7].text,
-        dependability: experiment[8].text,
-        courage: experiment[9].text,
-        fierceness: experiment[10].text,
-        power: experiment[11].text,
+        hardiness: experiment[2].text.to_i,
+        fortitude: experiment[3].text.to_i,
+        dexterity: experiment[4].text.to_i,
+        endurance: experiment[5].text.to_i,
+        intellect: experiment[6].text.to_i,
+        cleverness: experiment[7].text.to_i,
+        dependability: experiment[8].text.to_i,
+        courage: experiment[9].text.to_i,
+        fierceness: experiment[10].text.to_i,
+        power: experiment[11].text.to_i,
         armor: StrUtils.is_light_armor(experiment[12].text),
         experiment_number: experiment_step[:experiment_number],
+        assembly: experiment[13].text.strip.downcase == 'initial combine',
         physique: experiment_step.fetch(:physique, 0),
         prowess: experiment_step.fetch(:prowess, 0),
         mental: experiment_step.fetch(:mental, 0),
@@ -138,83 +194,9 @@ class FurryCatPage
       }
     end
 
-    # Samples
-    samples = html.css('table:nth-of-type(3)')
-
-    sample_list = samples.css('tr')[1..-1].map do |row|
-      sample = row.css('td')
-      attacks = sample[21].text.split('/')
-
-      {
-        sample_id: SecureRandom.uuid,
-        source: StrUtils.to_snake_case(sample[0].text),
-        generation: if sample[0].at_css('a') then
-            URI(sample[0].at_css('a')['href']).query.split('=')[0]
-          else
-            ''
-          end,
-        quality: StrUtils.to_snake_case(sample[1].text),
-        hardiness: sample[2].text,
-        fortitude: sample[3].text,
-        dexterity: sample[4].text,
-        endurance: sample[5].text,
-        intellect: sample[6].text,
-        cleverness: sample[7].text,
-        dependability: sample[8].text,
-        courage: sample[9].text,
-        fierceness: sample[10].text,
-        power: sample[11].text,
-        armor: StrUtils.is_light_armor(sample[12].text),
-        kinetic: sample[13].text,
-        energy: sample[14].text,
-        blast: sample[15].text,
-        heat: sample[16].text,
-        cold: sample[17].text,
-        electricity: sample[18].text,
-        acid: sample[19].text,
-        stun: sample[20].text,
-        sa1: if attacks[0] == '--' then '' else StrUtils.to_snake_case(attacks[0]) end,
-        sa2: if attacks[1] == '--' then '' else StrUtils.to_snake_case(attacks[1]) end,
-        ranged: attacks[2] != '--'
-      }
-    end
-
-    # Assembly
-    assembly_row = experiment_table.css('tr')[-1].css('td')
-
-    assembly_args = if assembly_row[13].text == 'Initial combine'
-      {
-        experiment_id: SecureRandom.uuid,
-        serial: assembly_row[0].text, # changed
-        quality: StrUtils.to_snake_case(assembly_row[1].text),
-        hardiness: assembly_row[2].text,
-        fortitude: assembly_row[3].text,
-        dexterity: assembly_row[4].text,
-        endurance: assembly_row[5].text,
-        intellect: assembly_row[6].text,
-        cleverness: assembly_row[7].text,
-        dependability: assembly_row[8].text,
-        courage: assembly_row[9].text,
-        fierceness: assembly_row[10].text,
-        power: assembly_row[11].text,
-        armor: StrUtils.is_light_armor(assembly_row[12].text),
-        # Note that data without samples is invalid for us
-        # However, Furrycat's dataset does indeed have some
-        # pages without samples -- just the final combine
-        physique: sample_list[0]&.[](:sample_id),
-        prowess: sample_list[1]&.[](:sample_id),
-        mental: sample_list[2]&.[](:sample_id),
-        psychology: sample_list[3]&.[](:sample_id),
-        aggression: sample_list[4]&.[](:sample_id)
-      }
-    else
-      {}
-    end
-
     FurryCatPage.new({
     creature: creature_args,
-    final_experiment: final_experiment_args,
-    assembly: assembly_args,
+    template: template_args,
     experiments: experiments,
     samples: sample_list
     })

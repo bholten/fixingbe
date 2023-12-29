@@ -12,15 +12,12 @@ params:
 
 The GBM of Furrycat's data shows a strong relationship between `r params$attribute_name` and both `r params$major_variable_name` and `r params$minor_variable_name`.
 
-```{r setup}
+```{r}
 library(magrittr)
 library(dplyr)
 library(readr)
 library(ggplot2)
 library(gbm)
-```
-
-```{r}
 
 # Some of these are obvious typos -- fix later
 bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
@@ -35,54 +32,51 @@ bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
               "ceh4m90v",                          # kimogila
               "mm8gn9sj"                           # kimogila
 )
-creatures <- read_csv("data/clean/furrycat/creature.csv") %>%
-  filter(!creature_id %in% bad_data)
-final_exp <- read_csv("data/clean/furrycat/final_experiment.csv")
-combined_data <- inner_join(creatures, final_exp, by = c("final_experimentation_id" = "serial"))
+creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
+  filter(!serial %in% bad_data)
+templates <- read_csv("data/clean/furrycat/templates.csv")
+combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial))
 normalized_df <- combined_data %>%
   mutate_at(
-    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
-    ~ ifelse(. < 0, -99, .)
-  ) %>%
-  mutate_at(
-    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
+    vars("kinetic.effective.x",
+         "kinetic.special.x",
+         "energy.effective.x",
+         "energy.special.x",
+         "blast.effective.x",
+         "blast.special.x",
+         "heat.effective.x",
+         "heat.special.x",
+         "cold.effective.x",
+         "cold.special.x",
+         "electricity.effective.x",
+         "electricity.special.x",
+         "acid.effective.x",
+         "acid.special.x",
+         "stun.effective.x",
+         "stun.special.x"),
     ~ ifelse(is.na(.), 0, .)
   )
 
-gbm_model <- gbm(
-  health ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
-  data = normalized_df,
-  distribution = "gaussian",
-  n.trees = 500,
-  interaction.depth = 3,
-  n.minobsinnode = 5,
-  bag.fraction = 0.5,
-  cv.folds = 10
-)
+experiments <- read_csv("data/clean/furrycat/experiments.csv")
+samples <- read_csv("data/clean/furrycat/samples.csv")
 ```
 
 ```{r}
-summary(gbm_model)
+1+1
 ```
 
 The linear model shows high correlation and low residuals.
 
 
 ```{r}
-model <- lm(health ~ hardiness + dexterity, data = normalized_df)
-summary(model)
+2 + 2
 ```
 
 And looks like this.
 
 
 ```{r}
-normalized_df$predicted_health <- predict.lm(model, newdata = normalized_df)
 
-ggplot(normalized_df, aes(x = health, y = predicted_health)) +
-  geom_point() +
-  geom_smooth(method = lm, color = "blue") +
-  ggtitle("Linear Model Predicted Health vs Actual")
 
 ```
 

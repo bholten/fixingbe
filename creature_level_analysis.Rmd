@@ -37,15 +37,33 @@ bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
               "ceh4m90v",                          # kimogila
               "mm8gn9sj"                           # kimogila
 )
-creatures <- read_csv("data/clean/furrycat/creature.csv") %>%
-  filter(!creature_id %in% bad_data)
-final_exp <- read_csv("data/clean/furrycat/final_experiment.csv")
-combined_data <- inner_join(creatures, final_exp, by = c("final_experimentation_id" = "serial"))
+creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
+  filter(!serial %in% bad_data)
+templates <- read_csv("data/clean/furrycat/templates.csv")
+combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial))
 normalized_df <- combined_data %>%
   mutate_at(
-    vars("kinetic.x", "energy.x", "blast.x", "heat.x", "cold.x", "electricity.x", "acid.x", "stun.x"),
+    vars("kinetic.effective.x",
+         "kinetic.special.x",
+         "energy.effective.x",
+         "energy.special.x",
+         "blast.effective.x",
+         "blast.special.x",
+         "heat.effective.x",
+         "heat.special.x",
+         "cold.effective.x",
+         "cold.special.x",
+         "electricity.effective.x",
+         "electricity.special.x",
+         "acid.effective.x",
+         "acid.special.x",
+         "stun.effective.x",
+         "stun.special.x"),
     ~ ifelse(is.na(.), 0, .)
   )
+
+experiments <- read_csv("data/clean/furrycat/experiments.csv")
+samples <- read_csv("data/clean/furrycat/samples.csv")
 ```
 
 
@@ -53,20 +71,34 @@ Let's consider "non-vulnerable" creatures for the moment -- this is simply to cu
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 non_vuln <- normalized_df %>% 
-  filter(kinetic.x >= 0, 
-         energy.x >= 0, 
-         blast.x >= 0, 
-         heat.x >= 0, 
-         cold.x >= 0, 
-         electricity.x >= 0, 
-         acid.x >= 0, 
-         stun.x >= 0)
+  filter(kinetic.special.x >= 0, 
+         energy.special.x >= 0, 
+         blast.special.x >= 0, 
+         heat.special.x >= 0, 
+         cold.special.x >= 0, 
+         electricity.special.x >= 0, 
+         acid.special.x >= 0, 
+         stun.special.x >= 0)
 ```
 
 This very interestingly fits a Gamma distribution!
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-gamma_model <- glm(creature_level ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +electricity.x + acid.x + stun.x, data = non_vuln, family = Gamma())
+gamma_model <- glm(level ~
+    hardiness + fortitude +
+    dexterity + endurance +
+    intellect + cleverness +
+    courage + dependability +
+    fierceness + power +
+    kinetic.special.x + kinetic.effective.x +
+    energy.special.x + energy.effective.x +
+    blast.special.x + blast.effective.x +
+    heat.special.x + heat.effective.x +
+    cold.special.x + cold.effective.x +
+    electricity.special.x + electricity.effective.x +
+    acid.special.x + acid.effective.x +
+    stun.special.x + stun.effective.x, 
+    data = non_vuln, family = Gamma())
 
 residuals <- resid(gamma_model)
 qqnorm(residuals)
@@ -85,7 +117,20 @@ Which is very suggestive that the residuals are normally distributed -- meaning,
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 gbm_model <- gbm(
-  creature_level ~ hardiness + fortitude + dexterity + endurance + intellect + cleverness + courage + dependability + fierceness + power + armor.x + kinetic.x + energy.x + blast.x + heat.x + cold.x +  electricity.x + acid.x + stun.x,
+  level ~
+    hardiness + fortitude +
+    dexterity + endurance +
+    intellect + cleverness +
+    courage + dependability +
+    fierceness + power +
+    kinetic.special.x + kinetic.effective.x +
+    energy.special.x + energy.effective.x +
+    blast.special.x + blast.effective.x +
+    heat.special.x + heat.effective.x +
+    cold.special.x + cold.effective.x +
+    electricity.special.x + electricity.effective.x +
+    acid.special.x + acid.effective.x +
+    stun.special.x + stun.effective.x,
   data = normalized_df,
   distribution = "gaussian",
   n.trees = 500,
