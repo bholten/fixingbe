@@ -463,19 +463,19 @@ bad_data &lt;- c(&quot;dta2275t&quot;, &quot;r8tfng1v&quot;,              # weir
 )
 creatures &lt;- read_csv(&quot;data/clean/furrycat/creatures.csv&quot;) %&gt;%
   filter(!serial %in% bad_data)</code></pre>
-<pre><code>## Rows: 461 Columns: 31</code></pre>
+<pre><code>## Rows: 461 Columns: 39</code></pre>
 <pre><code>## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (5): serial, template_id, skin, sa1, sa2
-## dbl (25): level, health, action, mind, speed, to_hit, damage_low, damage_hig...
+## dbl (33): level, health, action, mind, speed, to_hit, damage_low, damage_hig...
 ## lgl  (1): ranged
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code>templates &lt;- read_csv(&quot;data/clean/furrycat/templates.csv&quot;)</code></pre>
-<pre><code>## Rows: 461 Columns: 39── Column specification ────────────────────────────────────────────────────────
+<pre><code>## Rows: 461 Columns: 47── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
-## chr (11): id, serial, quality, sa1, sa2, used, physique, prowess, mental, ps...
-## dbl (27): hardiness, fortitude, dexterity, endurance, intellect, cleverness,...
+## chr (10): id, serial, sa1, sa2, used, physique, prowess, mental, psychology,...
+## dbl (36): quality, hardiness, fortitude, dexterity, endurance, intellect, cl...
 ## lgl  (1): ranged
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -504,16 +504,16 @@ normalized_df &lt;- combined_data %&gt;%
 experiments &lt;- read_csv(&quot;data/clean/furrycat/experiments.csv&quot;)</code></pre>
 <pre><code>## Rows: 604 Columns: 21── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
-## chr  (3): experiment_id, serial, quality
+## chr  (2): experiment_id, serial
 ## dbl (17): hardiness, fortitude, dexterity, endurance, intellect, cleverness,...
-## lgl  (1): assembly
+## lgl  (2): quality, assembly
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code>samples &lt;- read_csv(&quot;data/clean/furrycat/samples.csv&quot;)</code></pre>
-<pre><code>## Rows: 2287 Columns: 35── Column specification ────────────────────────────────────────────────────────
+<pre><code>## Rows: 2287 Columns: 43── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
-## chr  (7): sample_id, creature_serial, source, generation, quality, sa1, sa2
-## dbl (27): hardiness, fortitude, dexterity, endurance, intellect, cleverness,...
+## chr  (6): sample_id, creature_serial, source, generation, sa1, sa2
+## dbl (36): quality, hardiness, fortitude, dexterity, endurance, intellect, cl...
 ## lgl  (1): ranged
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
