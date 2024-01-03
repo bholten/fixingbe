@@ -1,9 +1,9 @@
 # Fixing Bio-Engineer
 
-Star Wars: Galaxies was a fantastic MMORPG that was unfortunately
-completely redesigned while in its prime. [Various
-emulators](https://swgemu.com) exist to recapture the magic, and one
-of the most compelling and gameplay systems was Bio-Engineering.
+Star Wars: Galaxies was a fantastic MMORPG that was unfortunately shut down 
+2011. [Various emulators](https://swgemu.com) exist to recapture the magic, 
+and one of the most compelling and complex systems in the game was 
+Bio-Engineering.
 
 This is a repository of data and analysis used as an attempt to
 reverse-engineer how Bio-Engineering worked.
@@ -24,6 +24,6 @@ here and the current state is published at [the GitHub
 Pages](bholten.github.io/fixingbe/).
 
 Most of the current analysis starts with
-[GBMs](https://en.wikipedia.org/wiki/Gradient_boosting) and then
+[GAMs](https://en.wikipedia.org/wiki/Generalized_additive_model) and then
 attempts to narrow down the exact mechanics from relative influence
-that the gradiant boosts suggest.
+that the additive model suggests.

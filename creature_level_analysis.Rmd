@@ -7,15 +7,90 @@ output: html_document
 
 The GBM of Furrycat's data shows a strong relationship between creature level and, well, nearly everything.
 
+The following formula comes from [this]( https://docs.google.com/spreadsheets/d/1h7qUFcX96VSNL1_WhZGf6rPJNBb53S0SCZBNzpITneU/edit#gid=597001656) Google Doc.
 
-## The Problems with Creature Level
 
-There are several big problems with attempting to reverse-engineer the creature level algorithm:
+## cerestan's formula
 
-- Bio-Engineers created pets for market demand, so the data set is heavily biased, preferring kinetic resists, optimizing for health, action, and mind -- in that order -- etc.
-- So-called "vulnerability stacking" complicates things considerably and it was, at best, an oversight; and at worst, a bug
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Multipliers
+HAM   = 0.73 / 1000
+ARMOR = 10
+DPS   = 0.099
 
-# The Creature Level Algorithm is Probably Multiplicative
+KIN_POS   = 0.12
+ENG_POS   = 0.1
+BLAST_POS = 0.02
+HEAT_POS  = 0.02
+COLD_POS  = 0.02
+ELEC_POS  = 0.02
+ACID_POS  = 0.02
+STUN_POS  = 0.02
+
+KIN_NEG   = 0.2
+ENG_NEG   = 0.11
+BLAST_NEG = 0.04
+HEAT_NEG  = 0.1
+COLD_NEG  = 0.12
+ELEC_NEG  = 0.04
+ACID_NEG  = 0.02
+STUN_NEG  = 0.02
+
+resist_contribution <- function(res, pos_multiplier, neg_multiplier) {
+  if (res > 0) {
+    return(res * pos_multiplier)
+  }
+  else if (res < -50) {
+    return(-50 * neg_multiplier)
+  }
+  else {
+    return(res * neg_multiplier)
+  }
+}
+
+
+creature_level <- function(data) {
+  health      = data$health
+  action      = data$action
+  mind        = data$mind
+  armor       = data$armor
+  damage_low  = data$damage_low
+  damage_high = data$damage_high 
+  to_hit      = data$to_hit
+  speed       = data$to_hit
+  kin         = data$kinetic
+  eng         = data$energy
+  blast       = data$blast
+  heat        = data$heat
+  cold        = data$cold
+  electricty  = data$electricity
+  acid        = data$acid
+  stun        = data$stun
+  
+  
+  # CL contributions
+  ham_cl = (health + action + mind) * HAM
+  armor_cl = armor * ARMOR
+  dps_cl = (DPS * to_hit * damage_low) / speed
+  kin_cl = resist_contribution(kin, KIN_POS, KIN_NEG)
+  eng_cl = resist_contribution(eng, ENG_POS, ENG_NEG)
+  blast_cl = resist_contribution(blast, BLAST_POS, BLAST_NEG)
+  heat_cl = resist_contribution(heat, HEAT_POS, HEAT_NEG)
+  cold_cl = resist_contribution(cold, COLD_POS, COLD_NEG)
+  electricity_cl = resist_contribution(electricty, ELEC_POS, ELEC_NEG)
+  acid_cl = resist_contribution(acid, ACID_POS, ACID_NEG)
+  stun_cl = resist_contribution(stun, STUN_POS, STUN_NEG)
+  
+  
+  return(
+    ham_cl + armor_cl + dps_cl + 
+    kin_cl + eng_cl + blast_cl + 
+    heat_cl + cold_cl + electricity_cl +
+    acid_cl + stun_cl
+  )
+}
+```
+
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(magrittr)
@@ -40,25 +115,33 @@ bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
 creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
   filter(!serial %in% bad_data)
 templates <- read_csv("data/clean/furrycat/templates.csv")
-combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial))
+combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial), suffix = c("", ".template"))
 normalized_df <- combined_data %>%
   mutate_at(
-    vars("kinetic.effective.x",
-         "kinetic.special.x",
-         "energy.effective.x",
-         "energy.special.x",
-         "blast.effective.x",
-         "blast.special.x",
-         "heat.effective.x",
-         "heat.special.x",
-         "cold.effective.x",
-         "cold.special.x",
-         "electricity.effective.x",
-         "electricity.special.x",
-         "acid.effective.x",
-         "acid.special.x",
-         "stun.effective.x",
-         "stun.special.x"),
+    vars("kinetic",
+         "energy", 
+         "blast",
+         "heat",
+         "cold",
+         "electricity",
+         "acid",
+         "stun",
+         "kinetic.effective",
+         "kinetic.special",
+         "energy.effective",
+         "energy.special",
+         "blast.effective",
+         "blast.special",
+         "heat.effective",
+         "heat.special",
+         "cold.effective",
+         "cold.special",
+         "electricity.effective",
+         "electricity.special",
+         "acid.effective",
+         "acid.special",
+         "stun.effective",
+         "stun.special"),
     ~ ifelse(is.na(.), 0, .)
   )
 
@@ -66,87 +149,22 @@ experiments <- read_csv("data/clean/furrycat/experiments.csv")
 samples <- read_csv("data/clean/furrycat/samples.csv")
 ```
 
+Let's see how this model performs on the furrycat data set.
 
-Let's consider "non-vulnerable" creatures for the moment -- this is simply to cut out "vuln stacking" as a complication.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-non_vuln <- normalized_df %>% 
-  filter(kinetic.special.x >= 0, 
-         energy.special.x >= 0, 
-         blast.special.x >= 0, 
-         heat.special.x >= 0, 
-         cold.special.x >= 0, 
-         electricity.special.x >= 0, 
-         acid.special.x >= 0, 
-         stun.special.x >= 0)
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+normalized_df <- normalized_df %>%
+  rowwise() %>%
+  mutate(predicted_level = creature_level(cur_data())) %>%
+  ungroup()
+
+ggplot(normalized_df, aes(x = predicted_level, y = level)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  theme_minimal() +
+  ggtitle("Actual vs Predicted Creature Levels")
+
 ```
 
-This very interestingly fits a Gamma distribution!
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-gamma_model <- glm(level ~
-    hardiness + fortitude +
-    dexterity + endurance +
-    intellect + cleverness +
-    courage + dependability +
-    fierceness + power +
-    kinetic.special.x + kinetic.effective.x +
-    energy.special.x + energy.effective.x +
-    blast.special.x + blast.effective.x +
-    heat.special.x + heat.effective.x +
-    cold.special.x + cold.effective.x +
-    electricity.special.x + electricity.effective.x +
-    acid.special.x + acid.effective.x +
-    stun.special.x + stun.effective.x, 
-    data = non_vuln, family = Gamma())
 
-residuals <- resid(gamma_model)
-qqnorm(residuals)
-qqline(residuals)
-```
-
-And the Shapiro-Wilks test for this is:
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-shapiro.test(residuals)
-```
-
-Which is very suggestive that the residuals are normally distributed -- meaning, the variations in creature level are very likely simply due to random variations in assembly, experimentation, and so on.
-
-# Further
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-gbm_model <- gbm(
-  level ~
-    hardiness + fortitude +
-    dexterity + endurance +
-    intellect + cleverness +
-    courage + dependability +
-    fierceness + power +
-    kinetic.special.x + kinetic.effective.x +
-    energy.special.x + energy.effective.x +
-    blast.special.x + blast.effective.x +
-    heat.special.x + heat.effective.x +
-    cold.special.x + cold.effective.x +
-    electricity.special.x + electricity.effective.x +
-    acid.special.x + acid.effective.x +
-    stun.special.x + stun.effective.x,
-  data = normalized_df,
-  distribution = "gaussian",
-  n.trees = 500,
-  interaction.depth = 3,
-  n.minobsinnode = 10,
-  bag.fraction = 0.3,
-  cv.folds = 10
-)
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
-summary(gbm_model, plotit = FALSE)
-```
-
-The GBM shows several relationships, however, it is likely that not all are valid given biases in the data set.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-plot.gbm(gbm_model, i.var = "intellect", n.trees = 500)
-```

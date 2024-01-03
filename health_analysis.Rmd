@@ -2,98 +2,46 @@
 title: "Health Analysis"
 output: html_document
 ---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("R/data.R")
+library(mgcv)
+library(broom)
+library(ggplot2)
+```
 
 # Data
 
-The GBM of Furrycat's data shows a strong relationship between health and both hardiness and dexterity.
-
-
-```{r message=FALSE, warning=FALSE, include=FALSE}
-library(magrittr)
-library(dplyr)
-library(readr)
-library(ggplot2)
-library(gbm)
-
-# Some of these are obvious typos -- fix later
-bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
-              "er9nq4et", "38u9raer", "6ko7k4ql",  # weird action/dex
-              "6td1segp", "6f9lmdbu",              # bad speed
-              "frfksnne",                          # Maybe bad to-hit but interesting...
-              "kjvtv7d7",                          # has fortitude < 500 AND light armor?
-              "4231uemm",                          # trash mob in piket skin (min cl 25) that throws off CL calculations
-              "at8d24tc",                          # rancor skin (min cl 35) also throwing off cl calculations
-              "8mgpmeev",                          # thune skin also throwing off cl
-              "v22scdcg",                          # fambaa
-              "ceh4m90v",                          # kimogila
-              "mm8gn9sj"                           # kimogila
-)
-creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
-  filter(!serial %in% bad_data)
-templates <- read_csv("data/clean/furrycat/templates.csv")
-combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial))
-normalized_df <- combined_data %>%
-  mutate_at(
-    vars("kinetic.effective.x",
-         "kinetic.special.x",
-         "energy.effective.x",
-         "energy.special.x",
-         "blast.effective.x",
-         "blast.special.x",
-         "heat.effective.x",
-         "heat.special.x",
-         "cold.effective.x",
-         "cold.special.x",
-         "electricity.effective.x",
-         "electricity.special.x",
-         "acid.effective.x",
-         "acid.special.x",
-         "stun.effective.x",
-         "stun.special.x"),
-    ~ ifelse(is.na(.), 0, .)
-  )
-
-experiments <- read_csv("data/clean/furrycat/experiments.csv")
-samples <- read_csv("data/clean/furrycat/samples.csv")
-```
+A GAM of Furrycat's data shows a strong relationship between action and both dexterity and intellect.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-gbm_model <- gbm(
-  health ~ 
-    hardiness + fortitude +
-    dexterity + endurance +
-    intellect + cleverness +
-    courage + dependability +
-    fierceness + power +
-    kinetic.special.x + kinetic.effective.x +
-    energy.special.x + energy.effective.x +
-    blast.special.x + blast.effective.x +
-    heat.special.x + heat.effective.x +
-    cold.special.x + cold.effective.x +
-    electricity.special.x + electricity.effective.x +
-    acid.special.x + acid.effective.x +
-    stun.special.x + stun.effective.x,
-  data = normalized_df,
-  distribution = "gaussian",
-  n.trees = 500,
-  interaction.depth = 3,
-  n.minobsinnode = 5,
-  bag.fraction = 0.5,
-  cv.folds = 10
+model <- gam(
+  formula = health ~
+    s(hardiness) +
+    s(fortitude) + 
+    s(dexterity) + 
+    s(endurance) +
+    s(intellect) + 
+    s(cleverness) + 
+    s(courage) + 
+    s(dependability) +
+    s(power) +
+    s(fierceness) +
+    armor,
+  family = gaussian(),
+  data = normalized_df
 )
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
-summary(gbm_model, plotit = FALSE)
+summary(model)
 ```
 
-And GBM shows a linear relationships.
+And GAM shows a linear relationships.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-plot.gbm(gbm_model, i.var = "hardiness", n.trees = 500)
-```
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-plot.gbm(gbm_model, i.var = "dexterity", n.trees = 500)
+plot(model, select = 1)
+plot(model, select = 3)
 ```
 
 
@@ -107,18 +55,26 @@ summary(model)
 
 And looks like this.
 
-
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 normalized_df$predicted_health <- predict.lm(model, newdata = normalized_df)
 
-ggplot(normalized_df, aes(x = health, y = predicted_health)) +
+ggplot(normalized_df, aes(x = predicted_health, y = health)) +
   geom_point() +
-  geom_smooth(method = lm, color = "blue") +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
   ggtitle("Linear Model Predicted Health vs Actual")
 
+```
+
+The residuals suggest that some of the error may be due to rounding.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+res <- resid(model)
+qqnorm(res)
+qqline(res)
 ```
 
 
 # Conclusion
 
-Health is roughly captured by the following formula, $health \approx 35 + 15 * hardiness + 3 * dexterity$.
+Health is roughly captured by the following formula, $health \approx 42 + 15 * hardiness + 3 * dexterity$. The final health is rounded.
+

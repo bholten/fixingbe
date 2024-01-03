@@ -3,197 +3,173 @@ title: "Damage Analysis"
 output: html_document
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("R/data.R")
+library(mgcv)
+library(broom)
+library(ggplot2)
+```
+
+
 # Data
 
-The GBM of Furrycat's data shows a strong relationship between damage and power.
+A GAM of Furrycat's data shows a strong relationship between damage and power.
 
+Note that damage spread was changed near patch 14.1, so many of the examples in the Furrycat data set are not valid.
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
-library(magrittr)
-library(dplyr)
-library(readr)
-library(ggplot2)
-library(gbm)
-library(tidyr)
+- https://archive.cuemu.com/thread/28261
+- https://archive.cuemu.com/thread/28182
+- https://archive.cuemu.com/thread/28257
+- https://archive.cuemu.com/thread/28312
 
-# Some of these are obvious typos -- fix later
-bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
-              "er9nq4et", "38u9raer", "6ko7k4ql",  # weird action/dex
-              "6td1segp", "6f9lmdbu",              # bad speed
-              "frfksnne",                          # Maybe bad to-hit but interesting...
-              "kjvtv7d7",                          # has fortitude < 500 AND light armor?
-              "4231uemm",                          # trash mob in piket skin (min cl 25) that throws off CL calculations
-              "at8d24tc",                          # rancor skin (min cl 35) also throwing off cl calculations
-              "8mgpmeev",                          # thune skin also throwing off cl
-              "v22scdcg",                          # fambaa
-              "ceh4m90v",                          # kimogila
-              "mm8gn9sj"                           # kimogila
-)
-creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
-  filter(!serial %in% bad_data)
-templates <- read_csv("data/clean/furrycat/templates.csv")
-combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial))
-normalized_df <- combined_data %>%
-  mutate_at(
-    vars("kinetic.effective.x",
-         "kinetic.special.x",
-         "energy.effective.x",
-         "energy.special.x",
-         "blast.effective.x",
-         "blast.special.x",
-         "heat.effective.x",
-         "heat.special.x",
-         "cold.effective.x",
-         "cold.special.x",
-         "electricity.effective.x",
-         "electricity.special.x",
-         "acid.effective.x",
-         "acid.special.x",
-         "stun.effective.x",
-         "stun.special.x"),
-    ~ ifelse(is.na(.), 0, .)
-  )
+We can see this immediately from the complete data set as well.
 
-experiments <- read_csv("data/clean/furrycat/experiments.csv")
-samples <- read_csv("data/clean/furrycat/samples.csv")
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-gbm_model_low <- gbm(
-  damage_low ~     
-    hardiness + fortitude +
-    dexterity + endurance +
-    intellect + cleverness +
-    courage + dependability +
-    fierceness + power +
-    kinetic.special.x + kinetic.effective.x +
-    energy.special.x + energy.effective.x +
-    blast.special.x + blast.effective.x +
-    heat.special.x + heat.effective.x +
-    cold.special.x + cold.effective.x +
-    electricity.special.x + electricity.effective.x +
-    acid.special.x + acid.effective.x +
-    stun.special.x + stun.effective.x,
-  data = normalized_df,
-  distribution = "gaussian",
-  n.trees = 500,
-  interaction.depth = 3,
-  n.minobsinnode = 5,
-  bag.fraction = 0.5,
-  cv.folds = 10
-)
-
-gbm_model_high <- gbm(
-  damage_high ~ 
-    hardiness + fortitude +
-    dexterity + endurance +
-    intellect + cleverness +
-    courage + dependability +
-    fierceness + power +
-    kinetic.special.x + kinetic.effective.x +
-    energy.special.x + energy.effective.x +
-    blast.special.x + blast.effective.x +
-    heat.special.x + heat.effective.x +
-    cold.special.x + cold.effective.x +
-    electricity.special.x + electricity.effective.x +
-    acid.special.x + acid.effective.x +
-    stun.special.x + stun.effective.x,
-  data = normalized_df,
-  distribution = "gaussian",
-  n.trees = 500,
-  interaction.depth = 3,
-  n.minobsinnode = 5,
-  bag.fraction = 0.5,
-  cv.folds = 10
-)
-
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
-summary(gbm_model_low, plotit = FALSE)
-```
-
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
-summary(gbm_model_high, plotit = FALSE)
-```
-
-
-And GBM shows a linear relationships.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-plot.gbm(gbm_model_low, i.var = "power", n.trees = 500)
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-plot.gbm(gbm_model_high, i.var = "power", n.trees = 500)
-```
-
-The linear model shows high correlation and low residuals.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyr)
+normalized_df <- normalized_df %>% mutate(damage_spread = damage_high - damage_low) %>% filter(serial != "4rt3st55")
+
 long_df <- pivot_longer(
   normalized_df,
   cols = c(damage_low, damage_high),
   names_to = "damage_type",
   values_to = "damage_value"
 )
-
 ggplot(long_df, aes(x = power, y = damage_value, color = damage_type)) +
   geom_point() +
   scale_color_manual(values = c("damage_low" = "blue", "damage_high" = "red")) +
   ggtitle("Power vs. Damage")
 ```
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=TRUE}
-model_low <- lm(damage_low ~ power, data = normalized_df)
+
+Where we see a rather striking segment starting at around $damage_{min} \approx 300$.
+
+For the purposes of fitting the data, we will remove these pre-patch examples.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+post_patch_dataset <- normalized_df %>%
+  filter((damage_spread > 10 & power >= 380) | power < 380)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+long_df <- pivot_longer(
+  post_patch_dataset,
+  cols = c(damage_low, damage_high),
+  names_to = "damage_type",
+  values_to = "damage_value"
+)
+ggplot(long_df, aes(x = power, y = damage_value, color = damage_type)) +
+  geom_point() +
+  scale_color_manual(values = c("damage_low" = "blue", "damage_high" = "red")) +
+  ggtitle("Power vs. Damage")
+```
+
+A naive general additive model shows high influence from power.
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model_low <- gam(
+  formula = damage_low ~
+    s(hardiness) +
+    s(fortitude) + 
+    s(dexterity) + 
+    s(endurance) +
+    s(intellect) + 
+    s(cleverness) + 
+    s(courage) + 
+    s(dependability) +
+    s(power) +
+    s(fierceness) +
+    armor,
+  family = gaussian(),
+  data = post_patch_dataset
+)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
 summary(model_low)
 ```
-```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=TRUE}
-model_high <- lm(damage_high ~ power, data = normalized_df)
+
+And $damage_{high}$ is best expressed in terms of $damage_{low}$.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model_high <- gam(
+  formula = damage_high ~ s(damage_low),
+  family = gaussian(),
+  data = post_patch_dataset
+)
 summary(model_high)
 ```
 
-And looks like this.
+A simple change detection and segmentation analysis gives the piecewise-defined regressions.
 
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-normalized_df$predicted_damage_low <- predict.lm(model_low, newdata = normalized_df)
-
-ggplot(normalized_df, aes(x = damage_low, y = predicted_damage_low)) +
-  geom_point() +
-  geom_smooth(method = lm, color = "blue") +
-  ggtitle("Linear Model Predicted Damage Low vs Actual")
-
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model <- lm(damage_low ~ power, data = post_patch_dataset)
+summary(model)
 ```
 
 
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+library(segmented)
+segmented.model <- segmented(model, seg.Z = ~power, psi=380)
+summary(segmented.model)
+```
+
+Which visually fits.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-normalized_df$predicted_damage_high <- predict.lm(model_high, newdata = normalized_df)
+post_patch_dataset$predicted_damage_low <-segmented.model$fitted.values
+post_patch_dataset$predicted_damage_low_residuals <- post_patch_dataset$damage_low - post_patch_dataset$predicted_damage_low
 
-ggplot(normalized_df, aes(x = damage_high, y = predicted_damage_high)) +
+ggplot(post_patch_dataset, aes(x = power, y = damage_low)) +
   geom_point() +
-  geom_smooth(method = lm, color = "blue") +
-  ggtitle("Linear Model Predicted Damage High vs Actual")
+  geom_line(aes(x = power, y = predicted_damage_low), color = 'red', linetype = 'dotted')
 
 ```
 
-# Outliers
+What about $damage_{high}$? That's even more simple, especially if expressed in terms of $damage_{low}$.
 
-The outlier data curiously follow a pattern. This could be due to something systematic, or perhaps an update to the game caused damage to be calculated differently. This happens when power is around 300, as can be seen above.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model <- lm(damage_high ~ damage_low, data = post_patch_dataset)
+segmented.model <- segmented(model, seg.Z = ~damage_low, psi=300)
+summary(segmented.model)
+```
 
-Curiously, in the data set above 300 power, we see power have less influence in both damage attributes; however, power is still the primary influence.
+Which also fits.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+post_patch_dataset$predicted_damage_high <-segmented.model$fitted.values
+post_patch_dataset$predicted_damage_high_residuals <- post_patch_dataset$damage_high - post_patch_dataset$predicted_damage_high
+
+ggplot(post_patch_dataset, aes(x = power, y = damage_high)) +
+  geom_point() +
+  geom_line(aes(x = power, y = predicted_damage_high), color = 'red', linetype = 'dotted')
+
+```
 
 # Conclusion
 
 Damage is roughly captured by the following formulas, 
 
 $$
-damage_{low} \approx 14.44471 + 0.76784 * power
+ \begin{equation}
+ damage_{low} \approx
+   \left\{\begin{array}{lr}
+       max(13 + (7/9) * power, 30), & 0 < power \le 369 \\
+       300 + 0.5 * power, & power > 369
+    \end{array}\right.
+ \end{equation}
 $$
+
 $$
-damage_{high} \approx 20.973211 + 0.794045 * power
+ \begin{equation}
+ damage_{high} \approx
+   \left\{\begin{array}{lr}
+       10 + damage_{low}, & damage_{low} \le 300 \\
+       2 * damage_{low} - 290, & damage_{low} > 300
+    \end{array}\right.
+ \end{equation}
 $$ 
 
-However, more investigation is needed.
+Furthermore, $damage_{high}$ will round to the nearest $10$, and $damage_{low}$ will (sometimes) round to the nearest $5$. There is more investigation needed into the rounding of these values; my belief is that $damage_{high}$ is based on the _non-rounded_ value of $damage_{low}$, and then the rounding occurs differently. More investigation on that behavior is needed, however I do consider some of that data of suspect quality, especially where the difference between $damage_{high}$ and $damage_{low}$ is allegedly $5$.

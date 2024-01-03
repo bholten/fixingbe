@@ -2,99 +2,56 @@
 title: "To-Hit Analysis"
 output: html_document
 ---
-
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("R/data.R")
+library(mgcv)
+library(broom)
+library(ggplot2)
+```
 # Data
 
-The GBM of Furrycat's data shows a strong relationship between to-hit and cleverness
-
-
-```{r message=FALSE, warning=FALSE, include=FALSE}
-library(magrittr)
-library(dplyr)
-library(readr)
-library(ggplot2)
-library(gbm)
-
-# Some of these are obvious typos -- fix later
-bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
-              "er9nq4et", "38u9raer", "6ko7k4ql",  # weird action/dex
-              "6td1segp", "6f9lmdbu",              # bad speed
-              "frfksnne",                          # Maybe bad to-hit but interesting...
-              "kjvtv7d7",                          # has fortitude < 500 AND light armor?
-              "4231uemm",                          # trash mob in piket skin (min cl 25) that throws off CL calculations
-              "at8d24tc",                          # rancor skin (min cl 35) also throwing off cl calculations
-              "8mgpmeev",                          # thune skin also throwing off cl
-              "v22scdcg",                          # fambaa
-              "ceh4m90v",                          # kimogila
-              "mm8gn9sj"                           # kimogila
-)
-creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
-  filter(!serial %in% bad_data)
-templates <- read_csv("data/clean/furrycat/templates.csv")
-combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial))
-normalized_df <- combined_data %>%
-  mutate_at(
-    vars("kinetic.effective.x",
-         "kinetic.special.x",
-         "energy.effective.x",
-         "energy.special.x",
-         "blast.effective.x",
-         "blast.special.x",
-         "heat.effective.x",
-         "heat.special.x",
-         "cold.effective.x",
-         "cold.special.x",
-         "electricity.effective.x",
-         "electricity.special.x",
-         "acid.effective.x",
-         "acid.special.x",
-         "stun.effective.x",
-         "stun.special.x"),
-    ~ ifelse(is.na(.), 0, .)
-  )
-
-experiments <- read_csv("data/clean/furrycat/experiments.csv")
-samples <- read_csv("data/clean/furrycat/samples.csv")
-```
+The GAM of Furrycat's data shows a strong relationship between to-hit and cleverness
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-gbm_model <- gbm(
-  to_hit ~ 
-    hardiness + fortitude +
-    dexterity + endurance +
-    intellect + cleverness +
-    courage + dependability +
-    fierceness + power +
-    kinetic.special.x + kinetic.effective.x +
-    energy.special.x + energy.effective.x +
-    blast.special.x + blast.effective.x +
-    heat.special.x + heat.effective.x +
-    cold.special.x + cold.effective.x +
-    electricity.special.x + electricity.effective.x +
-    acid.special.x + acid.effective.x +
-    stun.special.x + stun.effective.x,
-  data = normalized_df,
-  distribution = "gaussian",
-  n.trees = 500,
-  interaction.depth = 3,
-  n.minobsinnode = 5,
-  bag.fraction = 0.5,
-  cv.folds = 10
+model <- gam(
+  formula = to_hit ~
+    s(hardiness) +
+    s(fortitude) + 
+    s(dexterity) + 
+    s(endurance) +
+    s(intellect) + 
+    s(cleverness) + 
+    s(courage) + 
+    s(dependability) +
+    s(power) +
+    s(fierceness) +
+    armor,
+  family = gaussian(),
+  data = normalized_df
 )
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
-summary(gbm_model, plotit = FALSE)
+summary(model)
 ```
 
-And GBM shows a linear relationships.
+This is easy to see with the graph.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-plot.gbm(gbm_model, i.var = "cleverness", n.trees = 500)
+ggplot(normalized_df, aes(x = cleverness, y = to_hit)) +
+  geom_point() +
+  ggtitle("Cleverness vs To-Hit")
+```
+
+And the GAM shows linear relationships.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot(model, select = 6)
 ```
 
 The linear model shows high correlation and low residuals.
-
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=TRUE}
 model <- lm(to_hit ~ cleverness, data = normalized_df)
@@ -103,18 +60,16 @@ summary(model)
 
 And looks like this.
 
-
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 normalized_df$predicted_to_hit <- predict.lm(model, newdata = normalized_df)
 
 ggplot(normalized_df, aes(x = to_hit, y = predicted_to_hit)) +
   geom_point() +
-  geom_smooth(method = lm, color = "blue") +
-  ggtitle("Linear Model Predicted To-Hit vs Actual")
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  ggtitle("Linear Model Predicted Action vs Actual")
 
 ```
 
-
 # Conclusion
 
-To-Hit is roughly captured by the following formula, $tohit \approx 0.195 + 0.0006458 * cleverness$. Furthermore, there is strong statistical evidence that to-hit is capped after around 500 cleverness and is especially sensitive to rounding.
+To-Hit is roughly captured by the following formula, $tohit \approx 0.195 + 0.0006455 * cleverness$.

@@ -15,6 +15,15 @@ class FurryCatPage
     'Agg' => :aggression
   }
 
+  @@QUALITY_MAP = {
+    'low' => 0,
+    'below_average' => 1,
+    'average' => 2,
+    'above_average' => 3,
+    'high' => 4,
+    'very_high' => 5
+  }
+
   def initialize(args = {})
     @creature = args[:creature]
     @template = args[:template]
@@ -49,6 +58,7 @@ class FurryCatPage
 
     [:kinetic, :energy, :blast, :heat, :cold, :electricity, :acid, :stun].each.with_index do |resist, idx|
       resist_element = element[start_idx + idx]
+      name = "#{resist}" # We leave the name in for easier CL calculations
       name_eff = "#{resist}.effective"
       name_spec = "#{resist}.special"
       res = resist_element.text.to_i
@@ -59,7 +69,7 @@ class FurryCatPage
           {name_spec => 0, name_eff => res}
         end
 
-      resists.merge!(part)
+      resists.merge!(part).merge!({name => res})
     end
 
     obj.merge(resists)
@@ -83,7 +93,7 @@ class FurryCatPage
     creature_args = {
       serial: final_creature[0].text,
       template_id: template[0].text,
-      skin: final_creature[1].text,
+      skin: StrUtils.to_snake_case(final_creature[1].text),
       level: final_creature[2].text.to_i,
       health: final_creature[3].text.to_i,
       action: final_creature[4].text.to_i,
@@ -116,7 +126,7 @@ class FurryCatPage
           else
             ''
           end,
-        quality: StrUtils.to_snake_case(sample[1].text),
+        quality: @@QUALITY_MAP[StrUtils.to_snake_case(sample[1].text)],
         hardiness: sample[2].text.to_i,
         fortitude: sample[3].text.to_i,
         dexterity: sample[4].text.to_i,
@@ -139,7 +149,7 @@ class FurryCatPage
     template_args = {
       id: SecureRandom.uuid,
       serial: template[0].text, ## changed
-      quality: StrUtils.to_snake_case(template[1].text),
+      quality: @@QUALITY_MAP[StrUtils.to_snake_case(template[1].text)],
       hardiness: template[2].text.to_i,
       fortitude: template[3].text.to_i,
       dexterity: template[4].text.to_i,
@@ -172,7 +182,7 @@ class FurryCatPage
       experiment_args = {
         experiment_id: SecureRandom.uuid,
         serial: experiment[0].text, # changed
-        quality: StrUtils.to_snake_case(experiment[1].text),
+        quality: @@QUALITY_MAP[StrUtils.to_snake_case(experiment[1].text)],
         hardiness: experiment[2].text.to_i,
         fortitude: experiment[3].text.to_i,
         dexterity: experiment[4].text.to_i,
