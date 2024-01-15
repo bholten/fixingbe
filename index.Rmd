@@ -7,9 +7,16 @@ output: html_document
 
 The Massively Multiplayer Online Game, Star Wars: Galaxies was released over 20 years ago. The game was shut down on December 15, 2011; but from at least late-2006, an on-going emulation project has been attempting to recreate the game.
 
+One of the most interesting and complex systems in SWG was the Bio-Engineering profession. This is an attempt to reverse-engineer it from historical data.
+
 # Data
 
 All data is scraped from Furrycat's archives. The raw data has been archived to this git repository, and scripts to construct CSVs and import in R as dataframes are provided in the `scripts/` folder.
+
+# Assumptions
+
+1. The real game logic is probably rounded to human-friendly whole numbers. For example, linear regression may indicate values such as 14.995 -- here we'll round this up to 15, assuming tha it's unlikely that game developers were tuning parameters to that level.
+2. The real game logic was certainly efficient on C++ 98 running on hardware from 2003. It was unlikely to be very sophisticated or computationally expensive.
 
 # Attribute Analysis
 

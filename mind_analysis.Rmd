@@ -66,6 +66,14 @@ ggplot(normalized_df, aes(x = predicted_mind, y = mind)) +
 ```
 
 
+The residuals suggest that some of the error may be due to rounding.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+res <- resid(model)
+qqnorm(res)
+qqline(res)
+```
+
 # Conclusion
 
-Mind is roughly captured by the following formula, $mind \approx 15 * intellect + 3 * hardiness$.
+Mind is roughly captured by the following formula, $mind \approx 42 + 15 * intellect + 3 * hardiness$.

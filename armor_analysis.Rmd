@@ -1,0 +1,26 @@
+---
+title: "Armor Analysis"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("R/data.R")
+library(mgcv)
+library(broom)
+library(ggplot2)
+```
+
+# Data
+
+Armor is determined by fortitude. It is trivial to see this in the graph.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(normalized_df, aes(x = fortitude, y = armor)) +
+  geom_point() +
+  ggtitle("Fortitude vs Armor")
+```
+
+# Conclusion
+
+Armor is given by, $armor = fortitude >= 500$.

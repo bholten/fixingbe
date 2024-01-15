@@ -200,7 +200,7 @@ normalized_df <- normalized_df %>%
 normalized_df <- normalized_df %>%
   mutate(average_hdi = (hardiness + dexterity + intellect) / 3)
 normalized_df <- normalized_df %>%
-  mutate(average_sec = (fortitude + endurance + dependability) / 3)
+  mutate(average_sec = (endurance + dependability) / 3)
 normalized_df <- normalized_df %>%
   mutate(average_eff = (kinetic.effective + energy.effective + blast.effective + heat.effective + cold.effective + electricity.effective + acid.effective + stun.effective) / 8) %>%
   mutate(average_spc = (kinetic.special + energy.special + blast.special + heat.special + cold.special + electricity.special + acid.special + stun.special) / 8)

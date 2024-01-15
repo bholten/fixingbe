@@ -102,7 +102,7 @@ model_high <- gam(
 summary(model_high)
 ```
 
-A simple change detection and segmentation analysis gives the piecewise-defined regressions.
+A simple change-point detection and segmentation analysis gives the piecewise-defined regressions.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 model <- lm(damage_low ~ power, data = post_patch_dataset)
@@ -114,6 +114,8 @@ summary(model)
 library(segmented)
 segmented.model <- segmented(model, seg.Z = ~power, psi=380)
 summary(segmented.model)
+intercept(segmented.model)
+slope(segmented.model)
 ```
 
 Which visually fits.
@@ -134,6 +136,8 @@ What about $damage_{high}$? That's even more simple, especially if expressed in 
 model <- lm(damage_high ~ damage_low, data = post_patch_dataset)
 segmented.model <- segmented(model, seg.Z = ~damage_low, psi=300)
 summary(segmented.model)
+intercept(segmented.model)
+slope(segmented.model)
 ```
 
 Which also fits.

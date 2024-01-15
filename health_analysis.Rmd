@@ -12,7 +12,7 @@ library(ggplot2)
 
 # Data
 
-A GAM of Furrycat's data shows a strong relationship between action and both dexterity and intellect.
+A GAM of Furrycat's data shows a strong relationship between health and both hardiness and dexterity.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 model <- gam(

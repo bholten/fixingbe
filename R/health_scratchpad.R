@@ -60,7 +60,7 @@ outlier_records %>% select(serial, health, hardiness, dexterity) %>% View()
 
 # Drop outliers
 normalized_df <- normalized_df %>% filter(!serial %in% c("64v2qh2v", "78mq8sed", "lnk4d7fn"))
-
+0
 model <- lm(
   formula = health ~ hardiness + dexterity,
   data = normalized_df
@@ -72,6 +72,9 @@ hist(res, breaks = 30, main = "Residuals Distribution")
 qqnorm(res)
 qqline(res)
 shapiro.test(res)
+
+library(lmtest)
+bptest(model)
 
 normalized_df$predicted_health <- predict.gam(model, normalized_df)
 normalized_df$health_resid <- normalized_df$health - normalized_df$predicted_health
