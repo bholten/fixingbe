@@ -15,7 +15,7 @@ All data is scraped from Furrycat's archives. The raw data has been archived to 
 
 # Assumptions
 
-1. The real game logic is probably rounded to human-friendly whole numbers. For example, linear regression may indicate values such as 14.995 -- here we'll round this up to 15, assuming tha it's unlikely that game developers were tuning parameters to that level.
+1. The real game logic is probably rounded to human-friendly whole numbers. For example, linear regression may indicate values such as 14.995 -- here we'll round this up to 15, assuming that it's unlikely that game developers were tuning parameters to that level.
 2. The real game logic was certainly efficient on C++ 98 running on hardware from 2003. It was unlikely to be very sophisticated or computationally expensive.
 
 # Attribute Analysis
@@ -27,5 +27,5 @@ All data is scraped from Furrycat's archives. The raw data has been archived to 
 - [To-Hit Analysis](to_hit_analysis.html)
 - [Damage Analysis](damage_analysis.html)
 - [Armor Analysis](armor_analysis.html)
-- [Resists Analysis](resists_analysis.html)
-- [Creature Level Analysis](creature_level_analysis.html)
+- To Do - [Resists Analysis](resists_analysis.html)
+- Work In Progress - [Creature Level Analysis](creature_level_analysis.html)

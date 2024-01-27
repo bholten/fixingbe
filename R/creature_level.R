@@ -87,7 +87,7 @@ normalized_df <- normalized_df %>%
 normalized_df <- normalized_df %>%
   mutate(kinen = (kinetic + energy) / 2)
 normalized_df <- normalized_df %>%
-  mutate(average_res_nonkinen = ( blast + heat + cold + electricity + acid + stun) / 6)
+  mutate(nonkinen = ( blast + heat + cold + electricity + acid + stun) / 6)
 normalized_df <- normalized_df %>%
   mutate(average_dps = ((damage_high + damage_low) / 2) * speed * to_hit)
 normalized_df <- normalized_df %>%
@@ -100,52 +100,327 @@ normalized_df <- normalized_df %>%
   mutate(average_dps_attr = (power + courage + cleverness) / 3)
 normalized_df <- normalized_df %>%
   mutate(armor_factor = fortitude * (1 + armor))
+normalized_df <- normalized_df %>%
+  mutate(coldac = (cold + acid) / 2)
+normalized_df <- normalized_df %>%
+  mutate(bhes = (blast + heat + electricity + stun) / 4)
+normalized_df <- normalized_df %>%
+  mutate(kinen.special = (kinetic.special + energy.special) / 2)
+normalized_df <- normalized_df %>%
+  mutate(kinen.effective = (kinetic.effective + energy.effective) / 2)
+normalized_df <- normalized_df %>%
+  mutate(nonkinen.special = (blast.special + cold.special + heat.special + electricity.special + acid.special + stun.special) / 6)
+normalized_df <- normalized_df %>%
+  mutate(nonkinen.effective = (blast.effective + cold.effective + heat.effective + electricity.effective + acid.effective + stun.effective) / 6)
+normalized_df <- normalized_df %>%
+  mutate(clepow = (cleverness + power) / 2)
+normalized_df <- normalized_df %>%
+  mutate(dps = ((damage_high + damage_low) / 2) * to_hit * speed)
+
 
 ##########################
 # Clustering experiments #
 ##########################
+# s(hardiness) +
+#   s(fortitude) +
+#   s(dexterity) +
+#   s(intellect) +
+#   s(cleverness) +
+#   s(power) +
+#   s(kinetic) +
+#   s(energy) +
+#   s(cold)
 clustering_data <- normalized_df %>%
-  select(c(average_hdi, armor_factor, average_res, average_dps_attr)) %>%
-  select(where(is.numeric)) %>%
+  dplyr::select(c(average_hdi, fortitude, cleverness, power, kinen, nonkinen)) %>%
+  dplyr::select(where(is.numeric)) %>%
   mutate_all(replace_na, 0)
 
-kmeans_result <- kmeans(clustering_data, centers = 5)
+kmeans_result <- kmeans(clustering_data, centers = 3)
 normalized_df$cluster <- as.factor(kmeans_result$cluster)
 
-ggplot(normalized_df, aes(x = hardiness, y = level, color = cluster)) +
+print(kmeans_result$centers)
+
+# normalized_df %>%
+#   dplyr::select(c(serial, skin, level, cluster, hardiness, fortitude, dexterity, intellect, cleverness, power, kinetic, energy, cold)) %>%
+#   View()
+
+
+
+ggplot(normalized_df, aes(x = average_hdi, y = level, color = cluster)) +
   geom_point() +
-  labs(title = "K-means Clustering", x = "hardiness", y = "level") +
+  labs(title = "K-means Clustering", x = "average_hdi", y = "level") +
   scale_color_discrete(name = "Cluster")
 
 ### Some plots
-ggplot(normalized_df, aes(x = average_ham, y = level, color = cluster)) +
-  geom_point() +
-  labs(title = "K-means Clustering", x = "average_ham", y = "level") +
-  scale_color_discrete(name = "Cluster")
-
-ggplot(normalized_df, aes(x = average_dps_attr, y = level, color = cluster)) +
-  geom_point() +
-  labs(title = "K-means Clustering", x = "average_dps_attr", y = "level") +
-  scale_color_discrete(name = "Cluster")
-
-ggplot(normalized_df, aes(x = average_res, y = level, color = cluster)) +
-  geom_point() +
-  labs(title = "K-means Clustering", x = "average_res", y = "level") +
-  scale_color_discrete(name = "Cluster")
-
 ggplot(normalized_df, aes(x = fortitude, y = level, color = cluster)) +
   geom_point() +
   labs(title = "K-means Clustering", x = "fortitude", y = "level") +
   scale_color_discrete(name = "Cluster")
 
+ggplot(normalized_df, aes(x = cleverness, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "K-means Clustering", x = "cleverness", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(normalized_df, aes(x = power, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "K-means Clustering", x = "power", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(normalized_df, aes(x = kinen, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "K-means Clustering", x = "kinen", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(normalized_df, aes(x = nonkinen, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "K-means Clustering", x = "nonkinen", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+
+# What even has influence?
+
+model.gam.everything <- gam(
+  level ~
+    s(hardiness) +
+    s(fortitude) +
+    s(dexterity) +
+    s(endurance) +
+    s(intellect) +
+    s(cleverness) +
+    s(dependability) +
+    s(courage) +
+    s(fierceness) +
+    s(power) +
+    s(kinetic) +
+    s(energy)  +
+    s(blast) +
+    s(heat) +
+    s(cold) +
+    s(electricity) +
+    s(acid) +
+    s(stun),
+  data = normalized_df,
+  family = gaussian()
+)
+
+summary(model.gam.everything)
+plot(model.gam.everything)
+
+
+
+model.gam.everything.finalstats <- gam(
+  level ~
+    s(average_ham) +
+    s(dps) +
+    armor +
+    s(kinen) +
+    s(nonkinen),
+  data = normalized_df,
+  family = gaussian()
+)
+
+summary(model.gam.everything.finalstats)
+plot(model.gam.everything.finalstats)
+
+
+nonamror <- normalized_df %>% filter(fortitude < 500)
+model.gam.everything.nonarmor <- gam(
+  level ~
+    s(hardiness) +
+    s(fortitude) +
+    s(dexterity) +
+    s(endurance) +
+    s(intellect) +
+    s(cleverness) +
+    s(dependability) +
+    s(courage) +
+    s(fierceness) +
+    s(power) +
+    s(kinetic) +
+    s(energy)  +
+    s(blast) +
+    s(heat) +
+    s(cold) +
+    s(electricity) +
+    s(acid) +
+    s(stun),
+  data = nonamror,
+  family = gaussian()
+)
+summary(model.gam.everything.nonarmor)
+plot(model.gam.everything.nonarmor)
+
+
+
+armor <- normalized_df %>% filter(fortitude >= 500)
+model.gam.everything.armor <- gam(
+  level ~
+    s(hardiness) +
+    s(fortitude) +
+    s(dexterity) +
+    s(endurance) +
+    s(intellect) +
+    s(cleverness) +
+    s(dependability) +
+    s(courage) +
+    s(fierceness) +
+    s(power) +
+    s(kinetic) +
+    s(energy)  +
+    s(blast) +
+    s(heat) +
+    s(cold) +
+    s(electricity) +
+    s(acid) +
+    s(stun),
+  data = armor,
+  family = gaussian()
+)
+summary(model.gam.everything.armor)
+plot(model.gam.everything.armor)
+
+
+model.lm.everything.armor <- lm(
+  level ~
+    hardiness +
+    fortitude +
+    dexterity +
+    endurance +
+    intellect +
+    cleverness +
+    dependability +
+    courage +
+    fierceness +
+    power +
+    kinetic +
+    energy  +
+    blast +
+    heat +
+    cold +
+    electricity +
+    acid +
+    stun,
+  data = armor
+)
+summary(model.lm.everything.armor)
+
+
+# model.gbm.everything <- gbm(
+#   level ~
+#     hardiness +
+#     fortitude +
+#     dexterity +
+#     endurance +
+#     intellect +
+#     cleverness +
+#     dependability +
+#     courage +
+#     power +
+#     average_res,
+#   data = normalized_df
+# )
+#
+# summary(model.gbm.everything, plotit = FALSE)
+
+model.gam.highest.influence <- gam(
+  level ~
+    s(hardiness) +
+    s(fortitude) +
+    s(dexterity) +
+    s(intellect) +
+    s(cleverness) +
+    s(power) +
+    s(kinetic) +
+    s(energy) +
+    s(cold),
+  data = normalized_df
+)
+
+summary(model.gam.highest.influence)
+
+ggplot(normalized_df, aes(x = predict(model.gam.highest.influence, newdata = normalized_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+
+
+############## Clusters
+
+model_cluster <- function(df) {
+  model.gam.highest.influence <- gam(
+    level ~
+      s(hardiness) +
+      s(fortitude) +
+      s(dexterity) +
+      s(intellect) +
+      s(cleverness) +
+      s(power) +
+      s(kinetic) +
+      s(energy) +
+      s(cold),
+    data = df
+  )
+
+  print(summary(model.gam.highest.influence))
+
+  ggplot(df, aes(x = predict(model.gam.highest.influence, newdata = df), y = level)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+    labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+    scale_color_discrete(name = "Max Relative Term")
+
+  return(model.gam.highest.influence)
+}
+
+model.cluster.1 <- normalized_df %>%
+  filter(cluster == 1) %>%
+  model_cluster()
+
+ggplot(normalized_df, aes(x = predict(model.cluster.1, newdata = normalized_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+model.cluster.2 <- normalized_df %>%
+  filter(cluster == 2) %>%
+  model_cluster()
+
+ggplot(normalized_df, aes(x = predict(model.cluster.2, newdata = normalized_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+
+model.cluster.3 <- normalized_df %>%
+  filter(cluster == 3) %>%
+  model_cluster()
+
+ggplot(normalized_df, aes(x = predict(model.cluster.3, newdata = normalized_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+
 
 #### GAM
 
 model.gam <- gam(
-  level ~ s(average_hdi) +
-    s(average_dps_attr) +
-    s(average_res) +
-    s(fortitude),
+  level ~
+    s(hardiness) +
+    s(fortitude) +
+    s(dexterity) +
+    s(intellect) +
+    s(cleverness) +
+    s(power) +
+    s(kinetic) +
+    s(energy) +
+    s(cold),
   data = normalized_df
 )
 summary(model.gam)
@@ -153,6 +428,9 @@ plot(model.gam, select = 1)
 plot(model.gam, select = 2)
 plot(model.gam, select = 3)
 plot(model.gam, select = 4)
+plot(model.gam, select = 5)
+plot(model.gam, select = 6)
+
 predictions.gam.level <- predict.gam(model.gam, newdata = normalized_df)
 predictions.gam.terms <- predict.gam(model.gam, newdata = normalized_df, type = "terms")
 
@@ -166,30 +444,123 @@ ggplot(normalized_df, aes(x = predictions.gam.level, y = level, color = max_rela
   labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
   scale_color_discrete(name = "Max Relative Term")
 
-#### GBM
-
-model.gbm <- gbm(
-  level ~ average_hdi + average_dps_attr + average_res + armor_factor,
-  data = normalized_df
-)
-
-summary(model.gbm, plotit = FALSE)
-plot(model.gbm, i.var = "average_dps_attr")
-predictions.gbm.level <- predict.gbm(model.gbm, newdata = normalized_df)
-
-ggplot(normalized_df, aes(x = predictions.gbm.level, y = level, color = max_relative_term)) +
+max.term.1 <- normalized_df %>% filter(max_relative_term == 1)
+ggplot(max.term.1, aes(x = predict(model.gam, newdata = max.term.1), y = level, color = max_relative_term)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
   labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
   scale_color_discrete(name = "Max Relative Term")
 
+max.term.2 <- normalized_df %>% filter(max_relative_term == 2)
+ggplot(max.term.2, aes(x = predict(model.gam, newdata = max.term.2), y = level, color = max_relative_term)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+max.term.3 <- normalized_df %>% filter(max_relative_term == 3)
+ggplot(max.term.3, aes(x = predict(model.gam, newdata = max.term.3), y = level, color = max_relative_term)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+
+max.term.4 <- normalized_df %>% filter(max_relative_term == 4)
+ggplot(max.term.4, aes(x = predict(model.gam, newdata = max.term.4), y = level, color = max_relative_term)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+max.term.5 <- normalized_df %>% filter(max_relative_term == 5)
+ggplot(max.term.5, aes(x = predict(model.gam, newdata = max.term.5), y = level, color = max_relative_term)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+max.term.6 <- normalized_df %>% filter(max_relative_term == 6)
+ggplot(max.term.6, aes(x = predict(model.gam, newdata = max.term.6), y = level, color = max_relative_term)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+max.term.7 <- normalized_df %>% filter(max_relative_term == 7)
+ggplot(max.term.6, aes(x = predict(model.gam, newdata = max.term.6), y = level, color = max_relative_term)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+max.term.8 <- normalized_df %>% filter(max_relative_term == 8)
+max.term.9 <- normalized_df %>% filter(max_relative_term == 9)
+
+
+
+
+
+# My actual suspicions:
+
+
+model.gam <- gam(
+  level ~
+    s(average_hdi) +
+    s(fortitude) +
+    s(cleverness) +
+    s(power) +
+    s(kinen) +
+    s(nonkinen),
+  data = normalized_df
+)
+summary(model.gam)
+plot(model.gam, select = 1)
+plot(model.gam, select = 2)
+plot(model.gam, select = 3)
+plot(model.gam, select = 4)
+plot(model.gam, select = 5)
+plot(model.gam, select = 6)
+
+
+
+
+
+
+
+
+
+#### GBM
+
+# model.gbm <- gbm(
+#   level ~ average_hdi + average_dps_attr + average_res + armor_factor,
+#   data = normalized_df
+# )
+#
+# summary(model.gbm, plotit = FALSE)
+# plot(model.gbm, i.var = "average_dps_attr")
+# predictions.gbm.level <- predict.gbm(model.gbm, newdata = normalized_df)
+#
+# ggplot(normalized_df, aes(x = predictions.gbm.level, y = level, color = max_relative_term)) +
+#   geom_point() +
+#   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+#   labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+#   scale_color_discrete(name = "Max Relative Term")
+
 ####
 library(segmented)
 plot(model.gam, select = 1)
 
-linear.fit.level <- lm(level ~ average_hdi + average_dps_attr + average_res + fortitude, data = normalized_df)
+linear.fit.level <- lm(level ~
+                         average_hdi +
+                         fortitude +
+                         power +
+                         cleverness +
+                         kinen +
+                         nonkinen, data = normalized_df)
 summary(linear.fit.level)
 bptest(linear.fit.level)
+
 segmented.fit.average_hdi <- segmented(linear.fit.level, seg.Z = ~average_hdi, npsi = 2)
 summary(segmented.fit.average_hdi)
 plot(segmented.fit.average_hdi)
@@ -198,49 +569,178 @@ points.segmented(segmented.fit.average_hdi)
 
 plot(model.gam, select = 2)
 
-segmented.fit.average_dps_attr <- segmented(linear.fit.level, seg.Z = ~average_dps_attr, npsi = 1)
-summary(segmented.fit.average_dps_attr)
-plot(segmented.fit.average_dps_attr)
-lines.segmented(segmented.fit.average_dps_attr)
-points.segmented(segmented.fit.average_dps_attr)
+segmented.fit.power <- segmented(linear.fit.level, seg.Z = ~fortitude, npsi = 3)
+summary(segmented.fit.power)
+plot(segmented.fit.power)
+lines.segmented(segmented.fit.power)
+points.segmented(segmented.fit.power)
 
 
 plot(model.gam, select = 3)
 
-linear.fit.average_res <- lm(level ~ average_hdi + average_dps_attr + average_res + armor_factor, data = normalized_df)
-segmented.fit.average_res <- segmented(linear.fit.average_res, seg.Z = ~average_res, npsi = 2)
-summary(segmented.fit.average_res)
-plot(segmented.fit.average_res)
-lines.segmented(segmented.fit.average_res)
-points.segmented(segmented.fit.average_res)
+segmented.fit.cleverness <- segmented(linear.fit.level, seg.Z = ~cleverness, npsi = 1)
+summary(segmented.fit.cleverness)
+plot(segmented.fit.cleverness)
+lines.segmented(segmented.fit.cleverness)
+points.segmented(segmented.fit.cleverness)
 
 
 
 plot(model.gam, select = 4)
 
-segmented.fit.armor_factor <- segmented(linear.fit.level, seg.Z = ~armor_factor, npsi = 3)
-summary(segmented.fit.armor_factor)
-plot(segmented.fit.armor_factor)
-lines.segmented(segmented.fit.armor_factor)
-points.segmented(segmented.fit.armor_factor)
+segmented.fit.courage <- segmented(linear.fit.level, seg.Z = ~courage, npsi = 2)
+summary(segmented.fit.courage)
+plot(segmented.fit.courage)
+lines.segmented(segmented.fit.courage)
+points.segmented(segmented.fit.courage)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 ### Segment analysis
 no_armor_df <- normalized_df %>% filter(armor == 0)
-armor_df <- normalized_df %>% filter(armor == 1)
+armor_df <- normalized_df %>% filter(armor == 1 & fortitude >= 500)
+
+
+
+##### Influence Analysis Again
+model.gam.everything.noarmor <- gam(
+  level ~
+    s(hardiness) +
+    s(fortitude) +
+    s(dexterity) +
+    s(endurance) +
+    s(intellect) +
+    s(cleverness) +
+    s(dependability) +
+    s(courage) +
+    s(fierceness) +
+    s(power) +
+    s(kinetic) +
+    s(energy)  +
+    s(blast) +
+    s(heat) +
+    s(cold) +
+    s(electricity) +
+    s(acid) +
+    s(stun),
+  data = no_armor_df,
+  family = gaussian()
+)
+
+summary(model.gam.everything.noarmor)
+
+
+model.gam.everything.armor <- gam(
+  level ~
+    s(hardiness) +
+    s(fortitude) +
+    s(dexterity) +
+    s(endurance) +
+    s(intellect) +
+    s(cleverness) +
+    s(dependability) +
+    s(courage) +
+    s(fierceness) +
+    s(power) +
+    s(kinetic) +
+    s(energy)  +
+    s(blast) +
+    s(heat) +
+    s(cold) +
+    s(electricity) +
+    s(acid) +
+    s(stun),
+  data = armor_df,
+  family = gaussian()
+)
+
+summary(model.gam.everything.armor)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 # No armor
+ggplot(no_armor_df, aes(x = average_hdi, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "Average HDI vs Level", x = "average_hdi", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(no_armor_df, aes(x = courage, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "Courage vs Level", x = "courage", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(no_armor_df, aes(x = power, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "power vs Level", x = "power", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(no_armor_df, aes(x = cleverness, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "cleverness vs Level", x = "cleverness", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(no_armor_df, aes(x = kinen, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "average_res vs Level", x = "average_res", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(no_armor_df, aes(x = nonkinen, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "average_res vs Level", x = "average_res", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+ggplot(no_armor_df, aes(x = fortitude, y = level, color = cluster)) +
+  geom_point() +
+  labs(title = "fortitude vs Level", x = "fortitude", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+
+
 model.gam.noarmor <- gam(
-  level ~ s(average_hdi) +
-    s(average_dps_attr) +
-    s(average_res) +
-    s(fortitude),
+  level ~
+    s(average_hdi) +
+    s(fortitude) +
+    s(cleverness) +
+    s(power) +
+    s(kinen) +
+    s(nonkinen),
   data = no_armor_df
 )
 summary(model.gam.noarmor)
+
 ggplot(no_armor_df, aes(x = predict(model.gam.noarmor, newdata = no_armor_df), y = level, color = cluster)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
@@ -252,14 +752,18 @@ plot(model.gam.noarmor, select = 1)
 plot(model.gam.noarmor, select = 2)
 plot(model.gam.noarmor, select = 3)
 plot(model.gam.noarmor, select = 4)
-
+plot(model.gam.noarmor, select = 5)
+plot(model.gam.noarmor, select = 6)
+plot(model.gam.noarmor, select = 7)
 
 linear.fit.level.noarmor <- lm(
   level ~
     average_hdi +
-    average_dps_attr +
-    average_res +
-    fortitude,
+    fortitude +
+    cleverness +
+    power +
+    kinen +
+    nonkinen,
   data = no_armor_df
 )
 summary(linear.fit.level.noarmor)
@@ -282,45 +786,74 @@ summary(segmented.fit.average_hdi.noarmor)
 plot(segmented.fit.average_hdi.noarmor)
 lines.segmented(segmented.fit.average_hdi.noarmor)
 points.segmented(segmented.fit.average_hdi.noarmor)
+slope(segmented.fit.average_hdi.noarmor)
+intercept(segmented.fit.average_hdi.noarmor)
 
 
 plot(model.gam.noarmor, select = 2)
 
-segmented.fit.average_dps_attr.noarmor <- segmented(linear.fit.level.noarmor, seg.Z = ~average_dps_attr, npsi = 1)
-summary(segmented.fit.average_dps_attr.noarmor)
-plot(segmented.fit.average_dps_attr.noarmor)
-lines.segmented(segmented.fit.average_dps_attr.noarmor)
-points.segmented(segmented.fit.average_dps_attr.noarmor)
+segmented.fit.power.noarmor <- segmented(linear.fit.level.noarmor, seg.Z = ~fortitude, npsi = 2)
+summary(segmented.fit.power.noarmor)
+slope(segmented.fit.power.noarmor)
+plot(segmented.fit.power.noarmor)
+lines.segmented(segmented.fit.power.noarmor)
+points.segmented(segmented.fit.power.noarmor)
 
 
 
 
 plot(model.gam.noarmor, select = 3)
 
-segmented.fit.average_res.noarmor <- segmented(linear.fit.level.noarmor, seg.Z = ~average_res, npsi = 2)
-summary(segmented.fit.average_res.noarmor)
-plot(segmented.fit.average_res.noarmor)
-lines.segmented(segmented.fit.average_res.noarmor)
-points.segmented(segmented.fit.average_res.noarmor)
+segmented.fit.cleverness.noarmor <- segmented(linear.fit.level.noarmor, seg.Z = ~cleverness, npsi = 1)
+summary(segmented.fit.cleverness.noarmor)
+plot(segmented.fit.cleverness.noarmor)
+lines.segmented(segmented.fit.cleverness.noarmor)
+points.segmented(segmented.fit.cleverness.noarmor)
 
 
 
 
-plot(model.gam, select = 4)
+plot(model.gam.noarmor, select = 4)
 
-segmented.fit.fortitude.noarmor <- segmented(linear.fit.level.noarmor, seg.Z = ~fortitude, npsi = 1)
-summary(segmented.fit.fortitude.noarmor)
-plot(segmented.fit.fortitude.noarmor)
-lines.segmented(segmented.fit.fortitude.noarmor)
-points.segmented(segmented.fit.fortitude.noarmor)
+segmented.fit.kinen.noarmor <- segmented(linear.fit.level.noarmor, seg.Z = ~kinen, npsi = 5)
+summary(segmented.fit.kinen.noarmor)
+plot(segmented.fit.kinen.noarmor)
+lines.segmented(segmented.fit.kinen.noarmor)
+points.segmented(segmented.fit.kinen.noarmor)
+
+
+
+plot(model.gam.noarmor, select = 5)
+
+segmented.fit.kinen.noarmor <- segmented(linear.fit.level.noarmor, seg.Z = ~kinen, npsi = 1)
+summary(segmented.fit.kinen.noarmor)
+plot(segmented.fit.kinen.noarmor)
+lines.segmented(segmented.fit.kinen.noarmor)
+points.segmented(segmented.fit.kinen.noarmor)
+slope(segmented.fit.kinen.noarmor)
+intercept(segmented.fit.kinen.noarmor)
+
+plot(model.gam.noarmor, select = 6)
+
+segmented.fit.nonkinen.noarmor <- segmented(linear.fit.level.noarmor, seg.Z = ~nonkinen, npsi = 1)
+summary(segmented.fit.nonkinen.noarmor)
+plot(segmented.fit.nonkinen.noarmor)
+lines.segmented(segmented.fit.nonkinen.noarmor)
+points.segmented(segmented.fit.nonkinen.noarmor)
+slope(segmented.fit.nonkinen.noarmor)
+intercept(segmented.fit.nonkinen.noarmor)
+
 
 # Armor
 
 model.gam.armor <- gam(
-  level ~ s(average_hdi) +
-    s(average_dps_attr) +
-    s(average_res) +
-    s(fortitude),
+  level ~
+    s(average_hdi) +
+    s(fortitude) +
+    s(cleverness) +
+    s(power) +
+    s(kinen) +
+    s(nonkinen),
   data = armor_df
 )
 summary(model.gam.armor)
@@ -328,19 +861,28 @@ plot(model.gam.armor, select = 1)
 plot(model.gam.armor, select = 2)
 plot(model.gam.armor, select = 3)
 plot(model.gam.armor, select = 4)
+plot(model.gam.armor, select = 5)
+plot(model.gam.armor, select = 6)
 
 
 linear.fit.level.armor <- lm(
   level ~
     average_hdi +
-    average_dps_attr +
-    average_res +
-    fortitude,
+    fortitude +
+    cleverness +
+    power +
+    kinen +
+    nonkinen,
   data = armor_df
 )
 summary(linear.fit.level.armor)
 
 ggplot(armor_df, aes(x = predict(linear.fit.level.armor, newdata = armor_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level") +
+  scale_color_discrete(name = "Cluster")
+ggplot(normalized_df, aes(x = predict(linear.fit.level.armor, newdata = normalized_df), y = level, color = cluster)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
   labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level") +
@@ -359,50 +901,82 @@ summary(segmented.fit.average_hdi.armor)
 plot(segmented.fit.average_hdi.armor)
 lines.segmented(segmented.fit.average_hdi.armor)
 points.segmented(segmented.fit.average_hdi.armor)
+slope(segmented.fit.average_hdi.armor)
+intercept(segmented.fit.average_hdi.armor)
 
 
 plot(model.gam.armor, select = 2)
 
-segmented.fit.average_dps_attr.armor <- segmented(linear.fit.level.armor, seg.Z = ~average_dps_attr, npsi = 1)
-summary(segmented.fit.average_dps_attr.armor)
-plot(segmented.fit.average_dps_attr.armor)
-lines.segmented(segmented.fit.average_dps_attr.armor)
-points.segmented(segmented.fit.average_dps_attr.armor)
-
-
+segmented.fit.power.armor <- segmented(linear.fit.level.armor, seg.Z = ~fortitude, npsi = 1)
+summary(segmented.fit.power.armor)
+plot(segmented.fit.power.armor)
+lines.segmented(segmented.fit.power.armor)
+points.segmented(segmented.fit.power.armor)
+summary(segmented.fit.power.armor)
+slope(segmented.fit.power.armor)
+intercept(segmented.fit.power.armor)
 
 
 plot(model.gam.armor, select = 3)
 
-segmented.fit.average_res.armor <- segmented(linear.fit.level.armor, seg.Z = ~average_res, npsi = 1)
-summary(segmented.fit.average_res.armor)
-plot(segmented.fit.average_res.armor)
-lines.segmented(segmented.fit.average_res.armor)
-points.segmented(segmented.fit.average_res.armor)
+segmented.fit.cleverness.armor <- segmented(linear.fit.level.armor, seg.Z = ~cleverness, npsi = 1)
+summary(segmented.fit.cleverness.armor)
+plot(segmented.fit.cleverness.armor)
+lines.segmented(segmented.fit.cleverness.armor)
+points.segmented(segmented.fit.cleverness.armor)
 
 
 
 
 plot(model.gam.armor, select = 4)
 
-segmented.fit.armor_factor.armor <- segmented(linear.fit.level.armor, seg.Z = ~armor_factor, npsi = 1)
-summary(segmented.fit.armor_factor.armor)
-plot(segmented.fit.armor_factor.armor)
-lines.segmented(segmented.fit.armor_factor.armor)
-points.segmented(segmented.fit.armor_factor.armor)
+segmented.fit.courage.armor <- segmented(linear.fit.level.armor, seg.Z = ~courage, npsi = 1)
+summary(segmented.fit.courage.armor)
+plot(segmented.fit.courage.armor)
+lines.segmented(segmented.fit.courage.armor)
+points.segmented(segmented.fit.courage.armor)
+
+
+plot(model.gam.armor, select = 5)
+
+segmented.fit.courage.armor <- segmented(linear.fit.level.armor, seg.Z = ~courage, npsi = 1)
+summary(segmented.fit.courage.armor)
+plot(segmented.fit.courage.armor)
+lines.segmented(segmented.fit.courage.armor)
+points.segmented(segmented.fit.courage.armor)
+
+plot(model.gam.armor, select = 6)
+
+segmented.fit.courage.armor <- segmented(linear.fit.level.armor, seg.Z = ~nonkinen, npsi = 1)
+summary(segmented.fit.courage.armor)
+plot(segmented.fit.courage.armor)
+lines.segmented(segmented.fit.courage.armor)
+points.segmented(segmented.fit.courage.armor)
+slope(segmented.fit.courage.armor)
+intercept(segmented.fit.courage.armor)
 
 
 
 
 
+
+# armor_df$predicted_level <- creature_level_armor(armor_df)
+# armor_df$residuals <- armor_df$predicted_level - armor_df$level
+# qqnorm(armor_df$residuals)
+# qqline(armor_df$residuals)
+#
+# shapiro.test(armor_df$residuals)
+#
+#
+# ggplot(armor_df, aes(x = predicted_level, y = level, color = cluster)) +
+#   geom_point() +
+#   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+#   labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level") +
+#   scale_color_discrete(name = "Cluster")
 
 
 ############ Cluster Analysis
 # Why? the armor fit extremely well, and it was all in the same cluster
-normalized_df %>%
-  filter(cluster == 4) %>%
-  dplyr::select(serial, level, average_hdi, average_dps_attr, average_res, armor_factor) %>%
-  View()
 
 
 
@@ -454,7 +1028,7 @@ test_cl_no_armor <- function(hardiness, fortitude, dexterity, intellect, clevern
 
   return(10 + ham + dps + res + ar)
 }
-
+armor_df %>% View()
 test_cl_no_armor(33, 8, 34, 16, 39, 505, 57, 2, 2, 0, 0, 3, 0, 0, -35)
 test_cl_no_armor(611, 442, 352, 105, 50, 519, 137, 58, -64, -2, -35, -34, -99, 40, -99)
 test_cl_no_armor(25, 5, 13, 5, 7, 339, 16, 6, 0, 4, 0, -39, -39, -39, -99)

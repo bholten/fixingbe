@@ -194,13 +194,34 @@ normalized_df <- normalized_df %>%
 normalized_df <- normalized_df %>%
   mutate(average_res = (kinetic + energy + blast + heat + cold + electricity + acid + stun) / 8)
 normalized_df <- normalized_df %>%
+  mutate(kinen = (kinetic + energy) / 2)
+normalized_df <- normalized_df %>%
+  mutate(nonkinen = ( blast + heat + cold + electricity + acid + stun) / 6)
+normalized_df <- normalized_df %>%
   mutate(average_dps = ((damage_high + damage_low) / 2) * speed * to_hit)
 normalized_df <- normalized_df %>%
   mutate(average_others = (blast + heat + cold + electricity + acid + stun) / 6)
 normalized_df <- normalized_df %>%
   mutate(average_hdi = (hardiness + dexterity + intellect) / 3)
 normalized_df <- normalized_df %>%
-  mutate(average_sec = (endurance + dependability) / 3)
+  mutate(average_sec = (fortitude + endurance + dependability) / 3)
 normalized_df <- normalized_df %>%
-  mutate(average_eff = (kinetic.effective + energy.effective + blast.effective + heat.effective + cold.effective + electricity.effective + acid.effective + stun.effective) / 8) %>%
-  mutate(average_spc = (kinetic.special + energy.special + blast.special + heat.special + cold.special + electricity.special + acid.special + stun.special) / 8)
+  mutate(average_dps_attr = (power + courage + cleverness) / 3)
+normalized_df <- normalized_df %>%
+  mutate(armor_factor = fortitude * (1 + armor))
+normalized_df <- normalized_df %>%
+  mutate(coldac = (cold + acid) / 2)
+normalized_df <- normalized_df %>%
+  mutate(bhes = (blast + heat + electricity + stun) / 4)
+normalized_df <- normalized_df %>%
+  mutate(kinen.special = (kinetic.special + energy.special) / 2)
+normalized_df <- normalized_df %>%
+  mutate(kinen.effective = (kinetic.effective + energy.effective) / 2)
+normalized_df <- normalized_df %>%
+  mutate(nonkinen.special = (blast.special + cold.special + heat.special + electricity.special + acid.special + stun.special) / 6)
+normalized_df <- normalized_df %>%
+  mutate(nonkinen.effective = (blast.effective + cold.effective + heat.effective + electricity.effective + acid.effective + stun.effective) / 6)
+normalized_df <- normalized_df %>%
+  mutate(clepow = (cleverness + power) / 2)
+normalized_df <- normalized_df %>%
+  mutate(dps = ((damage_high + damage_low) / 2) * to_hit * speed)

@@ -2,169 +2,205 @@
 title: "Creature Level Analysis"
 output: html_document
 ---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("R/data.R")
+library(mgcv)
+library(broom)
+library(ggplot2)
+library(lmtest)
+
+no_armor_df <- normalized_df %>% filter(armor == 0)
+armor_df <- normalized_df %>% filter(armor == 1 & fortitude >= 500)
+```
 
 # Data
 
-The GBM of Furrycat's data shows a strong relationship between creature level and, well, nearly everything.
-
-The following formula comes from [this]( https://docs.google.com/spreadsheets/d/1h7qUFcX96VSNL1_WhZGf6rPJNBb53S0SCZBNzpITneU/edit#gid=597001656) Google Doc.
-
-
-## cerestan's formula
+The GAM model of creature level shows relative influence to a few attributes.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Multipliers
-HAM   = 0.73 / 1000
-ARMOR = 10
-DPS   = 0.099
 
-KIN_POS   = 0.12
-ENG_POS   = 0.1
-BLAST_POS = 0.02
-HEAT_POS  = 0.02
-COLD_POS  = 0.02
-ELEC_POS  = 0.02
-ACID_POS  = 0.02
-STUN_POS  = 0.02
-
-KIN_NEG   = 0.2
-ENG_NEG   = 0.11
-BLAST_NEG = 0.04
-HEAT_NEG  = 0.1
-COLD_NEG  = 0.12
-ELEC_NEG  = 0.04
-ACID_NEG  = 0.02
-STUN_NEG  = 0.02
-
-resist_contribution <- function(res, pos_multiplier, neg_multiplier) {
-  if (res > 0) {
-    return(res * pos_multiplier)
-  }
-  else if (res < -50) {
-    return(-50 * neg_multiplier)
-  }
-  else {
-    return(res * neg_multiplier)
-  }
-}
-
-
-creature_level <- function(data) {
-  health      = data$health
-  action      = data$action
-  mind        = data$mind
-  armor       = data$armor
-  damage_low  = data$damage_low
-  damage_high = data$damage_high 
-  to_hit      = data$to_hit
-  speed       = data$to_hit
-  kin         = data$kinetic
-  eng         = data$energy
-  blast       = data$blast
-  heat        = data$heat
-  cold        = data$cold
-  electricty  = data$electricity
-  acid        = data$acid
-  stun        = data$stun
-  
-  
-  # CL contributions
-  ham_cl = (health + action + mind) * HAM
-  armor_cl = armor * ARMOR
-  dps_cl = (DPS * to_hit * damage_low) / speed
-  kin_cl = resist_contribution(kin, KIN_POS, KIN_NEG)
-  eng_cl = resist_contribution(eng, ENG_POS, ENG_NEG)
-  blast_cl = resist_contribution(blast, BLAST_POS, BLAST_NEG)
-  heat_cl = resist_contribution(heat, HEAT_POS, HEAT_NEG)
-  cold_cl = resist_contribution(cold, COLD_POS, COLD_NEG)
-  electricity_cl = resist_contribution(electricty, ELEC_POS, ELEC_NEG)
-  acid_cl = resist_contribution(acid, ACID_POS, ACID_NEG)
-  stun_cl = resist_contribution(stun, STUN_POS, STUN_NEG)
-  
-  
-  return(
-    ham_cl + armor_cl + dps_cl + 
-    kin_cl + eng_cl + blast_cl + 
-    heat_cl + cold_cl + electricity_cl +
-    acid_cl + stun_cl
-  )
-}
-```
-
-
-```{r message=FALSE, warning=FALSE, include=FALSE}
-library(magrittr)
-library(dplyr)
-library(readr)
-library(ggplot2)
-library(gbm)
-
-# Some of these are obvious typos -- fix later
-bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
-              "er9nq4et", "38u9raer", "6ko7k4ql",  # weird action/dex
-              "6td1segp", "6f9lmdbu",              # bad speed
-              "frfksnne",                          # Maybe bad to-hit but interesting...
-              "kjvtv7d7",                          # has fortitude < 500 AND light armor?
-              "4231uemm",                          # trash mob in piket skin (min cl 25) that throws off CL calculations
-              "at8d24tc",                          # rancor skin (min cl 35) also throwing off cl calculations
-              "8mgpmeev",                          # thune skin also throwing off cl
-              "v22scdcg",                          # fambaa
-              "ceh4m90v",                          # kimogila
-              "mm8gn9sj"                           # kimogila
+model.gam.everything <- gam(
+  level ~
+    s(hardiness) +
+    s(fortitude) +
+    s(dexterity) +
+    s(endurance) +
+    s(intellect) +
+    s(cleverness) +
+    s(dependability) +
+    s(courage) +
+    s(fierceness) +
+    s(power) +
+    s(kinetic) +
+    s(energy)  +
+    s(blast) +
+    s(heat) +
+    s(cold) +
+    s(electricity) +
+    s(acid) +
+    s(stun),
+  data = normalized_df,
+  family = gaussian()
 )
-creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
-  filter(!serial %in% bad_data)
-templates <- read_csv("data/clean/furrycat/templates.csv")
-combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial), suffix = c("", ".template"))
-normalized_df <- combined_data %>%
-  mutate_at(
-    vars("kinetic",
-         "energy", 
-         "blast",
-         "heat",
-         "cold",
-         "electricity",
-         "acid",
-         "stun",
-         "kinetic.effective",
-         "kinetic.special",
-         "energy.effective",
-         "energy.special",
-         "blast.effective",
-         "blast.special",
-         "heat.effective",
-         "heat.special",
-         "cold.effective",
-         "cold.special",
-         "electricity.effective",
-         "electricity.special",
-         "acid.effective",
-         "acid.special",
-         "stun.effective",
-         "stun.special"),
-    ~ ifelse(is.na(.), 0, .)
-  )
 
-experiments <- read_csv("data/clean/furrycat/experiments.csv")
-samples <- read_csv("data/clean/furrycat/samples.csv")
+summary(model.gam.everything)
+
 ```
+Specifically, the following attributes:
 
-Let's see how this model performs on the furrycat data set.
+- hardiness
+- fortitude 
+- dexterity
+- intellect
+- cleverness
+- power
+- kinetic
+- energy
+- cold
 
+The appearance of `kinetic`, `energy`, `cold` and no other resists is especially strange.
+
+Also interesting is that the following attributes have `1.00` degrees of freedom (so their influence is essentially flat):
+
+- endurance
+- fierceness
+- blast
+- heat
+- electricity
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-normalized_df <- normalized_df %>%
-  rowwise() %>%
-  mutate(predicted_level = creature_level(cur_data())) %>%
-  ungroup()
+plot(model.gam.everything, select = 4)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot(model.gam.everything, select = 9)
+```
 
-ggplot(normalized_df, aes(x = predicted_level, y = level)) +
-  geom_point() +
-  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
-  theme_minimal() +
-  ggtitle("Actual vs Predicted Creature Levels")
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot(model.gam.everything, select = 13)
+```
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot(model.gam.everything, select = 14)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot(model.gam.everything, select = 16)
+```
+
+## Feature Engineering
+
+We are going to make some assumptions about the model based on our domain knowledge
+of the game, and to avoid over-fitting.
+
+1. Hardiness, Dexterity, and Intellect have the same weights against level
+
+It's possible that the additive models associate higher weights to hardiness due to
+its correlation with fortitude. However, for now, we'll assume that each attribute is more 
+or less equal.
+
+2. Kinetic and Energy resists have the same weights against level
+
+We're combining these two because they are uniquely capped at 60%.
+
+3. The other resists have the same weight against level
+
+This is due to domain knowledge -- "vuln stacking" creatures caused a measurable drop
+in creature level. It's possible the special emphasis given to `cold` is due to over-fitting or something unique about furrycat's data.
+
+To mediate these concerns, we can create the following synthetic attributes
+
+1. `average_hdi` -- is the average of hardiness, dexterity, and intellect. Taking the mean of these attributes and training the GAM on this synthetic feature will force it not to over-fit on any of hardiness, dexterity, and intellect.
+
+2. `kinen` -- mean of kinetic and energy, for the same reasons.
+
+3. `nonkinen` -- mean of cold, heat, electricity, acid, and stun.
+
+With that, this is the final model:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model.gam <- gam(
+  level ~
+    s(average_hdi) +
+    s(fortitude) +
+    s(cleverness) +
+    s(power) +
+    s(kinen) +
+    s(nonkinen),
+  data = normalized_df
+)
+summary(model.gam)
 ```
 
 
+## Armored Creature Levels
+
+Analysis of the data shows extreme an extreme segmentation point $fortitude = 500$.
+
+In fact, the $fortitude >= 500$ data set is particularly well-behaved.
+
+```{r}
+model.gam.armor <- gam(
+  level ~
+    s(average_hdi) +
+    s(fortitude) +
+    s(cleverness) +
+    s(power) +
+    s(kinen) +
+    s(nonkinen),
+  data = armor_df
+)
+summary(model.gam.armor)
+```
+
+In fact, the relative degrees of freedom show that several of these parameters are already close to linear.
+
+```{r}
+linear.fit.level.armor <- lm(
+  level ~
+    average_hdi +
+    fortitude +
+    cleverness +
+    power +
+    kinen +
+    nonkinen,
+  data = armor_df
+)
+summary(linear.fit.level.armor)
+```
+
+This simple linear model behaves remarkably well.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(armor_df, aes(x = predict(linear.fit.level.armor, newdata = armor_df), y = level, color = "blue")) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level") +
+  scale_color_discrete(name = "Cluster")
+```
+
+And analysis of the residuals are highly promising.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+rs.model.level.armor <- resid(linear.fit.level.armor)
+qqnorm(rs.model.level.armor)
+qqline(rs.model.level.armor)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+shapiro.test(rs.model.level.armor)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+bptest(linear.fit.level.armor)
+```
+
+To summarize, this simple linear model for the "armored" data set (i.e. creatures that have armor):
+
+1. The residuals are +/- 4 levels 
+2. The residuals have median 0.19 levels.
+2. The residuals are normally distributed
+3. The residuals are [homoscedastic](https://en.wikipedia.org/wiki/Homoscedasticity_and_heteroscedasticity)
+
+Taken together, this may imply that the residuals are *due to randomness within the crafting system itself*, and may not be due to missing variables or unknown non-linear relationships.
 
