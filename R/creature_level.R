@@ -11,7 +11,6 @@ library(cluster)
 library(tidyr)
 library(mgcv)
 
-
 phy_sample <-samples %>% rename_with(~ paste0(., ".physique"), -sample_id)
 pro_sample <-samples %>% rename_with(~ paste0(., ".prowess"), -sample_id)
 men_sample <-samples %>% rename_with(~ paste0(., ".mental"), -sample_id)
@@ -206,6 +205,34 @@ model.gam.everything <- gam(
 
 summary(model.gam.everything)
 plot(model.gam.everything)
+
+
+model.gbm.everything <- gbm(
+  level ~
+    hardiness +
+    fortitude +
+    dexterity +
+    endurance +
+    intellect +
+    cleverness +
+    dependability +
+    courage +
+    fierceness +
+    power +
+    kinetic +
+    energy  +
+    blast +
+    heat +
+    cold +
+    electricity +
+    acid +
+    stun,
+  data = normalized_df
+)
+
+summary(model.gbm.everything, plotit = FALSE)
+plot(model.gbm.everything, i.var = "dexterity")
+
 
 
 
@@ -407,6 +434,56 @@ ggplot(normalized_df, aes(x = predict(model.cluster.3, newdata = normalized_df),
   scale_color_discrete(name = "Max Relative Term")
 
 
+### GBM
+model.gbm <- gbm(
+  level ~
+    average_hdi +
+    fortitude +
+    cleverness +
+    power +
+    kinen +
+    nonkinen,
+  data = normalized_df
+)
+summary(model.gbm, plotit = FALSE)
+plot(model.gbm, i.var = "average_hdi")
+plot(model.gbm, i.var = "fortitude")
+plot(model.gbm, i.var = "cleverness")
+plot(model.gbm, i.var = "power")
+plot(model.gbm, i.var = "kinen")
+plot(model.gbm, i.var = "nonkinen")
+
+ggplot(normalized_df, aes(x = predict(model.gbm, newdata = normalized_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+
+model.gbm.finalstats <- gbm(
+  level ~
+    average_ham +
+    armor +
+    average_dps +
+    kinen +
+    nonkinen,
+  data = normalized_df
+)
+summary(model.gbm.finalstats, plotit = FALSE)
+plot(model.gbm.finalstats, i.var = "average_ham")
+plot(model.gbm.finalstats, i.var = "armor")
+plot(model.gbm.finalstats, i.var = "average_dps")
+plot(model.gbm.finalstats, i.var = "kinen")
+plot(model.gbm.finalstats, i.var = "nonkinen")
+
+ggplot(normalized_df, aes(x = predict(model.gbm.finalstats, newdata = normalized_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level") +
+  scale_color_discrete(name = "Max Relative Term")
+
+
+
 
 #### GAM
 
@@ -561,6 +638,12 @@ linear.fit.level <- lm(level ~
 summary(linear.fit.level)
 bptest(linear.fit.level)
 
+ggplot(normalized_df, aes(x = predict(linear.fit.level, newdata = normalized_df), y = level)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predictions Colored by Max Relative Term", x = "Predicted Level", y = "Actual Level")
+
+
 segmented.fit.average_hdi <- segmented(linear.fit.level, seg.Z = ~average_hdi, npsi = 2)
 summary(segmented.fit.average_hdi)
 plot(segmented.fit.average_hdi)
@@ -569,7 +652,7 @@ points.segmented(segmented.fit.average_hdi)
 
 plot(model.gam, select = 2)
 
-segmented.fit.power <- segmented(linear.fit.level, seg.Z = ~fortitude, npsi = 3)
+segmented.fit.power <- segmented(linear.fit.level, seg.Z = ~fortitude, npsi = 1)
 summary(segmented.fit.power)
 plot(segmented.fit.power)
 lines.segmented(segmented.fit.power)
@@ -740,6 +823,14 @@ model.gam.noarmor <- gam(
   data = no_armor_df
 )
 summary(model.gam.noarmor)
+plot(model.gam.noarmor, select = 1)
+plot(model.gam.noarmor, select = 2)
+plot(model.gam.noarmor, select = 3)
+plot(model.gam.noarmor, select = 4)
+plot(model.gam.noarmor, select = 5)
+plot(model.gam.noarmor, select = 6)
+plot(model.gam.noarmor, select = 7)
+
 
 ggplot(no_armor_df, aes(x = predict(model.gam.noarmor, newdata = no_armor_df), y = level, color = cluster)) +
   geom_point() +
@@ -748,13 +839,111 @@ ggplot(no_armor_df, aes(x = predict(model.gam.noarmor, newdata = no_armor_df), y
   scale_color_discrete(name = "Cluster")
 
 
-plot(model.gam.noarmor, select = 1)
-plot(model.gam.noarmor, select = 2)
-plot(model.gam.noarmor, select = 3)
-plot(model.gam.noarmor, select = 4)
-plot(model.gam.noarmor, select = 5)
-plot(model.gam.noarmor, select = 6)
-plot(model.gam.noarmor, select = 7)
+model.gbm.noarmor <- gbm(
+  level ~
+    average_hdi +
+    fortitude +
+    cleverness +
+    power +
+    kinen +
+    nonkinen,
+  data = no_armor_df
+)
+summary(model.gbm.noarmor, plotit = FALSE)
+plot(model.gbm.noarmor, i.var = "average_hdi")
+plot(model.gbm.noarmor, i.var = "fortitude")
+plot(model.gbm.noarmor, i.var = "cleverness")
+plot(model.gbm.noarmor, i.var = "power")
+plot(model.gbm.noarmor, i.var = "kinen")
+plot(model.gbm.noarmor, i.var = "nonkinen")
+
+residuals <- no_armor_df$level - predict(model.gbm.noarmor, newdata = no_armor_df)
+min(residuals)
+max(residuals)
+mean(residuals)
+var(residuals)
+qqnorm(residuals)
+qqline(residuals)
+shapiro.test(residuals)
+
+
+
+ggplot(no_armor_df, aes(x = predict(model.gbm.noarmor, newdata = no_armor_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+
+
+
+
+
+
+#
+test_df <- no_armor_df %>%
+  filter(kinen <= 25 % kinen > 10)
+
+model.gam.noarmor.negative.nonkinen <- gam(
+  level ~
+    s(average_hdi) +
+    s(fortitude) +
+    s(cleverness) +
+    s(power) +
+    s(kinen) +
+    s(nonkinen),
+  data = test_df
+)
+summary(model.gam.noarmor.negative.nonkinen)
+plot(model.gam.noarmor.negative.nonkinen, select = 1)
+plot(model.gam.noarmor.negative.nonkinen, select = 2)
+plot(model.gam.noarmor.negative.nonkinen, select = 3)
+plot(model.gam.noarmor.negative.nonkinen, select = 4)
+plot(model.gam.noarmor.negative.nonkinen, select = 5)
+plot(model.gam.noarmor.negative.nonkinen, select = 6)
+plot(model.gam.noarmor.negative.nonkinen, select = 7)
+
+
+
+ggplot(test_df, aes(x = predict(model.gam.noarmor.negative.nonkinen, newdata = test_df), y = level, color = cluster)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level") +
+  scale_color_discrete(name = "Cluster")
+
+
+linear.fit.level.noarmor.negative.nonkinen <- lm(
+  level ~
+    average_hdi +
+    fortitude +
+    cleverness +
+    power +
+    kinen +
+    nonkinen,
+  data = test_df
+)
+summary(linear.fit.level.noarmor.negative.nonkinen)
+rs.model.level.noarmor.negative.nonkinen <- resid(linear.fit.level.noarmor.negative.nonkinen)
+qqnorm(rs.model.level.noarmor.negative.nonkinen)
+qqline(rs.model.level.noarmor.negative.nonkinen)
+shapiro.test(rs.model.level.noarmor.negative.nonkinen)
+bptest(linear.fit.level.noarmor.negative.nonkinen)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 linear.fit.level.noarmor <- lm(
   level ~

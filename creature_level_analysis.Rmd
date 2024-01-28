@@ -172,11 +172,10 @@ summary(linear.fit.level.armor)
 This simple linear model behaves remarkably well.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(armor_df, aes(x = predict(linear.fit.level.armor, newdata = armor_df), y = level, color = "blue")) +
+ggplot(armor_df, aes(x = predict(linear.fit.level.armor, newdata = armor_df), y = level)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
-  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level") +
-  scale_color_discrete(name = "Cluster")
+  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level")
 ```
 
 And analysis of the residuals are highly promising.
@@ -204,3 +203,57 @@ To summarize, this simple linear model for the "armored" data set (i.e. creature
 
 Taken together, this may imply that the residuals are *due to randomness within the crafting system itself*, and may not be due to missing variables or unknown non-linear relationships.
 
+## Unarmored Creature Levels
+
+The same analysis for unarmored creatures does not look as promising.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+linear.fit.level.noarmor <- lm(
+  level ~
+    average_hdi +
+    fortitude +
+    cleverness +
+    power +
+    kinen +
+    nonkinen,
+  data = no_armor_df
+)
+summary(linear.fit.level.noarmor)
+```
+
+Which shows a statistically decent but clearly heteroscedastic fit.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(no_armor_df, aes(x = predict(linear.fit.level.noarmor, newdata = no_armor_df), y = level)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level")
+```
+
+The residuals are clearly not normal.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+rs.model.level.noarmor <- resid(linear.fit.level.noarmor)
+qqnorm(rs.model.level.noarmor)
+qqline(rs.model.level.noarmor)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+shapiro.test(rs.model.level.noarmor)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+bptest(linear.fit.level.noarmor)
+```
+
+### Summary and areas for future investigation
+
+1. Using segment analysis, there is statistical evidence that armor is a change point in the model for creature level
+2. An ordinary linear regression fits armored creature levels remarkably well
+3. Unarmored creature levels are not so simple...
+
+For unarmored creature level, a few ideas:
+
+1. It could be that lower level are more sensitive to rounding, giving the heteroscedastic results
+2. Creature level may be calculated from "final" attributes (such as health, action, mind), which themselves are rounded, which further causes sensitivity at lower creature levels and attributes, where rounding is proportionally more significant
+3. There may be more change points in the unarmored data set
