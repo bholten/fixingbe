@@ -69,25 +69,6 @@ Also interesting is that the following attributes have `1.00` degrees of freedom
 - heat
 - electricity
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-plot(model.gam.everything, select = 4)
-```
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-plot(model.gam.everything, select = 9)
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-plot(model.gam.everything, select = 13)
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-plot(model.gam.everything, select = 14)
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-plot(model.gam.everything, select = 16)
-```
-
 ## Feature Engineering
 
 We are going to make some assumptions about the model based on our domain knowledge
@@ -257,3 +238,30 @@ For unarmored creature level, a few ideas:
 1. It could be that lower level are more sensitive to rounding, giving the heteroscedastic results
 2. Creature level may be calculated from "final" attributes (such as health, action, mind), which themselves are rounded, which further causes sensitivity at lower creature levels and attributes, where rounding is proportionally more significant
 3. There may be more change points in the unarmored data set
+
+### The Strange Case of Fortitude
+
+The influence of fortitude shows a slight _negative_ influence below $fortitude = 500$, and a positive influence above.
+
+See the influence plot,
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot(model.gam, select = 2)
+```
+
+This is reflected in the above linear model, where fortitude's slope in the unarmored data is actually negative!
+
+Recall the result of the linear, unarmored model:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+summary(linear.fit.level.noarmor)
+```
+
+Can this be true? Other influence models, such as GBMs, also show the same thing. Still, it is not an intuitive finding. However, note that:
+
+1. It would explain the existence of high-fortitude, unarmored CL 10s with lots of vulnerabilities -- maximizing fortitude to be as close to 499 as possible would _minimize_ its contribution to creature level!
+2. It would explain the question of how many levels armor adds -- some players said 10, others said 6. In this view, obtaining armor does not strictly add a constant creature level; it rolls you into a different segment of the linear model, where the influence of fortitude becomes sharply positive
+3. It would also explain why change point detection was so adamant about a change point existing at $fortitude = 500$ -- it's not that armor adds a constant level, it's that parameters of the level calculation change entirely!
+
+I'm unsure if this could be accurate, but it is compelling nonetheless.
+
