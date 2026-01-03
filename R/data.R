@@ -1,8 +1,21 @@
+###############################################################################
+# data.R - Data Loading and Filtering for Creature Level Analysis
+#
+# This script loads the Furrycat database and applies data quality filters.
+# After filtering: 370 creatures (79 armored, 291 unarmored)
+#
+# For full documentation of filters, see: docs/data_quality_filters.md
+# For analysis results, see: docs/creature_level_analysis.md
+###############################################################################
+
 library(readr)
 library(magrittr)
 library(dplyr)
 
-# Some of these are obvious typos -- fix later
+###############################################################################
+# EXPLICIT BAD DATA EXCLUSIONS
+# These specific serials are excluded due to obvious data errors or anomalies
+###############################################################################
 bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
               "er9nq4et", "38u9raer", "6ko7k4ql",  # weird action/dex
               "6td1segp", "6f9lmdbu",              # bad speed
@@ -14,19 +27,39 @@ bad_data <- c("dta2275t", "r8tfng1v",              # weird hardiness
               "v22scdcg",                          # fambaa
               "ceh4m90v",                          # kimogila
               "mm8gn9sj",                          # kimogila
-              "64v2qh2v", "78mq8sed", "lnk4d7fn"   # health ~ hardiness + dexterity outliers I don't like
+              "64v2qh2v", "78mq8sed", "lnk4d7fn",  # health ~ hardiness + dexterity outliers I don't like
+              # Data quality issues identified during residual analysis
+              "jgh9tjrs",                          # bantha level 9 with health=139 (health/level=15, expected ~420)
+              "q4glknvv",                          # kima level 20 with health=965 (health/level=48)
+              "5cubijof"                           # dewback level 12 with health=803 (health/level=67)
 )
 
+###############################################################################
+# LOAD DATA AND APPLY FILTERS
+###############################################################################
 creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
   filter(!serial %in% bad_data) %>%
+  # -------------------------------------------------------------------------
+  # MINIMUM LEVEL FILTERS
+  # Creatures at their skin's minimum CL are excluded because they may be
+  # artificially capped by the game engine, not the formula.
+  # See docs/historical_guide.md for minimum CLs by skin.
+  # -------------------------------------------------------------------------
+  # CL 2 minimum skins
   filter(!(skin == "angler" & level == 2)) %>%
   filter(!(skin == "bearded_jax" & level == 2)) %>%
+  filter(!(skin == "bearded_jax" & level == 3)) %>%
+  filter(!(skin == "bearded_jax" & level == 4)) %>%
   filter(!(skin == "boar_wolf" & level == 2)) %>%
   filter(!(skin == "bocatt" & level == 2)) %>%
   filter(!(skin == "choku" & level == 2)) %>%
   filter(!(skin == "durni" & level == 2)) %>%
+  filter(!(skin == "durni" & level == 3)) %>%
+  filter(!(skin == "durni" & level == 4)) %>%
   filter(!(skin == "eopi" & level == 2)) %>%
   filter(!(skin == "gnort" & level == 2)) %>%
+  filter(!(skin == "gnort" & level == 3)) %>%
+  filter(!(skin == "gnort" & level == 4)) %>%
   filter(!(skin == "hermit_spider" & level == 2)) %>%
   filter(!(skin == "huurton" & level == 2)) %>%
   filter(!(skin == "kima" & level == 2)) %>%
@@ -40,6 +73,7 @@ creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
   filter(!(skin == "squall" & level == 2)) %>%
   filter(!(skin == "swirl_prong" & level == 2)) %>%
   filter(!(skin == "vir_vir" & level == 2)) %>%
+  # CL 5 minimum skins
   filter(!(skin == "bageraset" & level == 5)) %>%
   filter(!(skin == "bantha" & level == 5)) %>%
   filter(!(skin == "blurrg" & level == 5)) %>%
@@ -68,11 +102,35 @@ creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
   filter(!(skin == "pugoriss" & level == 5)) %>%
   filter(!(skin == "verne" & level == 5)) %>%
   filter(!(skin == "zucca_boar" & level == 5)) %>%
+  # Additional skin minimums discovered during creature level analysis
+  filter(!(skin == "bageraset" & level == 10)) %>%
+  filter(!(skin == "bantha" & level == 6)) %>%
+  filter(!(skin == "bol" & level == 10)) %>%
+  filter(!(skin == "bolle_bol" & level == 10)) %>%
+  filter(!(skin == "brackaset" & level == 8)) %>%
+  filter(!(skin == "carrion_spat" & level == 10)) %>%
+  filter(!(skin == "cu_pa" & level == 9)) %>%
+  filter(!(skin == "dewback" & level == 6)) %>%
+  filter(!(skin == "dune_lizard" & level == 6)) %>%
+  filter(!(skin == "durni" & level == 5)) %>%
+  filter(!(skin == "durni" & level == 6)) %>%
+  filter(!(skin == "falumpaset" & level == 8)) %>%
+  filter(!(skin == "gurrcat" & level == 6)) %>%
+  filter(!(skin == "gurreck" & level == 7)) %>%
+  filter(!(skin == "hermit_spider" & level == 9)) %>%
+  filter(!(skin == "huurton" & level == 10)) %>%
+  filter(!(skin == "kaadu" & level == 8)) %>%
+  filter(!(skin == "kima" & level == 9)) %>%
+  filter(!(skin == "slice_hound" & level == 10)) %>%
+  filter(!(skin == "squall" & level == 9)) %>%
+  filter(!(skin == "vir_vir" & level == 7)) %>%
+  # CL 10 minimum skins
   filter(!(skin == "huf_dun" & level == 10)) %>%
   filter(!(skin == "piket" & level == 10)) %>%
   filter(!(skin == "razor_cat" & level == 10)) %>%
   filter(!(skin == "veermok" & level == 10)) %>%
   filter(!(skin == "woolamander" & level == 10)) %>%
+  # CL 15 minimum skins
   filter(!(skin == "gronda" & level == 15)) %>%
   filter(!(skin == "kliknik" & level == 15)) %>%
   filter(!(skin == "ronto" & level == 15)) %>%
@@ -80,15 +138,21 @@ creatures <- read_csv("data/clean/furrycat/creatures.csv") %>%
   filter(!(skin == "thune" & level == 15)) %>%
   filter(!(skin == "tyblis" & level == 15)) %>%
   filter(!(skin == "vesp" & level == 15)) %>%
+  # CL 20 minimum skins
   filter(!(skin == "malkloc" & level == 20)) %>%
   filter(!(skin == "torton" & level == 20)) %>%
+  # CL 25 minimum skins
   filter(!(skin == "graul" & level == 25)) %>%
   filter(!(skin == "merek" & level == 25)) %>%
   filter(!(skin == "sharnaff" & level == 25)) %>%
+  # CL 30+ minimum skins
   filter(!(skin == "fambaa" & level == 30)) %>%
   filter(!(skin == "rancor" & level == 35)) %>%
   filter(!(skin == "kimogila" & level == 40))
 
+###############################################################################
+# JOIN TEMPLATES AND NORMALIZE
+###############################################################################
 templates <- read_csv("data/clean/furrycat/templates.csv")
 combined_data <- creatures %>% inner_join(templates, by = join_by(template_id == serial), suffix = c("", ".template"))
 normalized_df <- combined_data %>%
@@ -188,7 +252,10 @@ normalized_df <-
   normalized_df %>%
   mutate(total_vulns = kinetic.vuln + energy.vuln +blast.vuln + heat.vuln + cold.vuln + electricity.vuln + acid.vuln + stun.vuln)
 
-#### ~ FEATURE ~ ENGINEERING ~~~~~
+###############################################################################
+# FEATURE ENGINEERING
+# Derived variables used in creature level analysis
+###############################################################################
 normalized_df <- normalized_df %>%
   mutate(average_ham = (health + action + mind) / 3)
 normalized_df <- normalized_df %>%

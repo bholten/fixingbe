@@ -10,7 +10,8 @@ required_packages <- c(
   "mgcv",
   "broom",
   "segmented",
-  "lmtest"
+  "lmtest",
+  "ppcor"
 )
 new_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
 if (length(new_packages)) install.packages(new_packages)
