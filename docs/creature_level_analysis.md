@@ -179,6 +179,240 @@ Significant skin adjustments identified (see [Skin Adjustments](#skin-adjustment
 
 These may represent edge cases in the game's algorithm or data quality issues.
 
+### Phase 9: The "Uber CL10" Cluster and Vulnerability-Aware Kinen
+
+**Cluster identified**: ~25 unarmored CL10 creatures with health ~10k, kinetic
+resist clamped near 60, and energy resist heavily negative (often -40 to -60).
+The baseline formula over-predicts them by 1-3 levels because `kinen =
+(kinetic + energy)/2` averages a near-cap positive against a heavily-negative
+number, then credits the small positive remainder linearly.
+
+**Identification problem**: Free-coefficient models (separate kinetic, energy)
+appear to show kinetic contributes ~0 to level. This is an artifact, not a
+mechanism — kinetic in the dataset is heavily concentrated near the in-game
+60% cap (24% of unarmored creatures have kinetic >= 50), so it carries almost
+no statistical leverage. Bio-Engineers strongly prefer kinetic resist, so
+"well-made" creatures cluster at the cap. The asymmetric pos/neg model
+(R² = 0.956) fits better but its k ≠ e weighting is unidentified — game
+mechanics should treat kinetic and energy symmetrically since both share the
+same 60% cap.
+
+**Symmetric candidate (M6 — superseded by M7)**: Replace `kinen` with
+`pmax(kinen, 0)`. The average of kinetic and energy still drives level, but
+contribution is floored at zero. Improves R² 0.938 → 0.949, but on the
+uber-CL10 cluster itself the spread *increases* (SD 1.10 → 1.36) — M6
+captures the cluster's mean but not its tightness, because creatures with
+kinetic=60 and energy=-50 still see kinen ≈ 5 of credit they shouldn't get.
+
+**Canonical replacement (M7)**: Use the **weaker resist** of kinetic and
+energy, floored at zero: `pmax(pmin(kinetic, energy), 0)`. Mechanically:
+"vulnerability on either side erases all kin/eng resist credit." Symmetric
+in k and e — both are 60%-capped in-engine, so the game treats them as the
+same resist class.
+
+```
+level = 7.87
+  + 0.013  × hardiness
+  - 0.019  × fortitude
+  + 0.004  × dexterity
+  + 0.010  × intellect
+  + 0.025  × cleverness
+  + 0.015  × power
+  + 0.167  × pmax(pmin(kinetic, energy), 0)
+  + 0.054  × nonkinen
+```
+
+**Performance** (unarmored, n = 291):
+
+| Model | R² | Resid SD | AIC | Uber-CL10 SD |
+|---|---|---|---|---|
+| M0 baseline `kinen` | 0.938 | 2.11 | 1279.2 | 1.10 |
+| M5 `kinen_pos + kinen_neg` | 0.950 | 1.90 | 1221.3 | 1.37 |
+| M6 `pmax(kinen, 0)` | 0.949 | 1.91 | 1221.0 | 1.36 |
+| **M7 `pmax(pmin(k,e), 0)`** | **0.952** | **1.86** | **1205.7** | **0.70** |
+
+LR tests confirm: M5 → M6 simpler form is preferred (p=0.21); M6 → M7
+is a real win (AIC drops 15 points). M8 (M7 + `pmax(kinen,0)` together)
+fits marginally better (R² 0.955) but the two terms partially overlap and
+the extra parameter likely captures noise rather than a second mechanism.
+
+**On the documented persistent-outlier list** (mean |residual|): baseline
+5.42 → M6 4.85 → M7 **3.97**.
+
+**On the uber-CL10 cluster** (n=25): SD drops from baseline 1.10 to M7
+**0.70** — the same fit quality the asymmetric (k ≠ e) M3 model achieved,
+but with full k=e symmetry intact.
+
+**Mechanism check**: 54% of unarmored creatures have `pmin(kinetic, energy)
+> 0`, vs 75% with `pmax(kinen, 0) > 0`. M7 says nearly half of all
+unarmored creatures get *zero* kin/eng resist credit because they have a
+vulnerability on one side. This matches the BE crafting reality where
+positive energy is hard to keep alongside cap-60 kinetic.
+
+**Residuals are still non-normal** (Shapiro p ≈ 3e-6 under M7), so there is
+additional structure left — see Phase 10 below.
+
+### Phase 11: Re-verifying the fort=500 breakpoint
+
+The original two-formula structure (unarmored vs armored, split at fortitude
+= 500) was re-tested with M7 in place. Three questions: is the breakpoint
+real, is the sign flip real, and is the *negative* fortitude coefficient
+under fort < 500 a literal game term or a statistical artifact?
+
+**Result 1: the breakpoint is real and overwhelming.**
+
+| Model | R² | Resid SD | AIC |
+|---|---|---|---|
+| Single global linear (no break) | 0.927 | 3.85 | 2067.0 |
+| GAM smooth fortitude | 0.978 | 2.05 | 1614.2 |
+| Segmented regression (data-driven break at fort=445) | 0.977 | 2.17 | 1644.6 |
+| **Two formulas, hard split at fort=500** | **0.982** | **1.92** | **1567.3** |
+
+Split-at-500 beats single-formula by ~500 AIC points and beats a flexible
+GAM smooth by 47 — meaning the relationship has a true *discontinuity* at
+500, not just a slope change. The GAM-implied shape, holding all other
+stats at mean, shows level *decreasing* steadily from fort=0 to fort=450
+(slope ≈ -0.02/pt), then *jumping +4.5 levels* to fort=500, then rising
+again (slope ≈ +0.08/pt). Classic step function in game code.
+
+**Result 2: the sign flip is iron-clad.**
+
+- Unarmored fortitude coef: -0.019 (p ≈ 1e-32)
+- Armored   fortitude coef: +0.059 (p ≈ 1e-10)
+
+Both coefficients are extremely significant; the flip is not a small-sample
+fluke.
+
+**Result 3: the negative coefficient is most likely a stat-budget /
+collinearity artifact, not a literal game-code term.**
+
+Within the unarmored subset, fortitude correlates 0.847 with hardiness and
+0.844 with health — BE crafters wire these together. Dropping fortitude
+from the unarmored regression:
+
+- R² goes 0.951 → 0.921 (real degradation)
+- **Hardiness coefficient flips from +0.013 to ~0**
+
+This is the smoking gun: the regression had been crediting hardiness
+positively and fortitude negatively as a *paired* signal. What the model
+actually identifies is the contrast between them, not their independent
+contributions. VIF on fortitude in the unarmored model is 4.7 (moderate
+collinearity); intellect (9.7) and cleverness (7.5) are worse offenders.
+
+**Mechanistic reading**: the game most plausibly gives unarmored fortitude
+*zero* level contribution — it doesn't matter for damage mitigation without
+armor — but BE crafters co-vary fortitude alongside hardiness/health when
+optimizing creatures, so the regression discovers an empirical
+(hardiness +, fortitude -) coefficient pair that fits the data well even
+though only one of them is mechanistically real.
+
+**Practical upshot**: keep the two-formula structure with the empirical
+coefficients (it predicts well, R² = 0.982 combined), but don't read literal
+mechanism into the negative-fortitude term in the unarmored formula. The
+"uber CL10" phenomenon's apparent fortitude-penalty effect is more
+plausibly explained as: high-fortitude unarmored creatures statistically
+have high HAM, the M7 resist mechanism (vulnerability erases credit), and
+BE crafters' tendency to push fortitude toward 500 alongside everything
+else.
+
+### Phase 12: Effective vs Special Resists — Ruled Out as the Driver
+
+A second hypothesis for the negative-fortitude coefficient: in the game,
+kinetic and energy resists come from two sources — **effective** (derived
+directly from fortitude as `floor(fortitude / 10)`, and `floor((fortitude -
+500) / 10)` for armored) and **special** (from DNA samples). When both are
+present on a DNA combine, special wins and effective drops out. For
+creatures whose displayed resist is "effective", the kinetic/energy column
+M7 uses is *literally a function of fortitude* — a potential double-count
+that could create a spurious fortitude coefficient.
+
+**The data confirms the formula** (`R/investigate_effective_resists.R`):
+
+- 34 / 40 unarmored creatures with non-zero `kinetic.effective` have
+  `kinetic.effective = floor(fortitude / 10)` exactly.
+- The 6 mismatches all align with Phase 10's data-quality suspects (e.g.
+  `lvn43jrf`, `j7rql94q`) — likely furrycat data-entry errors.
+- No row has both effective AND special non-zero — confirming the "special
+  wins" mechanic.
+
+**But the effective-resist double-count does NOT explain the negative
+fortitude coefficient.** Splitting the unarmored data by resist source:
+
+| Subset | n | fortitude coef | p-value | R² |
+|---|---|---|---|---|
+| Full unarmored | 290 | -0.01942 | 1e-32 | 0.951 |
+| All-special (k & e from DNA only) | 238 | **-0.02004** | 1e-27 | 0.953 |
+| Has effective k or e | 52 | -0.02071 | 0.0003 | 0.911 |
+
+The coefficient is **essentially identical** on the all-special subset,
+where there is no algebraic relationship between fortitude and the
+kinetic/energy values M7 consumes. This rules out the effective-resist
+double-count as the cause. The stat-budget / collinearity diagnosis from
+Phase 11 stands.
+
+**Other findings**:
+- Adding `k_effective` / `e_effective` flags to M7 reduces AIC by only 1.5
+  points — too small to merit promotion. The `k_effective` coefficient is
+  -0.81: creatures with effective kinetic average ~0.8 levels lower than
+  M7 predicts, but this is mostly absorbed by other low-stat correlates.
+- Zeroing out effective resists from `ke_floor` (treating them as if the
+  game ignored them) makes the model **worse** by ~40 AIC. The level
+  formula appears to credit effective and special resists at the same
+  rate, using whichever value is displayed.
+
+**Conclusion**: M7 uses the right resist column. No source-aware refactor
+is needed. The negative fortitude coefficient remains a stat-budget
+artifact, not an effective-resist algebraic confound.
+
+### Phase 13: Robustness Check — Re-fit With Suspects Removed
+
+To check whether the suspected data-quality issues from Phases 10 and 12 are
+biasing the M7 coefficients, the unarmored model was refit on a "clean"
+subset with 10 suspects removed (low-health-for-skin: `lvn43jrf`,
+`qd5n95rf`, `j7rql94q`, `qkuvjn3m`, `pumhbd0k`, `n4fcvdo8`; effective-resist
+formula mismatches: `e27uddsi`, `njm5aqfv`, `o4jedp5e`, `rfjtgs7o`).
+
+| | Full (n=290) | Clean (n=280) |
+|---|---|---|
+| R² | 0.9513 | 0.9549 |
+| Resid SD | 1.861 | 1.806 |
+| Outliers \|resid\| > 3 | 27 | 21 |
+| Shapiro-Wilk p | 2.4e-6 | 7.4e-7 |
+
+Combined fit (armored + unarmored): R² = 0.9818 → 0.9827, SD = 1.92 → 1.88.
+
+**The formula is robust.** Coefficient shifts are tiny (largest: intercept
++0.34, nonkinen +0.007, ke_floor −0.003). The fortitude coefficient moves
+from −0.01942 to −0.02032 — essentially unchanged. Refitting on cleaner
+data doesn't pull the model around.
+
+**Most outliers persist.** Only 6 of the 27 |resid|>3 outliers are
+explained by data quality; the remaining 21 are real modeling gaps —
+chiefly the high-DPS under-prediction at the top end (rancor CL48,
+falumpaset CL32) and the near-armor-border zone (fortitude 380-540).
+Shapiro-Wilk normality actually *worsens* slightly on the clean set,
+confirming that residual non-normality is structural, not data-quality.
+
+**Decision**: keep the suspects in the dataset. The improvement from
+removing them is small (~3% SD reduction) and the model is robust to
+their presence. The bad_data filter in `R/data.R` is unchanged.
+
+### Phase 10: Low-Stat Negative-Residual Cluster (Separate Puzzle)
+
+A small set of creatures resists the M6 fix and remains heavily over-predicted:
+
+| Serial | Skin | CL | Pred (base) | Pred (M6) | Health | Fortitude |
+|---|---|---|---|---|---|---|
+| lvn43jrf | bantha | 8 | 13.3 | 12.7 | 2,850 | 1 |
+| qd5n95rf | bantha | 14 | 18.3 | 17.6 | 3,406 | 45 |
+| j7rql94q | veermok | 14 | 18.1 | 16.9 | 2,598 | 1 |
+
+These have low health AND fortitude near zero. The kinen-vulnerability
+mechanism doesn't explain them — they appear to be a *different* mode,
+possibly a HAM-floor or skin-tier effect where the formula gives full credit
+for hardiness but the underlying creature isn't really "hardy." Flagged as
+its own investigation.
+
 ---
 
 ## Final Formulas
@@ -203,22 +437,29 @@ Where:
 
 **Accuracy**: R² = 0.979, SD = 1.8 levels, normally distributed residuals
 
-### Unarmored Creatures
+### Unarmored Creatures (M7 — canonical as of Phase 9)
 
 ```
-level = 9
-  + 0.01  × hardiness
-  - 0.02  × fortitude
-  + 0.01  × dexterity
-  + 0.01  × intellect
+level = 7.87
+  + 0.013 × hardiness
+  - 0.019 × fortitude
+  + 0.004 × dexterity
+  + 0.010 × intellect
   + 0.025 × cleverness
   + 0.015 × power
-  + 0.12  × kinen
-  + 0.06  × nonkinen
-  + skin_adjustment
+  + 0.167 × pmax(pmin(kinetic, energy), 0)
+  + 0.054 × nonkinen
 ```
 
-**Accuracy**: R² = 0.947 (with skin effects), SD = 1.9 levels
+The kinetic-energy resist term is the **weaker side, floored at zero** —
+vulnerability on either kinetic or energy erases all credit for kin/eng resist.
+Symmetric in kinetic and energy (the game treats both as the 60%-capped resist
+class), no asymmetric weighting.
+
+**Accuracy**: R² = 0.952, SD = 1.86 levels (without skin adjustments). See
+Phase 9 for derivation. The earlier `kinen`-based form is preserved in
+git history; the live formula is implemented in `R/creature_level_model.R`
+as `creature_level_no_armor_lm`.
 
 ---
 
@@ -322,15 +563,17 @@ Based on regression with skin fixed effects (relative to bantha baseline):
 
 ## Future Work
 
-1. **Investigate outlier patterns**: The 36 persistent outliers may reveal additional game mechanics.
+1. **Near-armor border zone**: The remaining unarmored over-predictions cluster at fortitude 380-499, and the armored over-predictions cluster at fortitude 500-540. The hard `fortitude < 500` step in `custom_model` may not match the game — likely a transition band the two formulas don't handle cleanly.
 
-2. **Cross-validate with other data sources**: If additional historical data exists, test formula generalization.
+2. **Low-stat negative cluster (Phase 10)**: Investigate as a separate mechanism. Likely a HAM-floor or skin-tier effect; the M7 fix doesn't help here. Several entries (e.g. `qkuvjn3m` bantha CL7 with health 875, `pumhbd0k` cu_pa CL13 with health 2473) look like furrycat data-entry issues — worth flagging as suspect rather than chasing.
 
-3. **Test non-linear cleverness thresholds**: The 200/300/400 thresholds showed some signal but need more data.
+3. **High-DPS under-prediction**: A handful of high-cleverness/power creatures (`6j048r2a` rancor CL48 +7.0, `01oatm1v` falumpaset CL32 +5.9, `pdefjush` razor_cat CL49 +5.4) remain under-predicted by M7. Earlier scratchpad work in `R/investigate_low_stat_outliers.R` suggested diminishing-returns thresholds at cleverness 200/300/400 — worth revisiting under M7.
 
-4. **Minimum CL by skin**: Consider adding floor constraints (e.g., rancor minimum CL 35).
+4. **Cross-validate with other data sources**: If additional historical data exists, test formula generalization.
 
-5. **Template quality effects**: The historical guide mentions template quality affecting outcomes.
+5. **Minimum CL by skin**: Consider adding floor constraints (e.g., rancor minimum CL 35).
+
+6. **Template quality effects**: The historical guide mentions template quality affecting outcomes.
 
 ---
 
@@ -344,6 +587,9 @@ Analysis scripts (in `R/` directory):
 - `nonlinear_model_refinement.R` - Non-linear term testing
 - `final_model_combination.R` - Combined model analysis
 - `investigate_low_stat_outliers.R` - Diminishing returns investigation
+- `investigate_uber_cl10.R` - Uber-CL10 cluster and vulnerability-aware kinen (Phase 9)
+- `investigate_fortitude_breakpoint.R` - Re-verified fort=500 breakpoint and sign flip (Phase 11)
+- `investigate_effective_resists.R` - Verified fort→effective-resist formula; ruled out as fort-coefficient cause (Phase 12)
 
 Historical documents (in `docs/` directory):
 - `historical_guide.md` - 2003 BE Guide
