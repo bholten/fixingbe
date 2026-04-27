@@ -440,20 +440,36 @@ knitr::kable(fort_compare, digits = c(0, 0, 5, -1),
 
 Both coefficients are extremely significant, and they have opposite signs.
 
-# The Negative-Fortitude Coefficient: Mechanism vs Artifact
+# The Negative-Fortitude Coefficient: Artifact, Mechanism, or Bug?
 
 The unarmored fortitude coefficient is **negative**. Taken at face value,
 this would say that a creature with more fortitude has a *lower* level —
-counterintuitive enough to deserve scrutiny. We tested two
-explanations: a stat-budget / collinearity artifact, and an
-effective-resist double-count.
+counterintuitive enough to deserve scrutiny. There are three families of
+explanation:
 
-## Stat-budget / collinearity diagnosis
+1. **Artifact**: the coefficient is not really about fortitude — it is
+   bookkeeping that compensates for a collinearity (e.g. hardiness and
+   fortitude correlate 0.85). Drop fortitude or shrink it, and another
+   predictor should absorb the signal with no loss of fit.
+2. **Mechanism**: the game's level formula literally subtracts a
+   fortitude term for unarmored creatures. Counterintuitive as gameplay,
+   but mechanically possible.
+3. **Bug or balance lever**: SWG ran a major creature-system rebalance
+   post-launch (pre-launch pets could equip medium armor; that was
+   stripped). A developer could have flipped the sign on the unarmored
+   fortitude term either accidentally or as a deliberate "armor must
+   pay for itself" damper.
 
-Within the unarmored subset, fortitude correlates 0.85 with hardiness and
-0.84 with health — Bio-Engineers wire these up together when crafting.
-Drop fortitude from the model, and the hardiness coefficient changes
-dramatically:
+We can rule out (1) with the data, but the data alone cannot
+distinguish (2) from (3). Four tests, in order.
+
+## Test 1: drop fortitude — does another coefficient absorb it?
+
+Within the unarmored subset, fortitude correlates 0.85 with hardiness
+and 0.84 with health — Bio-Engineers wire these up together when
+crafting. If the negative-fortitude coefficient is bookkeeping for the
+hardiness correlation, dropping fortitude from the model should let
+hardiness pick up the signal with no loss of fit.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 m_una_full <- m_una
@@ -474,14 +490,12 @@ knitr::kable(shift_compare, digits = 4, row.names = FALSE,
              caption = "Coefficient shifts when fortitude is dropped from the unarmored model")
 ```
 
-The hardiness coefficient flips from +0.013 to roughly zero. That is the
-smoking gun: the regression had been crediting hardiness positively and
-fortitude negatively as a *paired* signal — what it is actually
-identifying is the contrast between hardiness and fortitude, not their
-independent contributions.
+The hardiness coefficient flips from +0.013 to roughly zero — exactly
+what the artifact hypothesis predicts. So far, the picture is
+consistent with the negative coefficient being collinearity bookkeeping.
 
-A manual VIF (variance inflation factor) puts numbers on the
-collinearity:
+A manual VIF (variance inflation factor) confirms the collinearity is
+real:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 manual_vif <- function(model) {
@@ -495,35 +509,100 @@ manual_vif <- function(model) {
 round(manual_vif(m_una_full), 2)
 ```
 
-Fortitude itself is at moderate VIF (~5); the worse offenders are
-intellect and cleverness, which collinearity-correlate with the rest of
-the stat budget too.
+Fortitude itself is at moderate VIF (~5); intellect and cleverness are
+worse. This test is *suggestive* of artifact, but not decisive — the
+fact that hardiness can absorb the signal does not prove the signal is
+*nothing but* hardiness.
 
-**Mechanistic reading**: the game most plausibly gives unarmored
-fortitude *zero* level contribution — without armor, fortitude doesn't
-matter for damage mitigation — but BE crafters co-vary fortitude
-alongside hardiness and health when optimizing. The regression
-discovers an empirical (hardiness +, fortitude −) pair that fits the
-data well even though only one of the two is mechanistically real.
+## Test 2: constrained regression — what is the predictive cost of forcing fortitude ≥ 0?
 
-**Practical upshot**: keep the empirical coefficients (the formula
-predicts well), but don't read literal mechanism into the negative
-fortitude term. The "uber CL10" phenomenon's apparent
-"fortitude penalty" effect is more plausibly explained by the M7
-vulnerability mechanism plus this stat-budget correlation.
+If the negative coefficient is pure artifact, forcing fortitude ≥ 0
+(equivalent to setting it to zero, since the unconstrained estimate is
+on the wrong side of the constraint) should cost no predictive
+performance. Hardiness will absorb the signal and the model will fit
+just as well.
 
-## Effective vs special resists: ruled out
+By KKT conditions for inequality-constrained least squares: when the
+unconstrained estimate violates the constraint, the constrained
+optimum sets the violating coefficient to its boundary (zero) and
+re-fits the others. So the constrained regression is mathematically
+identical to the drop-fortitude `lm` above; we just look at the
+*predictive* metrics this time.
 
-A second hypothesis: in the game, kinetic and energy resists come from
-two sources — **effective** resists derived directly from fortitude
-(`floor(fortitude / 10)` for unarmored) and **special** resists from
-DNA samples. When both are present, special wins and effective drops
-out. For creatures whose displayed kinetic/energy *is* effective, the
-column M7 consumes is literally a function of fortitude — a potential
-double-count that could create the spurious coefficient.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+una_df$resid_unc <- resid(m_una_full)
+una_df$resid_con <- resid(m_una_no_fort)
 
-We confirmed the formula and tested whether splitting by source
-explains anything:
+cat(sprintf("Unconstrained M7: R^2 = %.4f, resid SD = %.3f, AIC = %.1f\n",
+            summary(m_una_full)$r.squared, sd(resid(m_una_full)),
+            AIC(m_una_full)))
+cat(sprintf("Constrained (fort >= 0): R^2 = %.4f, resid SD = %.3f, AIC = %.1f\n",
+            summary(m_una_no_fort)$r.squared, sd(resid(m_una_no_fort)),
+            AIC(m_una_no_fort)))
+cat(sprintf("Delta R^2 = %+.4f, delta SD = %+.3f, delta AIC = %+.1f\n",
+            summary(m_una_no_fort)$r.squared - summary(m_una_full)$r.squared,
+            sd(resid(m_una_no_fort)) - sd(resid(m_una_full)),
+            AIC(m_una_no_fort) - AIC(m_una_full)))
+```
+
+The cost is real and substantial: ~3 percentage points of R², half a
+level of residual SD, and ~140 AIC points. The artifact hypothesis
+predicts ≈ zero cost — this is a clear rejection.
+
+The cost is not uniformly distributed. Where does it land?
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+una_df$band <- cut(una_df$fortitude,
+                   breaks = c(-Inf, 0, 100, 200, 300, 400, 500),
+                   labels = c("<=0","0-100","100-200","200-300","300-400","400-500"),
+                   include.lowest = TRUE, right = FALSE)
+band_summary <- una_df %>%
+  group_by(band) %>%
+  summarise(n = n(),
+            sd_unc   = sd(resid_unc),
+            sd_con   = sd(resid_con),
+            mean_unc = mean(resid_unc),
+            mean_con = mean(resid_con),
+            .groups = "drop")
+knitr::kable(band_summary, digits = 3,
+             col.names = c("Fortitude band","n","SD (unc)","SD (con)",
+                           "Mean resid (unc)","Mean resid (con)"),
+             caption = "Residuals by fortitude band, unconstrained vs constrained")
+```
+
+The constrained model develops a clean U-shape across fortitude bands:
+positive bias at low fortitude (under-prediction by ~0.6 levels in the
+0–100 band) and negative bias at high fortitude (over-prediction by
+~1.3 levels in the 400–500 band). That's the residual signature of a
+*missing linear term in fortitude*. The empirical penalty was filling
+exactly that hole.
+
+The uber-CL10 cluster is the most affected:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+uber_idx <- una_df$level <= 12 & una_df$kinetic >= 50
+cat(sprintf("Uber-CL10 cluster (n = %d):\n", sum(uber_idx)))
+cat(sprintf("  Unconstrained: mean resid %+.2f, SD %.2f\n",
+            mean(una_df$resid_unc[uber_idx]),
+            sd(una_df$resid_unc[uber_idx])))
+cat(sprintf("  Constrained:   mean resid %+.2f, SD %.2f\n",
+            mean(una_df$resid_con[uber_idx]),
+            sd(una_df$resid_con[uber_idx])))
+```
+
+Same spread, but a 1.5-level downward bias. The negative fortitude
+coefficient was specifically pulling these creatures from "predicted
+~12" down to "actually CL 10."
+
+## Test 3: effective vs special resists
+
+A more subtle artifact possibility: in the game, kinetic and energy
+resists come from two sources — **effective** resists derived directly
+from fortitude (`floor(fortitude / 10)` for unarmored) and **special**
+resists from DNA samples. When both are present, special wins and
+effective drops out. For creatures whose displayed kinetic/energy *is*
+effective, the column M7 consumes is literally a function of fortitude
+— a potential double-count that could create a spurious coefficient.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 unarm <- normalized_df %>% dplyr::filter(armor == 0) %>%
@@ -559,14 +638,122 @@ cat(sprintf("All-special  fortitude coef:    %.5f (n=%d)\n",
 The fortitude coefficient is essentially identical on the all-special
 subset, where there is *no* algebraic relationship between fortitude
 and the kinetic/energy values M7 consumes. The effective-resist
-double-count is ruled out as the cause of the negative coefficient.
-The stat-budget diagnosis stands.
+double-count is ruled out as the cause.
 
-(For completeness: zeroing out effective resists from `ke_floor` —
-treating the game as if it ignored them — makes the fit worse by ~40
-AIC. The level formula appears to credit effective and special resists
-at the same rate, using whichever value is displayed. So M7 is using
-the right column; no source-aware refactor is needed.)
+(For completeness: zeroing out effective resists from `ke_floor` makes
+the fit worse by ~40 AIC. The level formula appears to credit
+effective and special resists at the same rate, using whichever value
+is displayed.)
+
+## Test 4: elastic-net under cross-validation
+
+The strongest test: regularize the regression and let cross-validation
+decide how much credibility each coefficient deserves. Lasso and
+elastic-net penalize the absolute size of coefficients, so a fragile
+coefficient — one that's only there to bookkeep a collinearity —
+should shrink toward zero or get dropped entirely. A robust signal
+survives.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(glmnet)
+
+predictors <- c("hardiness","fortitude","dexterity","intellect",
+                "cleverness","power","ke_floor","nonkinen")
+X_una <- as.matrix(una_df[, predictors])
+y_una <- una_df$level
+
+set.seed(2026)
+cv_ridge <- cv.glmnet(X_una, y_una, alpha = 0.0, nfolds = 10, standardize = TRUE)
+cv_enet  <- cv.glmnet(X_una, y_una, alpha = 0.5, nfolds = 10, standardize = TRUE)
+cv_lasso <- cv.glmnet(X_una, y_una, alpha = 1.0, nfolds = 10, standardize = TRUE)
+
+reg_compare <- data.frame(
+  Term = c("(Intercept)", predictors),
+  OLS = round(coef(m_una), 5),
+  Ridge_min = round(as.vector(coef(cv_ridge, s = "lambda.min")), 5),
+  ElasticNet_min = round(as.vector(coef(cv_enet, s = "lambda.min")), 5),
+  Lasso_min = round(as.vector(coef(cv_lasso, s = "lambda.min")), 5)
+)
+knitr::kable(reg_compare, row.names = FALSE,
+             caption = "Cross-validated coefficients at lambda.min, original scale")
+```
+
+Lasso and elastic-net at the cross-validated optimum *essentially
+reproduce the OLS solution*, including the −0.019 fortitude
+coefficient. Ridge halves both ends of the (hardiness, fortitude)
+pair but keeps the negative sign on fortitude.
+
+The lasso path is even more telling. Walking from λ=∞ down to λ=0,
+predictors enter the model in order of how much signal they carry:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+lasso_path <- glmnet(X_una, y_una, alpha = 1.0, standardize = TRUE)
+plot(lasso_path, xvar = "lambda", label = TRUE)
+title("Lasso coefficient path (unarmored M7)", line = 2.5)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+beta_path <- as.matrix(lasso_path$beta)
+entry_lambda <- apply(beta_path, 1, function(row) {
+  nz <- which(row != 0)
+  if (length(nz) == 0) NA else lasso_path$lambda[min(nz)]
+})
+entry_signs <- sapply(seq_along(entry_lambda), function(i) {
+  nz <- which(beta_path[i, ] != 0)
+  if (length(nz) == 0) "—" else
+    if (beta_path[i, min(nz)] > 0) "+" else "-"
+})
+entry_order <- data.frame(
+  Predictor = names(entry_lambda),
+  EnteredAtLambda = round(entry_lambda, 5),
+  EnteredSign = entry_signs
+)
+entry_order <- entry_order[order(-entry_order$EnteredAtLambda), ]
+knitr::kable(entry_order, row.names = FALSE,
+             caption = "Lasso entry order: when each predictor first becomes nonzero")
+```
+
+`fortitude` enters at λ ≈ 0.39 with the negative sign already, and
+stays negative across the entire path. Crucially, **`hardiness`
+enters last** — even after fortitude. The "fragile" coefficient of the
+collinear pair is hardiness, not fortitude.
+
+## Reading the evidence
+
+Putting the four tests together:
+
+| Test | Predicted under "artifact" | Observed |
+|---|---|---|
+| Drop fortitude | No fit loss; another coef absorbs it | Hardiness flips to ~0; **R² drops 3 pts** |
+| Constrained regression | No fit loss | **R² drops 3 pts; U-shape in residuals** |
+| Effective resists | Coefficient explained by fort→resist channel | Coefficient identical on all-special subset |
+| Elastic-net (lasso) | fortitude shrinks to zero | **fortitude stays at −0.019; hardiness enters last** |
+
+The artifact hypothesis is rejected. The negative fortitude
+coefficient is doing real, irreducible predictive work — it cannot
+be reshuffled away by another coefficient and it cannot be
+regularized to zero without paying a real penalty.
+
+That leaves two live mechanisms:
+
+- **Real game-formula term**. The unarmored CL formula literally
+  subtracts a fortitude term. A "fortitude penalty" reads as
+  counterintuitive gameplay, but it is mechanically possible — and
+  it would explain the BE-folklore observation that pushing
+  fortitude toward 499 minimized its CL contribution.
+- **Bug or post-rebalance damper**. Pre-launch SWG allowed pets to
+  equip medium armor; that was removed in a major creature-system
+  rebalance. Either the developer flipped the sign accidentally, or
+  introduced the negative term deliberately as an "armor pays for
+  itself" damper to keep heavy-resist unarmored pets from being
+  too tameable. Either way, the empirical coefficient is what the
+  retail game ran, and that is what an emulator must reproduce.
+
+The data does not let us choose between these two — both predict
+exactly the empirical coefficient pattern we observe. But for the
+purposes of reproducing the retail formula, the choice does not
+matter: the coefficient is real, and the SWGEmu re-implementation
+should keep it.
 
 # Combined Fit: Both Formulas
 

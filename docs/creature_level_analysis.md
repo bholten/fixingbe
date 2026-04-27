@@ -315,6 +315,12 @@ have high HAM, the M7 resist mechanism (vulnerability erases credit), and
 BE crafters' tendency to push fortitude toward 500 alongside everything
 else.
 
+> **⚠️ Updated by Phase 14.** Phases 11/12 concluded the negative
+> fortitude coefficient was probably a stat-budget / collinearity
+> artifact. Subsequent tests (constrained regression and elastic-net)
+> rejected that hypothesis: the coefficient is signal, not bookkeeping.
+> See Phase 14.
+
 ### Phase 12: Effective vs Special Resists — Ruled Out as the Driver
 
 A second hypothesis for the negative-fortitude coefficient: in the game,
@@ -361,8 +367,9 @@ Phase 11 stands.
   rate, using whichever value is displayed.
 
 **Conclusion**: M7 uses the right resist column. No source-aware refactor
-is needed. The negative fortitude coefficient remains a stat-budget
-artifact, not an effective-resist algebraic confound.
+is needed. The negative fortitude coefficient is *not* an effective-resist
+algebraic confound. (See Phase 14 for the resolution of the stat-budget /
+collinearity hypothesis, which Phase 12 left open.)
 
 ### Phase 13: Robustness Check — Re-fit With Suspects Removed
 
@@ -412,6 +419,106 @@ mechanism doesn't explain them — they appear to be a *different* mode,
 possibly a HAM-floor or skin-tier effect where the formula gives full credit
 for hardiness but the underlying creature isn't really "hardy." Flagged as
 its own investigation.
+
+### Phase 14: Stress-Testing the Negative-Fortitude Coefficient — Signal, Not Artifact
+
+Phase 11 left the negative-fortitude coefficient with a tentative
+"stat-budget / collinearity artifact" reading: dropping fortitude from
+the regression made the hardiness coefficient flip from +0.013 to ~0,
+suggesting the regression was identifying a (hardiness +, fortitude −)
+*contrast* rather than two independent effects. Phase 12 ruled out one
+specific artifact mechanism (the effective-resist double-count) but
+the stat-budget hypothesis itself was untested.
+
+Phase 14 tests it directly with two follow-on analyses, and **rejects
+the artifact hypothesis**.
+
+**Test 1: Constrained regression** (`R/investigate_constrained_regression.R`)
+
+Force `fortitude >= 0` via quadratic programming (`quadprog::solve.QP`).
+By KKT, when the unconstrained estimate violates the constraint, the
+constrained optimum sets that coefficient to zero and re-fits the rest
+— equivalent to a drop-fortitude `lm`. If the negative coefficient is
+pure artifact, the constraint should cost no predictive performance.
+It does not:
+
+| | Unconstrained M7 | Constrained (fort ≥ 0) | Δ |
+|---|---|---|---|
+| R² | 0.9518 | 0.9215 | −0.030 |
+| Resid SD | 1.859 | 2.373 | +0.514 |
+| AIC | 1205.7 | 1347.7 | +142 |
+| fortitude coef | −0.0194 | 0.0000 | binding |
+
+The cost is concentrated in a U-shape across fortitude bands: the
+constrained model under-predicts low-fortitude creatures by ~0.6
+levels in the 0–100 band and over-predicts high-fortitude ones by
+~1.3 levels in the 400–500 band. That residual signature *is* a
+missing linear term in fortitude.
+
+The uber-CL10 cluster (n=39) is the most affected: mean residual goes
+from −0.35 to **−1.86** under the constraint. The negative fortitude
+coefficient was specifically pulling these creatures from "predicted
+~12" down to "actually CL 10."
+
+**Test 2: Elastic-net under cross-validation**
+(`R/investigate_elastic_net.R`)
+
+Refit with regularized regression (ridge α=0, elastic-net α=0.5,
+lasso α=1.0) at 10-fold CV-optimal `lambda.min`. Lasso would gladly
+zero out a redundant predictor; elastic-net handles correlated
+predictors gracefully via the L2 component. Both pull on the
+collinear (hardiness, fortitude) pair — neither zeroes fortitude out:
+
+| Term | OLS | Ridge.min | ElasticNet.min | Lasso.min |
+|---|---|---|---|---|
+| hardiness | +0.0130 | +0.0063 | +0.0123 | +0.0124 |
+| **fortitude** | **−0.0194** | **−0.0118** | **−0.0186** | **−0.0186** |
+| ke_floor | +0.1665 | +0.1623 | +0.1668 | +0.1668 |
+| nonkinen | +0.0543 | +0.0460 | +0.0531 | +0.0531 |
+
+Even at the more aggressive `lambda.1se`, fortitude stays at −0.012.
+Walking the lasso path from λ=∞ down to λ=0, predictors enter in
+order of signal strength: `intellect → cleverness → ke_floor → power →
+nonkinen → dexterity → fortitude → hardiness`. **Hardiness enters
+last**, after fortitude. The fragile coefficient of the collinear
+pair is hardiness, not fortitude.
+
+The (hardiness + fortitude) sum is preserved at roughly −0.005 to
+−0.006 across all models — that's the genuinely identified contrast.
+Regularization can shrink both endpoints proportionally, but the
+direction between them is fixed by the data.
+
+**Verdict**: signal, not artifact.
+
+| Test | Predicted under "artifact" | Observed |
+|---|---|---|
+| Drop fortitude | No fit loss; another coef absorbs | Hardiness flips to ~0; **R² drops 3 pts** |
+| Constrained regression | No fit loss | **R² drops 3 pts; U-shape in residuals** |
+| Effective resists | Coefficient explained by fort→resist channel | Coefficient identical on all-special subset |
+| Elastic-net | fortitude shrinks to zero | **fortitude stays at −0.019; hardiness enters last** |
+
+**Two live mechanism hypotheses remain.** The data does not let us
+choose between them, but for the SWGEmu re-implementation the choice
+does not matter — the empirical coefficient is what retail ran.
+
+1. **Real game-formula term**. The unarmored CL formula literally
+   subtracts a fortitude term as a "balance lever" — a counterintuitive
+   gameplay choice but mechanically possible. It would explain the
+   BE-folklore observation that pushing fortitude toward 499 minimized
+   its CL contribution.
+2. **Bug or post-rebalance damper**. Pre-launch SWG allowed pets to
+   equip medium armor; that was removed in a major creature-system
+   rebalance. A developer could have flipped the sign on the unarmored
+   fortitude term either accidentally during the rebalance or as a
+   deliberate "armor pays for itself" damper to keep heavy-resist
+   unarmored pets from being too tameable. The hypothesis is
+   consistent with the "jump from −0.019 below 500 to +0.059 above
+   500" discontinuity (Phase 11): a single-line code change.
+
+**Practical upshot for SWGEmu**: keep the empirical coefficient. The
+formula `level = ... − 0.019 * fortitude + ...` for unarmored is the
+right predictive answer, and the four-test stress battery rules out
+the most plausible "this is just OLS picking a bad allocation" story.
 
 ---
 
@@ -590,6 +697,8 @@ Analysis scripts (in `R/` directory):
 - `investigate_uber_cl10.R` - Uber-CL10 cluster and vulnerability-aware kinen (Phase 9)
 - `investigate_fortitude_breakpoint.R` - Re-verified fort=500 breakpoint and sign flip (Phase 11)
 - `investigate_effective_resists.R` - Verified fort→effective-resist formula; ruled out as fort-coefficient cause (Phase 12)
+- `investigate_constrained_regression.R` - QP-constrained refit of M7 with fortitude ≥ 0 (Phase 14)
+- `investigate_elastic_net.R` - Ridge / elastic-net / lasso under CV; lasso entry order (Phase 14)
 
 Historical documents (in `docs/` directory):
 - `historical_guide.md` - 2003 BE Guide
