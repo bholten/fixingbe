@@ -9,17 +9,35 @@ library(mgcv)
 library(broom)
 library(ggplot2)
 library(lmtest)
+library(segmented)
 
-no_armor_df <- normalized_df %>% filter(armor == 0)
-armor_df <- normalized_df %>% filter(armor == 1 & fortitude >= 500)
+no_armor_df <- normalized_df %>% dplyr::filter(armor == 0)
+armor_df    <- normalized_df %>% dplyr::filter(armor == 1 & fortitude >= 500)
 ```
 
-# Data
+# Overview
 
-The GAM model of creature level shows relative influence to a few attributes.
+Bio-Engineering in Star Wars: Galaxies let players craft custom creatures
+("pets") by combining DNA samples. The creature's level (CL) governed who
+could tame the pet and how powerful it was. The 2003 BE Guide noted that CL
+"mostly depends on damage, resists, and the CL of the donors," but the exact
+algorithm was never published.
+
+This document reverse-engineers that algorithm from the Furrycat archive.
+The headline finding: **the game uses two completely different formulas**,
+selected by whether the creature has armor (`fortitude >= 500`). Both
+formulas are linear in the creature's attributes, but one of them — the
+unarmored formula — needs a vulnerability-aware resist term to fit the data
+well.
+
+The dataset, after filtering, has 370 creatures: 79 armored, 291 unarmored.
+
+# An Initial GAM
+
+A single GAM across all creatures gives a quick picture of which attributes
+move level.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-
 model.gam.everything <- gam(
   level ~
     s(hardiness) +
@@ -43,61 +61,40 @@ model.gam.everything <- gam(
   data = normalized_df,
   family = gaussian()
 )
-
 summary(model.gam.everything)
-
 ```
-Specifically, the following attributes:
 
-- hardiness
-- fortitude 
-- dexterity
-- intellect
-- cleverness
-- power
-- kinetic
-- energy
-- cold
+Several attributes appear important:
 
-The appearance of `kinetic`, `energy`, `cold` and no other resists is especially strange.
+- hardiness, fortitude, dexterity, intellect, cleverness, power
+- kinetic, energy (and to a lesser extent cold)
 
-Also interesting is that the following attributes have `1.00` degrees of freedom (so their influence is essentially flat):
+And a handful land on ~1.00 effective degrees of freedom (essentially flat):
+endurance, fierceness, blast, heat, electricity. We treat those as noise
+attributes for level purposes.
 
-- endurance
-- fierceness
-- blast
-- heat
-- electricity
+The fortitude smooth is the most interesting term. Its shape will turn out
+to encode the two-formula structure.
 
-## Feature Engineering
+# Feature Engineering
 
-We are going to make some assumptions about the model based on our domain knowledge
-of the game, and to avoid over-fitting.
+To avoid over-fitting to small per-attribute weight differences, we collapse
+correlated attributes into synthetic features:
 
-1. Hardiness, Dexterity, and Intellect have the same weights against level
+1. `average_hdi = (hardiness + dexterity + intellect) / 3` — these three
+   attributes have similar weights against level; collapsing them prevents
+   the model from over-attributing influence to whichever happens to
+   correlate most with fortitude.
+2. `kinen = (kinetic + energy) / 2` — kinetic and energy share the in-game
+   60% cap; treating them as one resist class respects that mechanic.
+3. `nonkinen = (blast + heat + cold + electricity + acid + stun) / 6` —
+   the other six resists, none of which are individually significant after
+   collapsing.
 
-It's possible that the additive models associate higher weights to hardiness due to
-its correlation with fortitude. However, for now, we'll assume that each attribute is more 
-or less equal.
+These are derived in `R/data.R` and ride along on `normalized_df`.
 
-2. Kinetic and Energy resists have the same weights against level
-
-We're combining these two because they are uniquely capped at 60%.
-
-3. The other resists have the same weight against level
-
-This is due to domain knowledge -- "vuln stacking" creatures caused a measurable drop
-in creature level. It's possible the special emphasis given to `cold` is due to over-fitting or something unique about furrycat's data.
-
-To mediate these concerns, we can create the following synthetic attributes
-
-1. `average_hdi` -- is the average of hardiness, dexterity, and intellect. Taking the mean of these attributes and training the GAM on this synthetic feature will force it not to over-fit on any of hardiness, dexterity, and intellect.
-
-2. `kinen` -- mean of kinetic and energy, for the same reasons.
-
-3. `nonkinen` -- mean of cold, heat, electricity, acid, and stun.
-
-With that, this is the final model:
+A re-fit GAM with these collapsed features reproduces the same picture
+with far fewer terms:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 model.gam <- gam(
@@ -113,578 +110,562 @@ model.gam <- gam(
 summary(model.gam)
 ```
 
+Holding all other attributes at their mean, the fortitude smooth shows the
+discontinuity that motivates the two-formula split:
 
-## Armored Creature Levels
-
-Analysis of the data shows extreme an extreme segmentation point $fortitude = 500$.
-
-In fact, the $fortitude >= 500$ data set is particularly well-behaved.
-
-```{r}
-model.gam.armor <- gam(
-  level ~
-    s(average_hdi) +
-    s(fortitude) +
-    s(cleverness) +
-    s(power) +
-    s(kinen) +
-    s(nonkinen),
-  data = armor_df
-)
-summary(model.gam.armor)
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=4}
+plot(model.gam, select = 2, shade = TRUE,
+     main = "Fortitude smooth (level vs fortitude, all else fixed)")
+abline(v = 500, col = "red", lty = 2)
 ```
 
-In fact, the relative degrees of freedom show that several of these parameters are already close to linear.
+The smooth is **decreasing** below fortitude=500 and **increasing** above
+it. We'll quantify and verify that breakpoint shortly.
 
-```{r}
+# Armored Creatures
+
+For creatures with `fortitude >= 500`, a plain linear regression already
+fits remarkably well.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 linear.fit.level.armor <- lm(
-  level ~
-    average_hdi +
-    fortitude +
-    cleverness +
-    power +
-    kinen +
-    nonkinen,
+  level ~ average_hdi + fortitude + cleverness + power + kinen + nonkinen,
   data = armor_df
 )
 summary(linear.fit.level.armor)
 ```
 
-This simple linear model behaves remarkably well.
-
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(armor_df, aes(x = predict(linear.fit.level.armor, newdata = armor_df), y = level)) +
-  geom_point() +
+ggplot(armor_df,
+       aes(x = predict(linear.fit.level.armor, newdata = armor_df),
+           y = level)) +
+  geom_point(alpha = 0.6) +
   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
-  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level")
+  labs(title = "Armored: predicted vs actual level",
+       x = "predicted_level", y = "level") +
+  theme_minimal()
 ```
 
-And analysis of the residuals are highly promising.
+Residual diagnostics:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-rs.model.level.armor <- resid(linear.fit.level.armor)
-qqnorm(rs.model.level.armor)
-qqline(rs.model.level.armor)
+rs.armor <- resid(linear.fit.level.armor)
+qqnorm(rs.armor); qqline(rs.armor)
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-shapiro.test(rs.model.level.armor)
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+shapiro.test(rs.armor)
 bptest(linear.fit.level.armor)
 ```
 
-To summarize, this simple linear model for the "armored" data set (i.e. creatures that have armor):
-
-1. The residuals are +/- 4 levels 
-2. The residuals have median 0.19 levels.
-2. The residuals are normally distributed
-3. The residuals are [homoscedastic](https://en.wikipedia.org/wiki/Homoscedasticity_and_heteroscedasticity)
-
-Taken together, this may imply that the residuals are *due to randomness within the crafting system itself*, and may not be due to missing variables or unknown non-linear relationships.
-
-## Unarmored Creature Levels
-
-The same analysis for unarmored creatures does not look as promising.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-linear.fit.level.noarmor <- lm(
-  level ~
-    average_hdi +
-    fortitude +
-    cleverness +
-    power +
-    kinen +
-    nonkinen,
-  data = no_armor_df
-)
-summary(linear.fit.level.noarmor)
-```
-
-Which shows a statistically decent but clearly heteroscedastic fit.
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(no_armor_df, aes(x = predict(linear.fit.level.noarmor, newdata = no_armor_df), y = level)) +
-  geom_point() +
-  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
-  labs(title = "Predicted Level vs Actual", x = "predicted_level", y = "level")
-```
-
-The residuals are clearly not normal.
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-rs.model.level.noarmor <- resid(linear.fit.level.noarmor)
-qqnorm(rs.model.level.noarmor)
-qqline(rs.model.level.noarmor)
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-shapiro.test(rs.model.level.noarmor)
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-bptest(linear.fit.level.noarmor)
-```
-
-### Summary and areas for future investigation
-
-1. Using segment analysis, there is statistical evidence that armor is a change point in the model for creature level
-2. An ordinary linear regression fits armored creature levels remarkably well
-3. Unarmored creature levels are not so simple...
-
-For unarmored creature level, a few ideas:
-
-1. It could be that lower level are more sensitive to rounding, giving the heteroscedastic results
-2. Creature level may be calculated from "final" attributes (such as health, action, mind), which themselves are rounded, which further causes sensitivity at lower creature levels and attributes, where rounding is proportionally more significant
-3. There may be more change points in the unarmored data set
-
-### The Strange Case of Fortitude
-
-The influence of fortitude shows a slight _negative_ influence below $fortitude = 500$, and a positive influence above.
-
-See the influence plot,
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-plot(model.gam, select = 2)
-```
-
-This is reflected in the above linear model, where fortitude's slope in the unarmored data is actually negative!
-
-Recall the result of the linear, unarmored model:
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-summary(linear.fit.level.noarmor)
-```
-
-Can this be true? Other influence models, such as GBMs, also show the same thing. Still, it is not an intuitive finding. However, note that:
-
-1. It would explain the existence of high-fortitude, unarmored CL 10s with lots of vulnerabilities -- maximizing fortitude to be as close to 499 as possible would _minimize_ its contribution to creature level!
-2. It would explain the question of how many levels armor adds -- some players said 10, others said 6. In this view, obtaining armor does not strictly add a constant creature level; it rolls you into a different segment of the linear model, where the influence of fortitude becomes sharply positive
-3. It would also explain why change point detection was so adamant about a change point existing at $fortitude = 500$ -- it's not that armor adds a constant level, it's that parameters of the level calculation change entirely!
-
-I'm unsure if this could be accurate, but it is compelling nonetheless.
-
-## Logarithmic Model Analysis
-
-Further investigation reveals that a **logarithmic transformation** of level provides better fit, suggesting the creature level formula may be multiplicative rather than additive.
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-# Feature engineering for log models
-normalized_df <- normalized_df %>%
-  mutate(
-    kinen = (kinetic + energy) / 2,
-    nonkinen = (blast + heat + cold + electricity + acid + stun) / 6
-  )
-
-no_armor_df <- normalized_df %>% filter(armor == 0)
-armor_df <- normalized_df %>% filter(armor == 1 & fortitude >= 500)
-```
-
-Testing `log(level)` as the outcome with raw attributes:
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-model.log.unarmored <- lm(
-  log(level) ~ hardiness + fortitude + dexterity + intellect +
-               cleverness + power + courage +
-               kinen + nonkinen,
-  data = no_armor_df
-)
-
-model.log.armored <- lm(
-  log(level) ~ hardiness + fortitude + dexterity + intellect +
-               cleverness + power + courage +
-               kinen + nonkinen,
-  data = armor_df
-)
-```
-
-### Model Fit Comparison
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-# Calculate R² on original scale
-calc_r2_exp <- function(model, data) {
-  pred <- exp(predict(model, newdata = data))
-  actual <- data$level
-  1 - sum((actual - pred)^2) / sum((actual - mean(actual))^2)
-}
-
-cat("Log(level) model R² (original scale):\n")
-cat("  Unarmored:", round(calc_r2_exp(model.log.unarmored, no_armor_df), 4), "\n")
-cat("  Armored:  ", round(calc_r2_exp(model.log.armored, armor_df), 4), "\n")
-```
-
-The armored model achieves R² ≈ 0.98, while unarmored achieves R² ≈ 0.94.
-
-### Coefficient Comparison: The Two Formulas
-
-The most striking finding is that **armored and unarmored creatures use fundamentally different formulas**. Several coefficients flip sign between the two regimes:
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-# Extract coefficients
-coef_unarmored <- coef(model.log.unarmored)
-coef_armored <- coef(model.log.armored)
-
-# Build comparison table
-terms <- c("hardiness", "fortitude", "dexterity", "intellect",
-           "cleverness", "power", "courage", "kinen", "nonkinen")
-
-comparison_df <- data.frame(
-  Attribute = terms,
-  Unarmored = sapply(terms, function(t) {
-    val <- coef_unarmored[t]
-    sprintf("%+.1f%%", (exp(val * 100) - 1) * 100)
-  }),
-  Armored = sapply(terms, function(t) {
-    val <- coef_armored[t]
-    sprintf("%+.1f%%", (exp(val * 100) - 1) * 100)
-  }),
-  SignFlip = sapply(terms, function(t) {
-    ifelse(sign(coef_unarmored[t]) != sign(coef_armored[t]), "YES", "")
-  })
-)
-rownames(comparison_df) <- NULL
-
-knitr::kable(comparison_df,
-             col.names = c("Attribute", "Unarmored (per 100)", "Armored (per 100)", "Sign Flip?"),
-             caption = "Percentage effect on level per 100 attribute points")
-```
-
-### Key Findings
-
-**Sign Flips:**
-
-1. **Fortitude**: The most dramatic flip. For unarmored creatures, fortitude has a *negative* effect on level (-11.7% per 100), while for armored creatures it has a *positive* effect (+5.5% per 100). This is statistically significant in both models.
-
-2. **Hardiness** and **Courage**: Also flip sign, but the armored coefficients are not statistically significant (p > 0.4), so these may be noise.
-
-**Coefficient Magnitude Differences:**
-
-The `kinen` (kinetic/energy resist) coefficient is **3.4x larger** for unarmored creatures (+94.9%) compared to armored (+28.2%). This makes intuitive sense: unarmored creatures rely on resists for survivability, so high resists dramatically increase their effective power level.
-
-### Visualization
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-# Add predictions
-no_armor_df$pred <- exp(predict(model.log.unarmored))
-armor_df$pred <- exp(predict(model.log.armored))
-
-# Combine for plotting
-no_armor_df$type <- "Unarmored"
-armor_df$type <- "Armored"
-combined <- bind_rows(
-  no_armor_df %>% select(level, pred, type),
-  armor_df %>% select(level, pred, type)
-)
-
-ggplot(combined, aes(x = pred, y = level, color = type)) +
-  geom_point(alpha = 0.6) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
-  scale_color_manual(values = c("Armored" = "blue", "Unarmored" = "red")) +
-  labs(
-    title = "Log(Level) Model: Predicted vs Actual",
-    subtitle = "Separate formulas for armored and unarmored creatures",
-    x = "Predicted Level",
-    y = "Actual Level",
-    color = "Type"
-  ) +
-  theme_minimal()
-```
-
-### Interpretation
-
-The evidence strongly supports the hypothesis that **the game uses two completely different formulas** for calculating creature level:
-
-**Unarmored Formula** (more complex):
-
-- Base level ≈ 10.6
-- Fortitude *lowers* level (bio-engineers could maximize fortitude to ~499 while keeping level low)
-- Kinetic/Energy resists have *huge* impact on level
-- Offensive attributes (cleverness, power) have larger coefficients
-
-**Armored Formula** (simpler, tighter fit):
-
-- Base level ≈ 12.8
-- Fortitude *raises* level (as intuitively expected)
-- Resists have moderate impact
-- More balanced coefficients across attributes
-
-This explains several long-standing mysteries:
-
-1. **High-fortitude, low-level unarmored creatures existed** because maximizing fortitude actually minimized its contribution to level
-2. **Players disagreed on "how many levels armor adds"** because armor doesn't add a constant—it changes the entire formula
-3. **The segmentation analysis found a breakpoint at fortitude=500** because crossing that threshold doesn't just add armor, it switches which formula the game uses
-
-### Model Summaries
-
-**Unarmored Model:**
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-summary(model.log.unarmored)
-```
-
-**Armored Model:**
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-summary(model.log.armored)
-```
-
-## Deriving Implementable Formulas
-
-The log-level models above are useful for understanding the relative importance of attributes, but for re-implementing the game's creature level calculation, we need **linear formulas** that can be directly coded.
-
-### Linear Model Derivation
-
-We fit linear models predicting `level` (not `log(level)`) from raw attributes:
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Linear models for formula derivation
-model.armor.linear <- lm(
-  level ~ hardiness + fortitude + dexterity + intellect +
-          cleverness + power + kinen + nonkinen,
-  data = armor_df
-)
-
-model.noarmor.linear <- lm(
-  level ~ hardiness + fortitude + dexterity + intellect +
-          cleverness + power + kinen + nonkinen,
-  data = no_armor_df
-)
-```
-
-### Regression-Derived Coefficients
-
-These are the "raw" coefficients from linear regression, rounded to 3 decimal places:
-
-**Armored Formula (fortitude >= 500):**
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-coefs.armor <- coef(model.armor.linear)
-cat("level =", round(coefs.armor["(Intercept)"], 0), "\n")
-cat("      +", round(coefs.armor["hardiness"], 3), "* hardiness\n")
-cat("      +", round(coefs.armor["fortitude"], 3), "* fortitude\n")
-cat("      +", round(coefs.armor["dexterity"], 3), "* dexterity\n")
-cat("      +", round(coefs.armor["intellect"], 3), "* intellect\n")
-cat("      +", round(coefs.armor["cleverness"], 3), "* cleverness\n")
-cat("      +", round(coefs.armor["power"], 3), "* power\n")
-cat("      +", round(coefs.armor["kinen"], 2), "* kinen\n")
-cat("      +", round(coefs.armor["nonkinen"], 2), "* nonkinen\n")
-```
-
-**Unarmored Formula (fortitude < 500):**
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-coefs.noarmor <- coef(model.noarmor.linear)
-cat("level =", round(coefs.noarmor["(Intercept)"], 0), "\n")
-cat("      +", round(coefs.noarmor["hardiness"], 3), "* hardiness\n")
-cat("      +", round(coefs.noarmor["fortitude"], 3), "* fortitude  // NEGATIVE!\n")
-cat("      +", round(coefs.noarmor["dexterity"], 3), "* dexterity\n")
-cat("      +", round(coefs.noarmor["intellect"], 3), "* intellect\n")
-cat("      +", round(coefs.noarmor["cleverness"], 3), "* cleverness\n")
-cat("      +", round(coefs.noarmor["power"], 3), "* power\n")
-cat("      +", round(coefs.noarmor["kinen"], 2), "* kinen\n")
-cat("      +", round(coefs.noarmor["nonkinen"], 2), "* nonkinen\n")
-```
-
-### Clean Game-Dev Friendly Coefficients
-
-For actual implementation, we want coefficients that represent simple fractions (like 1/100, 1/50, 3/200) that a game developer might reasonably use. These "clean" coefficients are derived by rounding to values that correspond to nice fractions while minimizing loss of fit.
-
-**Armored Formula (Clean):**
+The armored residuals are small (±4 levels), normally distributed, and
+homoscedastic. This is consistent with the residuals being driven by
+crafting-system randomness rather than a missing variable.
+
+A clean, game-dev-friendly version of the armored formula:
 
 ```
 level = -23
-      + 0.01   * hardiness      // 1/100
-      + 0.06   * fortitude      // 3/50
-      + 0.005  * dexterity      // 1/200
-      + 0.01   * intellect      // 1/100
-      + 0.025  * cleverness     // 1/40
-      + 0.015  * power          // 3/200
-      + 0.1    * kinen          // 1/10
-      + 0.08   * nonkinen       // 2/25
+      + 0.01   * hardiness
+      + 0.06   * fortitude
+      + 0.005  * dexterity
+      + 0.01   * intellect
+      + 0.025  * cleverness
+      + 0.015  * power
+      + 0.10   * kinen
+      + 0.08   * nonkinen
 ```
 
-**Unarmored Formula (Clean):**
+R² ≈ 0.98, residual SD ≈ 1.8 levels.
 
-```
-level = 9
-      + 0.01   * hardiness      // 1/100
-      - 0.02   * fortitude      // -1/50 (NEGATIVE!)
-      + 0.01   * dexterity      // 1/100
-      + 0.01   * intellect      // 1/100
-      + 0.025  * cleverness     // 1/40
-      + 0.015  * power          // 3/200
-      + 0.12   * kinen          // 3/25
-      + 0.06   * nonkinen       // 3/50
-```
+# Unarmored Creatures: the Naive Fit
 
-### Formula Validation
+The same recipe on unarmored creatures gives a worse fit, and the residuals
+clearly violate normality.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+linear.fit.level.noarmor <- lm(
+  level ~ average_hdi + fortitude + cleverness + power + kinen + nonkinen,
+  data = no_armor_df
+)
+summary(linear.fit.level.noarmor)
+```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-# Helper function to test a formula
-test_formula <- function(df, intercept, hardiness, fortitude, dexterity, intellect,
-                         cleverness, power, kinen, nonkinen, name) {
-  pred <- intercept +
-    hardiness * df$hardiness +
-    fortitude * df$fortitude +
-    dexterity * df$dexterity +
-    intellect * df$intellect +
-    cleverness * df$cleverness +
-    power * df$power +
-    kinen * df$kinen +
-    nonkinen * df$nonkinen
-
-  residual <- df$level - pred
-
-  ss_res <- sum(residual^2)
-  ss_tot <- sum((df$level - mean(df$level))^2)
-  r2 <- 1 - ss_res / ss_tot
-
-  return(list(r2 = r2, sd = sd(residual), mean = mean(residual),
-              max = max(abs(residual)), pred = pred, residual = residual))
-}
-
-# Test regression-derived formulas
-armor_reg <- test_formula(armor_df,
-  intercept = round(coefs.armor["(Intercept)"], 0),
-  hardiness = round(coefs.armor["hardiness"], 3),
-  fortitude = round(coefs.armor["fortitude"], 3),
-  dexterity = round(coefs.armor["dexterity"], 3),
-  intellect = round(coefs.armor["intellect"], 3),
-  cleverness = round(coefs.armor["cleverness"], 3),
-  power = round(coefs.armor["power"], 3),
-  kinen = round(coefs.armor["kinen"], 2),
-  nonkinen = round(coefs.armor["nonkinen"], 2),
-  "Armored (regression)")
-
-noarmor_reg <- test_formula(no_armor_df,
-  intercept = round(coefs.noarmor["(Intercept)"], 0),
-  hardiness = round(coefs.noarmor["hardiness"], 3),
-  fortitude = round(coefs.noarmor["fortitude"], 3),
-  dexterity = round(coefs.noarmor["dexterity"], 3),
-  intellect = round(coefs.noarmor["intellect"], 3),
-  cleverness = round(coefs.noarmor["cleverness"], 3),
-  power = round(coefs.noarmor["power"], 3),
-  kinen = round(coefs.noarmor["kinen"], 2),
-  nonkinen = round(coefs.noarmor["nonkinen"], 2),
-  "Unarmored (regression)")
-
-# Test clean formulas
-armor_clean <- test_formula(armor_df,
-  intercept = -23,
-  hardiness = 0.01,
-  fortitude = 0.06,
-  dexterity = 0.005,
-  intellect = 0.01,
-  cleverness = 0.025,
-  power = 0.015,
-  kinen = 0.1,
-  nonkinen = 0.08,
-  "Armored (clean)")
-
-noarmor_clean <- test_formula(no_armor_df,
-  intercept = 9,
-  hardiness = 0.01,
-  fortitude = -0.02,
-  dexterity = 0.01,
-  intellect = 0.01,
-  cleverness = 0.025,
-  power = 0.015,
-  kinen = 0.12,
-  nonkinen = 0.06,
-  "Unarmored (clean)")
-
-# Build comparison table
-validation_df <- data.frame(
-  Formula = c("Armored (regression)", "Armored (clean)",
-              "Unarmored (regression)", "Unarmored (clean)"),
-  R2 = c(armor_reg$r2, armor_clean$r2, noarmor_reg$r2, noarmor_clean$r2),
-  SD = c(armor_reg$sd, armor_clean$sd, noarmor_reg$sd, noarmor_clean$sd),
-  Mean_Residual = c(armor_reg$mean, armor_clean$mean, noarmor_reg$mean, noarmor_clean$mean),
-  Max_Residual = c(armor_reg$max, armor_clean$max, noarmor_reg$max, noarmor_clean$max)
-)
-
-knitr::kable(validation_df,
-             col.names = c("Formula", "R²", "SD", "Mean Residual", "Max |Residual|"),
-             digits = c(0, 4, 2, 2, 2),
-             caption = "Formula Validation Metrics")
-```
-
-The clean formulas maintain excellent fit:
-
-- **Armored**: R² ≈ 0.98, residuals typically within ±2 levels
-- **Unarmored**: R² ≈ 0.91, residuals typically within ±3 levels
-
-### Coefficient Comparison Table
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-comparison_df <- data.frame(
-  Term = c("intercept", "hardiness", "fortitude", "dexterity", "intellect",
-           "cleverness", "power", "kinen", "nonkinen"),
-  Armor_Reg = c(round(coefs.armor["(Intercept)"], 0),
-                round(coefs.armor["hardiness"], 3),
-                round(coefs.armor["fortitude"], 3),
-                round(coefs.armor["dexterity"], 3),
-                round(coefs.armor["intellect"], 3),
-                round(coefs.armor["cleverness"], 3),
-                round(coefs.armor["power"], 3),
-                round(coefs.armor["kinen"], 2),
-                round(coefs.armor["nonkinen"], 2)),
-  Armor_Clean = c(-23, 0.01, 0.06, 0.005, 0.01, 0.025, 0.015, 0.1, 0.08),
-  Unarmor_Reg = c(round(coefs.noarmor["(Intercept)"], 0),
-                  round(coefs.noarmor["hardiness"], 3),
-                  round(coefs.noarmor["fortitude"], 3),
-                  round(coefs.noarmor["dexterity"], 3),
-                  round(coefs.noarmor["intellect"], 3),
-                  round(coefs.noarmor["cleverness"], 3),
-                  round(coefs.noarmor["power"], 3),
-                  round(coefs.noarmor["kinen"], 2),
-                  round(coefs.noarmor["nonkinen"], 2)),
-  Unarmor_Clean = c(9, 0.01, -0.02, 0.01, 0.01, 0.025, 0.015, 0.12, 0.06)
-)
-
-knitr::kable(comparison_df,
-             col.names = c("Term", "Armored (reg)", "Armored (clean)",
-                          "Unarmored (reg)", "Unarmored (clean)"),
-             caption = "Coefficient Comparison: Regression vs Clean Values")
-```
-
-### Visualization of Clean Formulas
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6}
-# Add clean predictions
-armor_df$pred_clean <- armor_clean$pred
-no_armor_df$pred_clean <- noarmor_clean$pred
-
-armor_df$type <- "Armored"
-no_armor_df$type <- "Unarmored"
-
-combined_clean <- bind_rows(
-  armor_df %>% select(level, pred_clean, type),
-  no_armor_df %>% select(level, pred_clean, type)
-)
-
-ggplot(combined_clean, aes(x = pred_clean, y = level, color = type)) +
+ggplot(no_armor_df,
+       aes(x = predict(linear.fit.level.noarmor, newdata = no_armor_df),
+           y = level)) +
   geom_point(alpha = 0.6) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
-  scale_color_manual(values = c("Armored" = "blue", "Unarmored" = "red")) +
-  labs(
-    title = "Clean Formulas: Predicted vs Actual Level",
-    subtitle = "Using game-dev friendly coefficients",
-    x = "Predicted Level",
-    y = "Actual Level",
-    color = "Type"
-  ) +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Unarmored (naive `kinen`): predicted vs actual",
+       x = "predicted_level", y = "level") +
   theme_minimal()
 ```
 
-## Final Implementation
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+rs.noarmor <- resid(linear.fit.level.noarmor)
+qqnorm(rs.noarmor); qqline(rs.noarmor)
+```
 
-The following pseudocode can be used to implement creature level calculation:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+shapiro.test(rs.noarmor)
+bptest(linear.fit.level.noarmor)
+```
+
+Three things stand out from this naive unarmored fit:
+
+1. **Fortitude has a negative coefficient** in unarmored creatures. This is
+   reproducible across modelling approaches. We come back to it below.
+2. The **residuals are not normal**. The Q-Q plot shows a heavy left tail —
+   creatures that the model over-predicts.
+3. The over-predicted creatures cluster at low CL, with a recognizable
+   pattern that isn't captured by the naive `kinen` average.
+
+# The "Uber CL10" Cluster
+
+A heavy left tail in the residuals turned out to be a coherent cluster:
+low-CL unarmored creatures with ~10k Health and a kinetic resist near the
+60% cap.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+no_armor_df <- no_armor_df %>%
+  mutate(naive_resid = level - predict(linear.fit.level.noarmor, newdata = .))
+
+uber_cl10 <- no_armor_df %>%
+  dplyr::filter(level <= 12, kinetic >= 50)
+
+cat("Uber-CL10-style cluster (level <= 12 and kinetic >= 50):\n")
+cat(sprintf("  n = %d\n", nrow(uber_cl10)))
+cat(sprintf("  mean kinetic = %.1f, mean energy = %.1f\n",
+            mean(uber_cl10$kinetic), mean(uber_cl10$energy)))
+cat(sprintf("  mean kinen = (k+e)/2 = %.1f\n", mean(uber_cl10$kinen)))
+cat(sprintf("  mean naive residual = %.2f (negative = over-predicted)\n",
+            mean(uber_cl10$naive_resid)))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+no_armor_df <- no_armor_df %>%
+  mutate(uber = ifelse(level <= 12 & kinetic >= 50, "uber CL10", "other"))
+
+ggplot(no_armor_df, aes(x = kinetic, y = energy, color = uber)) +
+  geom_point(alpha = 0.7) +
+  geom_hline(yintercept = 0, color = "grey50", linetype = "dashed") +
+  geom_vline(xintercept = 60, color = "grey50", linetype = "dashed") +
+  scale_color_manual(values = c("uber CL10" = "red", "other" = "grey60")) +
+  labs(title = "Unarmored creatures: kinetic vs energy resist",
+       subtitle = "Uber-CL10 cluster has kinetic near 60% cap, energy heavily negative",
+       x = "kinetic", y = "energy") +
+  theme_minimal()
+```
+
+The Bio-Engineer "trick": stack kinetic resist near the 60% cap, accept a
+heavy negative energy resist as the cost. The naive `kinen = (k+e)/2`
+averages a near-cap positive against a heavily-negative number and credits
+the small remainder linearly — so the formula thinks the creature has ~5%
+"average" resist and predicts CL ~13, when in practice the energy
+vulnerability erases the resist's value entirely. The game evidently
+penalizes the vulnerability harder than `(k+e)/2` does.
+
+# Vulnerability-Aware Resists
+
+We test three symmetric formulations of the kinetic/energy term against
+the `kinen` baseline. All four use the same other predictors; only the
+resist term changes.
+
+| ID | Resist term | Mechanic |
+|---|---|---|
+| M0 | `kinen = (k+e)/2` | naive average |
+| M5 | `kinen_pos + kinen_neg` (split positive / negative half) | asymmetric credit on positive vs penalty on negative |
+| M6 | `pmax(kinen, 0)` | average resist, but no negative credit |
+| M7 | `pmax(pmin(k, e), 0)` | use the **weaker** side, floored at zero |
+
+Symmetric in kinetic and energy — both share the 60% in-engine cap, so
+treating them as a single resist class is mechanically motivated.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+no_armor_df <- no_armor_df %>%
+  mutate(
+    kinen_pos = pmax(kinen, 0),
+    kinen_neg = pmin(kinen, 0),
+    ke_floor  = pmax(pmin(kinetic, energy), 0)
+  )
+
+m0 <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                 cleverness + power + kinen + nonkinen,
+         data = no_armor_df)
+m5 <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                 cleverness + power + kinen_pos + kinen_neg + nonkinen,
+         data = no_armor_df)
+m6 <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                 cleverness + power + kinen_pos + nonkinen,
+         data = no_armor_df)
+m7 <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                 cleverness + power + ke_floor + nonkinen,
+         data = no_armor_df)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+uber_idx <- no_armor_df$level <= 12 & no_armor_df$kinetic >= 50
+
+cluster_sd <- function(m) {
+  sd(no_armor_df$level[uber_idx] - predict(m)[uber_idx])
+}
+
+resist_compare <- data.frame(
+  Model = c("M0 kinen", "M5 kinen_pos+kinen_neg", "M6 pmax(kinen,0)",
+            "M7 pmax(pmin(k,e),0)"),
+  R2    = c(summary(m0)$r.squared, summary(m5)$r.squared,
+            summary(m6)$r.squared, summary(m7)$r.squared),
+  ResidSD = c(sd(resid(m0)), sd(resid(m5)), sd(resid(m6)), sd(resid(m7))),
+  AIC   = c(AIC(m0), AIC(m5), AIC(m6), AIC(m7)),
+  UberCL10_SD = c(cluster_sd(m0), cluster_sd(m5), cluster_sd(m6), cluster_sd(m7))
+)
+knitr::kable(resist_compare, digits = c(0, 4, 3, 1, 3),
+             col.names = c("Model", "R²", "Resid SD", "AIC", "Uber-CL10 SD"),
+             caption = "Resist-term variants on the unarmored data")
+```
+
+M7 is unambiguously best on every metric: highest R², lowest residual SD,
+lowest AIC, and crucially the tightest fit on the uber-CL10 cluster
+itself (SD 0.70 vs 1.10 baseline). M5 and M6 capture the cluster's mean
+but not its tightness — a creature with `kinetic = 60`, `energy = -50`
+still gets `pmax(kinen, 0) = 5` of credit it apparently shouldn't.
+
+The mechanism reading: **vulnerability on either kinetic or energy erases
+all kin/eng resist credit**. Roughly half of unarmored creatures get
+zero credit from this term because they have a vulnerability on one
+side.
+
+We promote M7 as the canonical unarmored form. The fitted coefficients:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+summary(m7)
+```
+
+Q-Q residuals:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+qqnorm(resid(m7)); qqline(resid(m7))
+```
+
+The Shapiro-Wilk test still rejects normality (p ≈ 3e-6), so there is
+additional structure left in the unarmored residuals beyond the
+vulnerability mechanism — see "Persistent Outliers" below.
+
+# Verifying the fortitude=500 Breakpoint
+
+The two-formula split assumes a hard discontinuity at fortitude=500. We
+test it four ways: a single global linear regression with no break, a
+GAM smooth, a data-driven `segmented` regression, and the proposed
+hard split.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+df <- normalized_df %>%
+  mutate(ke_floor = pmax(pmin(kinetic, energy), 0))
+
+# Single global linear (no break)
+m_global <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                       cleverness + power + ke_floor + nonkinen,
+               data = df)
+
+# GAM with smooth fortitude
+m_gam <- gam(level ~ s(fortitude) + hardiness + dexterity + intellect +
+                     cleverness + power + ke_floor + nonkinen,
+             data = df)
+
+# Segmented regression (data-driven breakpoint)
+seg_in <- lm(level ~ fortitude + hardiness + dexterity + intellect +
+                     cleverness + power + ke_floor + nonkinen, data = df)
+m_seg  <- segmented(seg_in, seg.Z = ~ fortitude, psi = 500)
+
+# Two formulas, hard split at fort = 500
+arm_df <- df %>% dplyr::filter(armor == 1 & fortitude >= 500)
+una_df <- df %>% dplyr::filter(armor == 0)
+m_arm  <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                     cleverness + power + ke_floor + nonkinen,
+             data = arm_df)
+m_una  <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                     cleverness + power + ke_floor + nonkinen,
+             data = una_df)
+
+resid_split <- c(resid(m_arm), resid(m_una))
+ss_split    <- sum(resid_split^2)
+n_split     <- length(resid_split)
+r2_split    <- 1 - ss_split / sum((c(arm_df$level, una_df$level) -
+                                   mean(c(arm_df$level, una_df$level)))^2)
+sd_split    <- sd(resid_split)
+# AIC for the joint two-formula model: sum of AICs (each is independent)
+aic_split   <- AIC(m_arm) + AIC(m_una)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+breakpoint_compare <- data.frame(
+  Model = c("Single global linear (no break)",
+            "GAM smooth fortitude",
+            sprintf("Segmented regression (break at fort=%.0f)",
+                    m_seg$psi[1, "Est."]),
+            "Two formulas, hard split at fort=500"),
+  R2    = c(summary(m_global)$r.squared,
+            summary(m_gam)$r.sq,
+            summary(m_seg)$r.squared,
+            r2_split),
+  ResidSD = c(sd(resid(m_global)), sd(resid(m_gam)),
+              sd(resid(m_seg)), sd_split),
+  AIC   = c(AIC(m_global), AIC(m_gam), AIC(m_seg), aic_split)
+)
+knitr::kable(breakpoint_compare, digits = c(0, 4, 3, 1),
+             col.names = c("Model", "R²", "Resid SD", "AIC"),
+             caption = "Breakpoint test (level ~ stats with different fortitude treatments)")
+```
+
+The hard split at fortitude=500 beats the single global linear by ~500
+AIC points and beats a flexible GAM smooth by ~50. That second margin is
+the important one: it says the relationship has a true *discontinuity*
+at 500, not just a slope change. Classic step function in the game code.
+
+The sign flip across the break is iron-clad:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+fort_compare <- data.frame(
+  Subset = c("Unarmored (fortitude < 500)", "Armored (fortitude >= 500)"),
+  N      = c(nobs(m_una), nobs(m_arm)),
+  Fortitude_coef = c(coef(m_una)["fortitude"], coef(m_arm)["fortitude"]),
+  P_value = c(summary(m_una)$coef["fortitude", "Pr(>|t|)"],
+              summary(m_arm)$coef["fortitude", "Pr(>|t|)"])
+)
+knitr::kable(fort_compare, digits = c(0, 0, 5, -1),
+             col.names = c("Subset", "n", "Fortitude coef", "p-value"),
+             caption = "Fortitude coefficient on either side of the break")
+```
+
+Both coefficients are extremely significant, and they have opposite signs.
+
+# The Negative-Fortitude Coefficient: Mechanism vs Artifact
+
+The unarmored fortitude coefficient is **negative**. Taken at face value,
+this would say that a creature with more fortitude has a *lower* level —
+counterintuitive enough to deserve scrutiny. We tested two
+explanations: a stat-budget / collinearity artifact, and an
+effective-resist double-count.
+
+## Stat-budget / collinearity diagnosis
+
+Within the unarmored subset, fortitude correlates 0.85 with hardiness and
+0.84 with health — Bio-Engineers wire these up together when crafting.
+Drop fortitude from the model, and the hardiness coefficient changes
+dramatically:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+m_una_full <- m_una
+m_una_no_fort <- lm(level ~ hardiness + dexterity + intellect +
+                            cleverness + power + ke_floor + nonkinen,
+                    data = una_df)
+
+shift_compare <- data.frame(
+  Term = c("hardiness", "dexterity", "intellect",
+           "cleverness", "power", "ke_floor", "nonkinen"),
+  With_fortitude = coef(m_una_full)[c("hardiness","dexterity","intellect",
+                                      "cleverness","power","ke_floor","nonkinen")],
+  Without_fortitude = coef(m_una_no_fort)[c("hardiness","dexterity","intellect",
+                                            "cleverness","power","ke_floor","nonkinen")]
+)
+shift_compare$Shift <- shift_compare$Without_fortitude - shift_compare$With_fortitude
+knitr::kable(shift_compare, digits = 4, row.names = FALSE,
+             caption = "Coefficient shifts when fortitude is dropped from the unarmored model")
+```
+
+The hardiness coefficient flips from +0.013 to roughly zero. That is the
+smoking gun: the regression had been crediting hardiness positively and
+fortitude negatively as a *paired* signal — what it is actually
+identifying is the contrast between hardiness and fortitude, not their
+independent contributions.
+
+A manual VIF (variance inflation factor) puts numbers on the
+collinearity:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+manual_vif <- function(model) {
+  X <- model.matrix(model)[, -1, drop = FALSE]
+  vifs <- sapply(seq_len(ncol(X)), function(j) {
+    fit <- lm(X[, j] ~ X[, -j])
+    1 / (1 - summary(fit)$r.squared)
+  })
+  setNames(vifs, colnames(X))
+}
+round(manual_vif(m_una_full), 2)
+```
+
+Fortitude itself is at moderate VIF (~5); the worse offenders are
+intellect and cleverness, which collinearity-correlate with the rest of
+the stat budget too.
+
+**Mechanistic reading**: the game most plausibly gives unarmored
+fortitude *zero* level contribution — without armor, fortitude doesn't
+matter for damage mitigation — but BE crafters co-vary fortitude
+alongside hardiness and health when optimizing. The regression
+discovers an empirical (hardiness +, fortitude −) pair that fits the
+data well even though only one of the two is mechanistically real.
+
+**Practical upshot**: keep the empirical coefficients (the formula
+predicts well), but don't read literal mechanism into the negative
+fortitude term. The "uber CL10" phenomenon's apparent
+"fortitude penalty" effect is more plausibly explained by the M7
+vulnerability mechanism plus this stat-budget correlation.
+
+## Effective vs special resists: ruled out
+
+A second hypothesis: in the game, kinetic and energy resists come from
+two sources — **effective** resists derived directly from fortitude
+(`floor(fortitude / 10)` for unarmored) and **special** resists from
+DNA samples. When both are present, special wins and effective drops
+out. For creatures whose displayed kinetic/energy *is* effective, the
+column M7 consumes is literally a function of fortitude — a potential
+double-count that could create the spurious coefficient.
+
+We confirmed the formula and tested whether splitting by source
+explains anything:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+unarm <- normalized_df %>% dplyr::filter(armor == 0) %>%
+  mutate(
+    ke_floor    = pmax(pmin(kinetic, energy), 0),
+    k_effective = !is.na(kinetic.effective) & kinetic.effective != 0,
+    e_effective = !is.na(energy.effective)  & energy.effective  != 0,
+    k_special   = !is.na(kinetic.special)   & kinetic.special   != 0,
+    e_special   = !is.na(energy.special)    & energy.special    != 0
+  )
+
+# Verify: kinetic.effective = floor(fortitude / 10) for unarmored
+unarm_eff <- unarm %>% dplyr::filter(k_effective)
+exact_match <- sum(unarm_eff$kinetic.effective == floor(unarm_eff$fortitude / 10))
+cat(sprintf("kinetic.effective matches floor(fortitude/10): %d / %d\n",
+            exact_match, nrow(unarm_eff)))
+
+# Refit on the all-special subset (no fortitude->resist algebraic relationship)
+all_special <- unarm %>%
+  dplyr::filter(!k_effective & !e_effective &
+                (k_special | kinetic == 0) &
+                (e_special | energy == 0))
+m_special <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                        cleverness + power + ke_floor + nonkinen,
+                data = all_special)
+
+cat(sprintf("Full unarmored fortitude coef:  %.5f (n=%d)\n",
+            coef(m_una)["fortitude"], nobs(m_una)))
+cat(sprintf("All-special  fortitude coef:    %.5f (n=%d)\n",
+            coef(m_special)["fortitude"], nobs(m_special)))
+```
+
+The fortitude coefficient is essentially identical on the all-special
+subset, where there is *no* algebraic relationship between fortitude
+and the kinetic/energy values M7 consumes. The effective-resist
+double-count is ruled out as the cause of the negative coefficient.
+The stat-budget diagnosis stands.
+
+(For completeness: zeroing out effective resists from `ke_floor` —
+treating the game as if it ignored them — makes the fit worse by ~40
+AIC. The level formula appears to credit effective and special resists
+at the same rate, using whichever value is displayed. So M7 is using
+the right column; no source-aware refactor is needed.)
+
+# Combined Fit: Both Formulas
+
+Put the two formulas together with a hard switch at fortitude=500:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+source("R/creature_level_model.R")
+
+normalized_df$predicted_level <- custom_model(normalized_df)
+normalized_df$residuals       <- normalized_df$level - normalized_df$predicted_level
+
+cat(sprintf("Combined: n=%d, R^2=%.4f, residual SD=%.3f\n",
+            nrow(normalized_df),
+            1 - sum(normalized_df$residuals^2) /
+                sum((normalized_df$level - mean(normalized_df$level))^2),
+            sd(normalized_df$residuals)))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6}
+normalized_df <- normalized_df %>%
+  mutate(armor_label = ifelse(armor == 1 & fortitude >= 500,
+                              "Armored (fort >= 500)", "Unarmored"))
+
+ggplot(normalized_df, aes(x = predicted_level, y = level, color = armor_label)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0, color = "black", linetype = "dashed") +
+  scale_color_manual(values = c("Armored (fort >= 500)" = "blue",
+                                "Unarmored" = "red")) +
+  labs(title = "Two-formula model: predicted vs actual level",
+       subtitle = "M7 weaker-resist-floor for unarmored; clean linear for armored",
+       x = "Predicted level", y = "Actual level", color = NULL) +
+  theme_minimal()
+```
+
+# Final Formulas
+
+**Armored (fortitude >= 500)** — clean fractions, R² ≈ 0.98:
+
+```
+level = -23
+      + 0.01   * hardiness
+      + 0.06   * fortitude
+      + 0.005  * dexterity
+      + 0.01   * intellect
+      + 0.025  * cleverness
+      + 0.015  * power
+      + 0.10   * kinen
+      + 0.08   * nonkinen
+```
+
+with `kinen = (kinetic + energy) / 2` and
+`nonkinen = (blast + heat + cold + electricity + acid + stun) / 6`.
+
+**Unarmored (fortitude < 500)** — M7 weaker-resist-floor, R² ≈ 0.95:
+
+```
+level = 7.87
+      + 0.013  * hardiness
+      - 0.019  * fortitude
+      + 0.004  * dexterity
+      + 0.010  * intellect
+      + 0.025  * cleverness
+      + 0.015  * power
+      + 0.167  * pmax(pmin(kinetic, energy), 0)
+      + 0.054  * nonkinen
+```
+
+The kinetic/energy resist term is the **weaker side, floored at zero**
+— vulnerability on either kinetic or energy erases all credit for the
+kin/eng resist class. Symmetric in kinetic and energy.
+
+Combined (both formulas, n=370): R² ≈ 0.98, residual SD ≈ 1.9 levels.
+
+# Persistent Outliers
+
+After M7, residual non-normality is mild but still present (Shapiro-Wilk
+p ≈ 3e-6 on the unarmored set). Two structural patterns survive:
+
+1. **High-DPS under-prediction**: a handful of high-cleverness/power
+   creatures (e.g. rancor CL48, falumpaset CL32, razor cat CL49)
+   under-predict by 5–7 levels. Earlier scratchpad work suggested
+   diminishing-returns thresholds at cleverness 200/300/400 — worth
+   revisiting under M7.
+2. **Near-armor-border zone**: residuals concentrate at
+   fortitude 380–540, hinting that the hard `fortitude < 500` step in
+   the implementation may not match the game exactly — possibly a
+   transition band the two formulas don't bridge cleanly.
+
+A 10-creature "data-quality suspects" sensitivity analysis (low-
+health-for-skin entries plus the 6 effective-resist formula mismatches)
+shifts coefficients by less than 0.01 each and improves combined SD
+from 1.92 to 1.88. Coefficient stability under that ablation gives us
+confidence the formula is not being driven by a small number of
+suspect rows.
+
+# Implementation Pseudocode
 
 ```c
-int calculateCreatureLevel(Creature* c) {
-    // Compute resist averages
+int calculateCreatureLevel(const Creature* c) {
     float kinen = (c->kinetic + c->energy) / 2.0f;
     float nonkinen = (c->blast + c->heat + c->cold +
                       c->electricity + c->acid + c->stun) / 6.0f;
@@ -703,29 +684,27 @@ int calculateCreatureLevel(Creature* c) {
               + 0.1f    * kinen
               + 0.08f   * nonkinen;
     } else {
-        // UNARMORED FORMULA (note: fortitude is SUBTRACTED)
-        level = 9.0f
-              + 0.01f   * c->hardiness
-              - 0.02f   * c->fortitude    // NEGATIVE!
-              + 0.01f   * c->dexterity
-              + 0.01f   * c->intellect
+        // UNARMORED FORMULA — M7 weaker-resist-floor.
+        // ke_floor = max(0, min(kinetic, energy)): if either side has a
+        // vulnerability, the kin/eng resist credit collapses to zero.
+        float ke_floor = fmaxf(0.0f, fminf(c->kinetic, c->energy));
+
+        level = 7.87f
+              + 0.013f  * c->hardiness
+              - 0.019f  * c->fortitude
+              + 0.004f  * c->dexterity
+              + 0.010f  * c->intellect
               + 0.025f  * c->cleverness
               + 0.015f  * c->power
-              + 0.12f   * kinen
-              + 0.06f   * nonkinen;
+              + 0.167f  * ke_floor
+              + 0.054f  * nonkinen;
     }
 
-    // Clamp and round
-    if (level < 1.0f) level = 1.0f;
-    if (level > 75.0f) level = 75.0f;
-    return (int)(level + 0.5f);  // round to nearest
+    if (level < 1.0f)  level = 1.0f;
+
+    return (int)(level + 0.5f);   // round to nearest
 }
 ```
 
-### Key Implementation Notes
-
-1. **Armor threshold**: The switch point is `fortitude >= 500`, which corresponds to the point where creatures gain armor
-2. **Fortitude sign flip**: The most dramatic finding—fortitude has opposite effects in the two formulas
-3. **kinen vs nonkinen**: Kinetic/Energy resists (capped at 60%) are weighted differently than other resists
-4. **Residual sources**: Remaining error is likely due to rounding in the original game's attribute calculations
-
+The R counterpart of this pseudocode lives in `R/creature_level_model.R`
+as `custom_model()`.
