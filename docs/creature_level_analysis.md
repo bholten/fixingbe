@@ -670,17 +670,56 @@ Based on regression with skin fixed effects (relative to bantha baseline):
 
 ## Future Work
 
-1. **Near-armor border zone**: The remaining unarmored over-predictions cluster at fortitude 380-499, and the armored over-predictions cluster at fortitude 500-540. The hard `fortitude < 500` step in `custom_model` may not match the game — likely a transition band the two formulas don't handle cleanly.
+### Settled (don't relitigate)
 
-2. **Low-stat negative cluster (Phase 10)**: Investigate as a separate mechanism. Likely a HAM-floor or skin-tier effect; the M7 fix doesn't help here. Several entries (e.g. `qkuvjn3m` bantha CL7 with health 875, `pumhbd0k` cu_pa CL13 with health 2473) look like furrycat data-entry issues — worth flagging as suspect rather than chasing.
+- **The two-formula structure** at fortitude=500 is confirmed (Phase 11) and the discontinuity is too sharp for a smooth transition (split beats GAM smooth by ~50 AIC).
+- **M7 weaker-resist-floor** is the canonical unarmored resist term (Phase 9). Vulnerability on either kinetic or energy erases all kin/eng resist credit.
+- **The negative unarmored fortitude coefficient is signal, not artifact** (Phase 14). Ridge / elastic-net / lasso under cross-validation all preserve it; lasso never zeroes it out. Hardiness is the more fragile coefficient of the collinear pair.
+- **Most plausible mechanism** for the negative coefficient: a deliberate balance lever introduced during the post-launch creature rebalance (when pre-launch medium-armor pets were stripped), to prevent heavy-resist unarmored pets from dominating the tameable mid-CL bracket. The structure is too clean and the magnitude too "designed" to be accidental. The data alone cannot prove this over "real game-formula term," but the SWGEmu re-implementation should keep the empirical coefficient either way.
 
-3. **High-DPS under-prediction**: A handful of high-cleverness/power creatures (`6j048r2a` rancor CL48 +7.0, `01oatm1v` falumpaset CL32 +5.9, `pdefjush` razor_cat CL49 +5.4) remain under-predicted by M7. Earlier scratchpad work in `R/investigate_low_stat_outliers.R` suggested diminishing-returns thresholds at cleverness 200/300/400 — worth revisiting under M7.
+### Next-session priorities
 
-4. **Cross-validate with other data sources**: If additional historical data exists, test formula generalization.
+**Priority 1: High-DPS under-prediction (apex creatures)**
 
-5. **Minimum CL by skin**: Consider adding floor constraints (e.g., rancor minimum CL 35).
+A handful of high-cleverness/power creatures remain under-predicted by M7:
 
-6. **Template quality effects**: The historical guide mentions template quality affecting outcomes.
+| Serial | Skin | Level | M7 prediction | Residual |
+|---|---|---|---|---|
+| `6j048r2a` | rancor | 48 | ~41 | +7.0 |
+| `01oatm1v` | falumpaset | 32 | ~26 | +5.9 |
+| `pdefjush` | razor_cat | 49 | ~44 | +5.4 |
+
+These are the apex of the CL distribution, and the formula systematically misses them. Earlier scratchpad work (`R/investigate_low_stat_outliers.R`, Phase 6) suggested cleverness threshold effects at 200/300/400 with magnitudes +0.88 / +1.59 / +2.06 levels respectively, but those tests were under the old `kinen` baseline. Worth re-running under M7.
+
+Specific next steps:
+1. Add `pmax(cleverness - 200, 0)`, `pmax(cleverness - 300, 0)`, `pmax(cleverness - 400, 0)` as additional terms; test individually and jointly.
+2. Test multiplicative DPS terms: `damage * speed * to_hit` (already `dps` in `data.R`), or `cleverness * power` interaction.
+3. Test whether the under-prediction is *skin-specific* — if rancor and falumpaset always under-predict regardless of cleverness, it may be a skin-tier effect (cf. existing skin-adjustments table) rather than a non-linearity.
+
+If players currently feel SWGEmu's apex CL pets are mis-leveled, this is the regime to fix.
+
+**Priority 2: Near-armor-border zone (fortitude 380–540)**
+
+Both formulas fit worst in this band:
+- Unarmored creatures with fortitude 380–499 over-predict
+- Armored creatures with fortitude 500–540 under-predict
+
+The hard step in `custom_model` may be hiding a transition mechanic. Possibilities:
+- **Partial / light-armor mechanic** — pre-launch pets had medium armor; perhaps a vestigial "light armor" formula exists for fort 500–540 that's neither the unarmored nor full-armored formula.
+- **Skin-specific armor floor** — armor unlock might depend on skin × fortitude, not fortitude alone.
+- **Smooth transition band** — the game might blend the two formulas over fort 450–550 rather than switching hard at 500.
+
+Specific next steps:
+1. Refit a piecewise model with three segments: fort < 450, 450 ≤ fort < 540, fort ≥ 540. Compare AIC vs the current two-formula model.
+2. Look at residuals in the 380–540 band stratified by skin — does the misprediction concentrate in particular skins?
+3. Check whether any creatures in `combined_data` have an `armor` flag set but fortitude < 500, or vice versa. The armor flag in `creatures.csv` should be the ground truth on which formula to use; if it disagrees with the fort=500 split, that's the answer.
+
+### Longer-term ideas
+
+- **Low-stat negative cluster (Phase 10)**: Investigate as a separate mechanism. Likely a HAM-floor or skin-tier effect; the M7 fix doesn't help here. Several entries (e.g. `qkuvjn3m` bantha CL7 with health 875, `pumhbd0k` cu_pa CL13 with health 2473) look like furrycat data-entry issues — worth flagging as suspect rather than chasing.
+- **Cross-validate with other data sources**: If additional historical data exists, test formula generalization.
+- **Minimum CL by skin**: Consider adding floor constraints (e.g., rancor minimum CL 35).
+- **Template quality effects**: The historical guide mentions template quality affecting outcomes.
 
 ---
 
