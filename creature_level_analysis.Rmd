@@ -24,13 +24,21 @@ could tame the pet and how powerful it was. The 2003 BE Guide noted that CL
 algorithm was never published.
 
 This document reverse-engineers that algorithm from the Furrycat archive.
-The headline finding: **the game uses two completely different formulas**,
-selected by whether the creature has armor (`fortitude >= 500`). Both
-formulas are linear in the creature's attributes, but one of them — the
-unarmored formula — needs a vulnerability-aware resist term to fit the data
-well.
+The headline findings:
 
-The dataset, after filtering, has 370 creatures: 79 armored, 291 unarmored.
+1. **The game uses two completely different formulas**, selected by whether
+   the creature has armor. The split lives at template `fortitude >= 500`
+   (which agrees with the actual `armor` flag on 99.6% of creatures).
+2. The unarmored formula needs a **vulnerability-aware resist term**
+   (the weaker of kinetic/energy, floored at zero).
+3. The unarmored formula also needs a **cleverness hinge at K=400** to
+   capture how apex-DPS pets scale at the top of the level distribution.
+   This term is structurally specific to the unarmored regime — fitting the
+   same hinge to the armored set yields a coefficient indistinguishable from
+   zero.
+
+Combined, the two formulas reach R² ≈ 0.96 and SD ≈ 1.7 on 370 creatures
+(79 armored, 291 unarmored).
 
 # An Initial GAM
 
@@ -783,7 +791,7 @@ ggplot(normalized_df, aes(x = predicted_level, y = level, color = armor_label)) 
   scale_color_manual(values = c("Armored (fort >= 500)" = "blue",
                                 "Unarmored" = "red")) +
   labs(title = "Two-formula model: predicted vs actual level",
-       subtitle = "M7 weaker-resist-floor for unarmored; clean linear for armored",
+       subtitle = "M8 (resist-floor + cleverness hinge) for unarmored; clean linear for armored",
        x = "Predicted level", y = "Actual level", color = NULL) +
   theme_minimal()
 ```
@@ -807,47 +815,337 @@ level = -23
 with `kinen = (kinetic + energy) / 2` and
 `nonkinen = (blast + heat + cold + electricity + acid + stun) / 6`.
 
-**Unarmored (fortitude < 500)** — M7 weaker-resist-floor, R² ≈ 0.95:
+**Unarmored (fortitude < 500)** — M8 with cleverness hinge, R² ≈ 0.96:
 
 ```
-level = 7.87
-      + 0.013  * hardiness
+level = 8.13
+      + 0.012  * hardiness
       - 0.019  * fortitude
       + 0.004  * dexterity
-      + 0.010  * intellect
-      + 0.025  * cleverness
-      + 0.015  * power
-      + 0.167  * pmax(pmin(kinetic, energy), 0)
-      + 0.054  * nonkinen
+      + 0.011  * intellect
+      + 0.020  * cleverness
+      + 0.016  * power
+      + 0.170  * pmax(pmin(kinetic, energy), 0)
+      + 0.050  * nonkinen
+      + 0.106  * pmax(cleverness - 400, 0)
 ```
 
-The kinetic/energy resist term is the **weaker side, floored at zero**
-— vulnerability on either kinetic or energy erases all credit for the
-kin/eng resist class. Symmetric in kinetic and energy.
+Two structural features beyond the linear baseline:
 
-Combined (both formulas, n=370): R² ≈ 0.98, residual SD ≈ 1.9 levels.
+- The kinetic/energy resist term is the **weaker side, floored at zero**
+  — vulnerability on either kinetic or energy erases all credit for the
+  kin/eng resist class. Symmetric in kinetic and energy.
+- A **cleverness hinge at K=400**: above clev=400 the effective slope
+  becomes 0.020 + 0.106 = 0.126 (about 6× the linear-regime slope).
+  Apex DPS pets gain CL much faster per cleverness point.
 
-# Persistent Outliers
+Combined (both formulas, n=370): R² ≈ 0.96, residual SD ≈ 1.7 levels.
 
-After M7, residual non-normality is mild but still present (Shapiro-Wilk
-p ≈ 3e-6 on the unarmored set). Two structural patterns survive:
+# Phase 15: High-DPS Under-Prediction — A Cleverness Hinge at 400
 
-1. **High-DPS under-prediction**: a handful of high-cleverness/power
-   creatures (e.g. rancor CL48, falumpaset CL32, razor cat CL49)
-   under-predict by 5–7 levels. Earlier scratchpad work suggested
-   diminishing-returns thresholds at cleverness 200/300/400 — worth
-   revisiting under M7.
-2. **Near-armor-border zone**: residuals concentrate at
-   fortitude 380–540, hinting that the hard `fortitude < 500` step in
-   the implementation may not match the game exactly — possibly a
-   transition band the two formulas don't bridge cleanly.
+Three creatures resisted M7 stubbornly: rancor `6j048r2a` (CL48,
+residual +8.16), razor cat `pdefjush` (CL49, +5.40), and a sibling
+rancor `0iafqb8b` (CL48, +5.10). All three sit at the apex of the
+unarmored CL distribution, with cleverness above 400. M7's linear
+cleverness term (coef ~0.025) wasn't enough to lift them.
+
+Scan for a single hinge `pmax(cleverness − K, 0)` over K ∈ [100, 500]:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+no_armor_df <- normalized_df %>% dplyr::filter(armor == 0)
+no_armor_df$ke_floor <- pmax(pmin(no_armor_df$kinetic, no_armor_df$energy), 0)
+no_armor_df$nk       <- (no_armor_df$blast + no_armor_df$heat +
+                          no_armor_df$cold + no_armor_df$electricity +
+                          no_armor_df$acid + no_armor_df$stun) / 6
+
+m7_form <- level ~ hardiness + fortitude + dexterity + intellect +
+                   cleverness + power + ke_floor + nk
+fit_m7  <- lm(m7_form, data = no_armor_df)
+
+knot_scan <- data.frame(K = seq(200, 475, by = 25))
+knot_scan$dAIC <- sapply(knot_scan$K, function(K) {
+  no_armor_df$.h <- pmax(no_armor_df$cleverness - K, 0)
+  fit <- update(fit_m7, ~ . + .h, data = no_armor_df)
+  AIC(fit_m7) - AIC(fit)
+})
+knot_scan$coef <- sapply(knot_scan$K, function(K) {
+  no_armor_df$.h <- pmax(no_armor_df$cleverness - K, 0)
+  coef(update(fit_m7, ~ . + .h, data = no_armor_df))[".h"]
+})
+print(knot_scan)
+```
+
+The dAIC plateau is wide (K=300..425 all give roughly equivalent fit),
+with an in-sample peak at K=425 (dAIC ≈ +43, coefficient ≈ 0.18).
+That's the headline result — a cleverness hinge worth ~+40 AIC over M7.
+
+## Cross-validation and sanity check
+
+The optimal K is loose because only ~10 creatures sit above clev=400.
+We need to verify the hinge isn't an artifact of a single creature.
+
+**10-fold CV** (50 reps; full code in `R/cv_cleverness_hinge.R`):
+M7 baseline CV-RMSE is 1.929; the hinge family beats it by 0.09–0.14
+RMSE for any K in [200, 425]. Best K=425 gives CV-RMSE 1.788 — about
+50× the standard error. Out-of-sample improvement is unambiguous.
+
+**Leave-one-out on the top-cleverness creatures**: removing rancor
+`6j048r2a` shifts the in-sample best K from 425 → 275 and the
+coefficient from 0.176 → 0.028. That single creature is the anchor
+for K=425. K=400, however, retains 88% of its coefficient when
+`6j048r2a` is removed (0.106 → 0.093), and 86% when all three rancors
+are removed.
+
+**Bootstrap of the K=400 coefficient** (200 reps): median 0.105, 95% CI
+[0.057, 0.129] — well clear of zero and stable.
+
+**Raw-HTML check on `6j048r2a`**: level=48 is correct, template stats
+(clev=476, power=338) are internally consistent with the recorded
+samples, and no plausible single-digit typo on level / cleverness /
+power makes the residual go away while remaining physically craftable.
+
+## Decision: M8 = M7 + the K=400 cleverness hinge
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+no_armor_df$clev_h400 <- pmax(no_armor_df$cleverness - 400, 0)
+fit_m8 <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                     cleverness + power + ke_floor + nk + clev_h400,
+             data = no_armor_df)
+cat(sprintf("M8 unarmored: R^2=%.4f  SD=%.4f  AIC=%.2f\n",
+            summary(fit_m8)$r.squared, sd(resid(fit_m8)), AIC(fit_m8)))
+print(round(coef(fit_m8), 5))
+```
+
+Effective slope above clev 400 is 0.020 + 0.106 = 0.126 — apex pets
+gain CL more aggressively per cleverness point than mid-tier ones.
+
+K=400 is chosen over the in-sample optimum K=425 because (a) it survives
+single-point removal, (b) it has a tight bootstrap CI, and (c) it's a
+plausible game-design round number. Promoting K=425 would have meant
+banking on `6j048r2a`.
+
+A nice side-effect: the **rancor "+5 skin adjustment"** that earlier
+phases needed turns out to be a high-cleverness artifact. Mean rancor
+residual under M7 was +5.25; under M8 it is +1.48. The rancor row in
+the skin-adjustments table is retired.
+
+# Phase 16: Is the Hinge Pervasive? Test on the Armored Set
+
+If the cleverness hinge is a global game mechanic, the armored
+formula should benefit from the same term. The armored set has *more*
+high-cleverness creatures than unarmored (26 with clev ≥ 400 vs 10),
+so it's a fair test.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+arm_df <- normalized_df %>% dplyr::filter(armor == 1, fortitude >= 500)
+arm_form <- level ~ hardiness + fortitude + dexterity + intellect +
+                    cleverness + power +
+                    kinetic + energy +
+                    blast + heat + cold + electricity + acid + stun
+fit_arm <- lm(arm_form, data = arm_df)
+
+# Knot scan
+arm_scan <- data.frame(K = seq(200, 500, by = 50))
+arm_scan$dAIC <- sapply(arm_scan$K, function(K) {
+  arm_df$.h <- pmax(arm_df$cleverness - K, 0)
+  AIC(fit_arm) - AIC(update(fit_arm, ~ . + .h, data = arm_df))
+})
+arm_scan$coef <- sapply(arm_scan$K, function(K) {
+  arm_df$.h <- pmax(arm_df$cleverness - K, 0)
+  coef(update(fit_arm, ~ . + .h, data = arm_df))[".h"]
+})
+print(arm_scan)
+```
+
+The armored knot scan goes the wrong way. The in-sample best is K=100
+with a tiny dAIC of about +11 (vs +43 for unarmored), and the dAIC
+declines monotonically as K rises — already negative by K=400.
+
+A free-coefficient hinge at K=400 has coef ≈ 0.005 (1/20 of the
+unarmored coefficient), ANOVA p ≈ 0.39, and a bootstrap 95% CI of
+roughly [−0.009, 0.018] — zero sits comfortably inside it. Forcing
+the unarmored coefficient (0.106) onto the armored formula collapses
+its R² from 0.987 to 0.925.
+
+Conclusion: **the cleverness hinge is structurally unarmored-specific.**
+It's not a stat-driven scaling that would surface anywhere cleverness
+gets high. This parallels the negative-fortitude finding — both are
+unique to the unarmored regime, consistent with the "armor pays for
+itself" interpretation. Armored creatures already pick up CL from
+fortitude (+0.06) and the steeper kinetic/energy terms; they don't
+need the hinge. Unarmored apex pets, lacking that armor-derived
+credit, get it back through the cleverness hinge.
+
+Full code in `R/test_hinge_on_armored.R`.
+
+# Phase 17: Remaining Anomalies and a Broader Hypothesis
+
+Two falumpaset outliers survive M8 with large positive residuals:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+no_armor_df$pred_m8 <- predict(fit_m8)
+no_armor_df$resid_m8 <- no_armor_df$level - no_armor_df$pred_m8
+suspect <- no_armor_df %>%
+  dplyr::filter(serial %in% c("1lc95n55", "01oatm1v")) %>%
+  dplyr::select(serial, skin, level, hardiness, fortitude, cleverness,
+                power, pred_m8, resid_m8) %>%
+  dplyr::mutate(across(c(pred_m8, resid_m8), ~round(.x, 2)))
+print(as.data.frame(suspect))
+```
+
+Both have low cleverness (≈ 192) so the hinge can't help them. Raw
+HTML confirms the levels and template stats are internally consistent
+— no transcription error. Both share an unusual attack profile
+("Dizzy/Strong poison/Ranged") that the other 8 falumpasets don't
+have, and across the unarmored set sa2=`strong_poison` does have a
+mean residual of +1.09. But this signal is almost certainly a confound:
+strong_poison comes mainly from the Aggression and Psychology
+sample-source slots in BE crafting, so the attack flag is a marker
+for template-source-slot composition (which the model doesn't use),
+not an attack-→-level mechanism.
+
+The more interesting observation is that these two falumpasets sit at
+the tail of a broader population pattern — high-hardiness, low-
+cleverness, CL30+ creatures that the linear model under-predicts:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+look_alikes <- no_armor_df %>%
+  dplyr::filter(cleverness >= 100, cleverness <= 300, hardiness >= 500) %>%
+  dplyr::arrange(desc(resid_m8)) %>%
+  dplyr::select(serial, skin, level, hardiness, cleverness, power,
+                pred_m8, resid_m8) %>%
+  dplyr::mutate(across(c(pred_m8, resid_m8), ~round(.x, 2)))
+head(as.data.frame(look_alikes), 6)
+```
+
+Quick scans suggest at least two more candidate hinges sitting in the
+M8 residuals:
+
+- **Hardiness hinge K≈400 with negative coefficient (~−0.011)**:
+  dAIC ≈ +10 over M8. Above hardiness 400, the linear hardiness
+  contribution is too generous; this would tame the over-predicted
+  low-clev/high-hardiness razor cats and gurrcats.
+- **HAM-average hinge K≈7000 with positive coefficient (~+0.001)**:
+  dAIC ≈ +15 over M8. Adds ~+0.6 to the falumpaset predictions.
+
+Neither is promoted. They're roughly 1/3 the size of the cleverness
+hinge effect, may overlap mechanistically (capturing one underlying
+mechanism, not multiple independent terms), and would need the same
+CV / sanity-check workflow before being trusted. The data is consistent
+with the game computing CL from stat *bands* plus piecewise structure
+rather than a single linear formula — the cleverness K=400 hinge is
+just the most identifiable slice because the dataset spans its knot
+evenly. Code in `R/investigate_falumpaset_anomalies.R`.
+
+# Phase 18: Near-Armor-Border Zone — Resolved Under M8
+
+Earlier phases noted that residuals seemed concentrated near the
+fortitude=500 boundary, suggesting a possible "light armor" middle
+regime. Three tests under M8:
+
+**Cutoff scan**: refit the partition for cutoffs T ∈ [440, 540].
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+df <- normalized_df %>%
+  dplyr::mutate(ke_floor = pmax(pmin(kinetic, energy), 0),
+                nk = (blast + heat + cold + electricity + acid + stun) / 6,
+                clev_h400 = pmax(cleverness - 400, 0))
+
+scan_cutoff <- function(T) {
+  un <- df %>% dplyr::filter(fortitude < T)
+  ar <- df %>% dplyr::filter(fortitude >= T)
+  if (nrow(un) < 50 || nrow(ar) < 30) return(NULL)
+  fit_u <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                       cleverness + power + ke_floor + nk + clev_h400,
+              data = un)
+  fit_a <- lm(level ~ hardiness + fortitude + dexterity + intellect +
+                       cleverness + power +
+                       kinetic + energy + blast + heat + cold +
+                       electricity + acid + stun, data = ar)
+  sse <- sum(resid(fit_u)^2) + sum(resid(fit_a)^2)
+  n <- nrow(un) + nrow(ar)
+  p <- length(coef(fit_u)) + length(coef(fit_a)) + 2
+  data.frame(T = T, n_un = nrow(un), n_ar = nrow(ar),
+             sd = sqrt(sse / n),
+             aic = n * log(sse/n) + 2 * p)
+}
+cutoff_scan <- do.call(rbind,
+  lapply(seq(460, 540, by = 10),
+         function(T) { r <- scan_cutoff(T); if (!is.null(r)) r else NULL }))
+cutoff_scan$dAIC <- min(cutoff_scan$aic) - cutoff_scan$aic
+print(cutoff_scan)
+```
+
+The fort=500 cutoff is a knife-edge optimum. Moving it 10 either way
+costs at least 11 AIC; raising it to 510 costs 142 AIC, to 520 costs
+~250. The asymmetry tells us the unarmored formula extrapolates roughly
+linearly into the boundary, but classifying a true-armored creature as
+unarmored blows up the prediction.
+
+**Three-segment piecewise** (low/mid/high with break at 450 and 540):
+worse than two-segment by ΔAIC ≈ −56. There is no "light armor middle
+regime" hiding in the data.
+
+**Boundary-band residuals**: under M8 the bands have slightly elevated
+SD (~2.0 vs 1.7 baseline) but no systematic bias. The original M7-era
+claim "the boundary fits worst" was an artifact of the high-DPS
+under-prediction sitting in this region; M8 incidentally fixed it.
+
+## A small discovery: armor flag vs fortitude
+
+Joining `creatures.csv` to `templates.csv` and cross-tabulating the
+`armor` flag (creature side) against `fortitude >= 500` (template
+side) on the *unfiltered* raw data:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+raw_creatures <- readr::read_csv("data/clean/furrycat/creatures.csv",
+                                 show_col_types = FALSE)
+raw_templates <- readr::read_csv("data/clean/furrycat/templates.csv",
+                                 show_col_types = FALSE)
+joined_raw <- raw_creatures %>%
+  dplyr::inner_join(raw_templates %>%
+                      dplyr::select(serial, fortitude),
+                    by = c("template_id" = "serial"))
+table(armor_flag = joined_raw$armor,
+      fort_ge_500 = joined_raw$fortitude >= 500)
+```
+
+Out of 461 raw creatures, only **2 disagreements** exist:
+`kjvtv7d7` (template fort=408 with "Light" armor specified, already
+filtered as bad data) and `3f0lpuko` (template fort=501 with "Light"
+armor specified, but the **creature output** has empty/vulnerable AR
+in the raw HTML). In both disagreements the unarmored M8 formula fits
+better than the armored formula — the creature output is the ground
+truth, and a BE template specifying armor doesn't guarantee the
+crafted output gets the AR slot.
+
+The principled splitter is therefore **`armor == 0` from the creature
+output, not `fortitude < 500` from the template**. Empirically the two
+rules disagree on a handful of creatures (one in our filtered set), so
+the in-sample fit is essentially identical. `custom_model` keeps the
+fortitude split for now; an SWGEmu re-implementation should branch on
+the actual creature armor state, which the engine knows directly.
+
+# Persistent Outliers After M8
+
+After M8, the unarmored set has SD ≈ 1.73. Most outliers are within
+the crafting-noise envelope. The structural ones that remain:
+
+- **Two falumpaset outliers** (`1lc95n55` CL30, `01oatm1v` CL32):
+  +8.76 / +5.43. Discussed in Phase 17 — likely the tail of the
+  high-hardiness / low-cleverness pattern.
+- **A small low-stat over-prediction cluster** (e.g. `dcnqk0gj`
+  razor_cat CL15 predicted ~20). Phase 10 candidate; possibly a HAM
+  floor effect or the same broader hinge structure suggested in
+  Phase 17.
+- **The two CL48 rancors land at the same observed level** despite
+  having different stats. Could be a per-skin floor effect; M8
+  predicts them at 46.3 and 48.5 so it doesn't break anything.
 
 A 10-creature "data-quality suspects" sensitivity analysis (low-
 health-for-skin entries plus the 6 effective-resist formula mismatches)
-shifts coefficients by less than 0.01 each and improves combined SD
-from 1.92 to 1.88. Coefficient stability under that ablation gives us
-confidence the formula is not being driven by a small number of
-suspect rows.
+shifts coefficients by less than 0.01 each. The formula is not being
+driven by a small number of suspect rows.
 
 # Implementation Pseudocode
 
@@ -871,20 +1169,23 @@ int calculateCreatureLevel(const Creature* c) {
               + 0.1f    * kinen
               + 0.08f   * nonkinen;
     } else {
-        // UNARMORED FORMULA — M7 weaker-resist-floor.
+        // UNARMORED FORMULA — M8 = M7 weaker-resist-floor + cleverness hinge.
         // ke_floor = max(0, min(kinetic, energy)): if either side has a
         // vulnerability, the kin/eng resist credit collapses to zero.
-        float ke_floor = fmaxf(0.0f, fminf(c->kinetic, c->energy));
+        // clev_hinge: above cleverness 400, level scales more aggressively.
+        float ke_floor   = fmaxf(0.0f, fminf(c->kinetic, c->energy));
+        float clev_hinge = fmaxf(0.0f, c->cleverness - 400.0f);
 
-        level = 7.87f
-              + 0.013f  * c->hardiness
+        level = 8.13f
+              + 0.012f  * c->hardiness
               - 0.019f  * c->fortitude
               + 0.004f  * c->dexterity
-              + 0.010f  * c->intellect
-              + 0.025f  * c->cleverness
-              + 0.015f  * c->power
-              + 0.167f  * ke_floor
-              + 0.054f  * nonkinen;
+              + 0.011f  * c->intellect
+              + 0.020f  * c->cleverness
+              + 0.016f  * c->power
+              + 0.170f  * ke_floor
+              + 0.050f  * nonkinen
+              + 0.106f  * clev_hinge;
     }
 
     if (level < 1.0f)  level = 1.0f;
