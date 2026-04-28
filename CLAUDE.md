@@ -81,7 +81,7 @@ gam(outcome ~ s(predictor1) + s(predictor2), data = df)
 The game uses **completely different formulas** for armored vs unarmored creatures:
 
 - **Armored** (fortitude >= 500): Clean linear fit (R² ≈ 0.98)
-- **Unarmored**: More complex fit (R² ≈ 0.91)
+- **Unarmored** (M8, Phase 15): R² ≈ 0.96, SD ≈ 1.73
 
 ### Final Formulas
 
@@ -92,16 +92,18 @@ level = -23 + 0.01*hardiness + 0.06*fortitude + 0.005*dexterity
       + 0.1*kinen + 0.08*nonkinen
 ```
 
-**Unarmored (fortitude < 500):**
+**Unarmored (fortitude < 500) — M8:**
 ```
-level = 9 + 0.01*hardiness - 0.02*fortitude + 0.01*dexterity
-      + 0.01*intellect + 0.025*cleverness + 0.015*power
-      + 0.12*kinen + 0.06*nonkinen
+level = 8.13 + 0.012*hardiness - 0.019*fortitude + 0.004*dexterity
+      + 0.011*intellect + 0.020*cleverness + 0.016*power
+      + 0.170*ke_floor + 0.050*nonkinen
+      + 0.106*pmax(cleverness - 400, 0)
 ```
 
 Where:
-- `kinen = (kinetic + energy) / 2`
+- `ke_floor = pmax(pmin(kinetic, energy), 0)` (weaker resist, floored at 0)
 - `nonkinen = (blast + heat + cold + electricity + acid + stun) / 6`
+- The cleverness hinge gives apex-DPS pets a steeper slope above clev 400.
 
 ### Fortitude Sign Flip
 The most significant finding: **fortitude has opposite effects** depending on armor status:
@@ -111,7 +113,7 @@ The most significant finding: **fortitude has opposite effects** depending on ar
 This explains why bio-engineers could create high-fortitude, low-level unarmored creatures.
 
 ### Resist Impact
-Kinetic/Energy resists (`kinen`) have higher impact on unarmored creatures (0.12) vs armored (0.1). Unarmored creatures rely on resists for survivability.
+Kinetic/Energy resists have higher impact on unarmored creatures (`ke_floor` coef 0.17) vs armored (`kinen` coef 0.10). Unarmored creatures rely on resists for survivability — and a vulnerability on either kinetic or energy zeroes out the credit (`ke_floor` is the weaker side, floored at 0).
 
 ### Data Cleaning Notes
 - Skin minimum levels cause contamination (creatures clamped to skin's minimum)

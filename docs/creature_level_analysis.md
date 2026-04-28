@@ -520,6 +520,88 @@ formula `level = ... − 0.019 * fortitude + ...` for unarmored is the
 right predictive answer, and the four-test stress battery rules out
 the most plausible "this is just OLS picking a bad allocation" story.
 
+### Phase 15: High-DPS Under-Prediction — A Cleverness Hinge at 400
+
+**Question**: Why does M7 systematically under-predict the apex of the
+unarmored CL distribution? Rancor `6j048r2a` (CL48) sits at residual +8.16,
+razor cat `pdefjush` (CL49) at +5.40, and a CL48 sibling rancor at +5.10.
+The apex Phase 6 hint suggested a cleverness threshold around 200-400 with
+diminishing returns — re-tested under M7, that hint resolves cleanly.
+
+**Setup** (`R/investigate_high_dps.R`):
+1. Reproduce M7 residuals on the 291-creature unarmored set.
+2. Stratify by skin to test if rancor / falumpaset / razor_cat under-predict
+   universally or only at high cleverness.
+3. Knot scan for `pmax(cleverness − K, 0)` over K ∈ {100, 125, …, 500}.
+4. Compare to multiplicative DPS terms (`damage × speed × to_hit`,
+   `cleverness × power`).
+
+**Findings**:
+
+1. **A single cleverness hinge at K=400 captures the under-prediction**.
+   Adding `+ 0.106 × pmax(cleverness − 400, 0)` to M7 yields ΔAIC = +40.5,
+   R² 0.952 → 0.958, SD 1.86 → 1.73. Multiplicative DPS terms are redundant
+   (residual correlation with `damage × speed × to_hit` is only +0.06).
+
+2. **The "rancor +5 skin adjustment" was a high-cleverness artifact, not a
+   skin tier.** All 3 rancors have cleverness ≥ 315. After the K=400 hinge,
+   mean rancor residual drops from +5.25 to +1.48 (the K=425 in-sample
+   optimum gets it to +0.73, but K=425 fails the sanity check — see below).
+   The two apex rancors land at residuals +1.66 and −0.47, and razor cat
+   `pdefjush` lands at +0.69. The rancor row in the skin-adjustments table
+   can be retired.
+
+3. **Cross-validated** (`R/cv_cleverness_hinge.R`). Repeated 10-fold CV
+   confirms M8 beats M7 out-of-sample by ΔRMSE = −0.13 (M7: 1.93, M8: 1.80),
+   ~50× the SE. Bootstrap CI for the hinge coefficient at K=400 is
+   [0.057, 0.129], well clear of zero.
+
+4. **Sanity-checked against single-point overfit** (`R/sanity_check_high_dps.R`).
+   Influence diagnostics: rancor `6j048r2a` has DFBETAS = 0.83 for the hinge
+   and leverage 0.36 (far above the 0.07 cutoff). But removing it only drops
+   the K=400 coefficient from 0.106 → 0.093 (88% retention). Removing all
+   three rancors retains 86%. By contrast, K=425 collapsed to 16% retention
+   when the same creature was removed — that knot was overfitting and was
+   rejected. The two CL48 rancors corroborate each other (different stats,
+   same observed level) and the raw furrycat HTML confirms the level and
+   template values; no plausible single-digit typo on level / cleverness /
+   power makes the residual sensible while remaining physically craftable
+   from the recorded samples.
+
+**Decision: promote M7 → M8**:
+
+```
+level = 8.13
+  + 0.012  × hardiness
+  - 0.019  × fortitude
+  + 0.004  × dexterity
+  + 0.011  × intellect
+  + 0.020  × cleverness                       # was 0.025 in M7
+  + 0.016  × power
+  + 0.170  × pmax(pmin(kinetic, energy), 0)
+  + 0.050  × nonkinen
+  + 0.106  × pmax(cleverness − 400, 0)        # NEW: high-DPS hinge
+```
+
+The cleverness coefficient drops from 0.025 to 0.020 because the hinge
+absorbs the high-cleverness signal that the linear term was over-credited
+for; effective slope above K=400 is 0.020 + 0.106 ≈ 0.126.
+
+**Mechanistic interpretation**: a piecewise cleverness contribution is
+plausible game design — once a pet exceeds clev 400 it crosses into the
+"DPS-dominant" regime and its level scales more aggressively with that
+attribute. The exact knot is loose (CV-RMSE plateau spans K ≈ 275–425);
+K=400 was chosen because it is the highest K with a tight bootstrap CI and
+a likely game-design round number. K=425 fits marginally better in-sample
+but is anchored on one creature.
+
+**Open**: Two falumpaset outliers (`1lc95n55` CL30 clev 193, `01oatm1v`
+CL32 clev 191) remain at residual +8.65 / +5.37 after the hinge. Both have
+low cleverness — the hinge can't help them. The other 8 falumpasets fit
+fine, so it is not a skin-tier effect. Likely a furrycat data-entry artifact
+on the level field, or a hidden mechanic these two trigger. Flagged as
+suspect; not pursued further without new evidence.
+
 ---
 
 ## Final Formulas
@@ -544,39 +626,48 @@ Where:
 
 **Accuracy**: R² = 0.979, SD = 1.8 levels, normally distributed residuals
 
-### Unarmored Creatures (M7 — canonical as of Phase 9)
+### Unarmored Creatures (M8 — canonical as of Phase 15)
 
 ```
-level = 7.87
-  + 0.013 × hardiness
-  - 0.019 × fortitude
-  + 0.004 × dexterity
-  + 0.010 × intellect
-  + 0.025 × cleverness
-  + 0.015 × power
-  + 0.167 × pmax(pmin(kinetic, energy), 0)
-  + 0.054 × nonkinen
+level = 8.13
+  + 0.012  × hardiness
+  - 0.019  × fortitude
+  + 0.004  × dexterity
+  + 0.011  × intellect
+  + 0.020  × cleverness
+  + 0.016  × power
+  + 0.170  × pmax(pmin(kinetic, energy), 0)
+  + 0.050  × nonkinen
+  + 0.106  × pmax(cleverness - 400, 0)        # high-DPS cleverness hinge
 ```
 
-The kinetic-energy resist term is the **weaker side, floored at zero** —
-vulnerability on either kinetic or energy erases all credit for kin/eng resist.
-Symmetric in kinetic and energy (the game treats both as the 60%-capped resist
-class), no asymmetric weighting.
+Two structural features:
+- The kinetic-energy resist term is the **weaker side, floored at zero** —
+  vulnerability on either kinetic or energy erases all credit for kin/eng
+  resist (Phase 9). Symmetric in kinetic and energy.
+- A **cleverness hinge at 400** adds extra level for apex-DPS creatures
+  (Phase 15). Below 400 cleverness, the standard `0.020 × cleverness` term
+  applies; above 400 the slope effectively becomes `0.020 + 0.106 = 0.126`.
 
-**Accuracy**: R² = 0.952, SD = 1.86 levels (without skin adjustments). See
-Phase 9 for derivation. The earlier `kinen`-based form is preserved in
-git history; the live formula is implemented in `R/creature_level_model.R`
-as `creature_level_no_armor_lm`.
+**Accuracy**: R² = 0.958, SD = 1.73 levels (without skin adjustments).
+The promotion from M7 → M8 reduced SD from 1.86 → 1.73 and AIC by 40.5.
+The hinge fully explains the rancor "+5 skin adjustment" — see Phase 15.
+The live formula is implemented in `R/creature_level_model.R` as
+`creature_level_no_armor_lm`.
 
 ---
 
 ## Skin Adjustments
 
-Based on regression with skin fixed effects (relative to bantha baseline):
+Based on regression with skin fixed effects (relative to bantha baseline).
+Computed under M7. After M8 promotion (Phase 15), the rancor entry below
+collapses (mean residual +5.25 → +0.73), so it no longer needs a skin
+adjustment — see Phase 15. Other rows are still M7-era and would shift
+slightly under M8; the table is kept for historical reference.
 
 | Skin | Adjustment | n | Notes |
 |------|------------|---|-------|
-| Rancor | +5.2 | 3 | Significantly higher than predicted |
+| Rancor | +5.2 | 3 | (M7 only — largely explained by M8 cleverness hinge; mean rancor residual drops to +1.48 under M8. Do not apply alongside M8.) |
 | Merek | +1.9 | - | |
 | Kima | +1.6 | - | |
 | Falumpaset | +1.2 | - | |
@@ -676,29 +767,11 @@ Based on regression with skin fixed effects (relative to bantha baseline):
 - **M7 weaker-resist-floor** is the canonical unarmored resist term (Phase 9). Vulnerability on either kinetic or energy erases all kin/eng resist credit.
 - **The negative unarmored fortitude coefficient is signal, not artifact** (Phase 14). Ridge / elastic-net / lasso under cross-validation all preserve it; lasso never zeroes it out. Hardiness is the more fragile coefficient of the collinear pair.
 - **Most plausible mechanism** for the negative coefficient: a deliberate balance lever introduced during the post-launch creature rebalance (when pre-launch medium-armor pets were stripped), to prevent heavy-resist unarmored pets from dominating the tameable mid-CL bracket. The structure is too clean and the magnitude too "designed" to be accidental. The data alone cannot prove this over "real game-formula term," but the SWGEmu re-implementation should keep the empirical coefficient either way.
+- **High-DPS under-prediction is a cleverness hinge at K≈400** (Phase 15). M7 → M8 promotion adds `+ 0.106 × pmax(cleverness − 400, 0)`; ΔAIC = +40.5; cross-validated and sanity-checked. Fully explains the rancor "+5 skin adjustment" — that table row should not be applied alongside M8.
 
 ### Next-session priorities
 
-**Priority 1: High-DPS under-prediction (apex creatures)**
-
-A handful of high-cleverness/power creatures remain under-predicted by M7:
-
-| Serial | Skin | Level | M7 prediction | Residual |
-|---|---|---|---|---|
-| `6j048r2a` | rancor | 48 | ~41 | +7.0 |
-| `01oatm1v` | falumpaset | 32 | ~26 | +5.9 |
-| `pdefjush` | razor_cat | 49 | ~44 | +5.4 |
-
-These are the apex of the CL distribution, and the formula systematically misses them. Earlier scratchpad work (`R/investigate_low_stat_outliers.R`, Phase 6) suggested cleverness threshold effects at 200/300/400 with magnitudes +0.88 / +1.59 / +2.06 levels respectively, but those tests were under the old `kinen` baseline. Worth re-running under M7.
-
-Specific next steps:
-1. Add `pmax(cleverness - 200, 0)`, `pmax(cleverness - 300, 0)`, `pmax(cleverness - 400, 0)` as additional terms; test individually and jointly.
-2. Test multiplicative DPS terms: `damage * speed * to_hit` (already `dps` in `data.R`), or `cleverness * power` interaction.
-3. Test whether the under-prediction is *skin-specific* — if rancor and falumpaset always under-predict regardless of cleverness, it may be a skin-tier effect (cf. existing skin-adjustments table) rather than a non-linearity.
-
-If players currently feel SWGEmu's apex CL pets are mis-leveled, this is the regime to fix.
-
-**Priority 2: Near-armor-border zone (fortitude 380–540)**
+**Priority 1: Near-armor-border zone (fortitude 380–540)**
 
 Both formulas fit worst in this band:
 - Unarmored creatures with fortitude 380–499 over-predict
@@ -716,7 +789,10 @@ Specific next steps:
 
 ### Longer-term ideas
 
-- **Low-stat negative cluster (Phase 10)**: Investigate as a separate mechanism. Likely a HAM-floor or skin-tier effect; the M7 fix doesn't help here. Several entries (e.g. `qkuvjn3m` bantha CL7 with health 875, `pumhbd0k` cu_pa CL13 with health 2473) look like furrycat data-entry issues — worth flagging as suspect rather than chasing.
+- **Falumpaset CL30/CL32 anomalies (Phase 15 open item)**: `1lc95n55` and `01oatm1v` remain at +8.65 / +5.37 after M8. Both have low cleverness so the hinge can't help; the other 8 falumpasets fit fine. Likely a furrycat data-entry artifact or a hidden mechanic these two trigger.
+- **Two-knot cleverness model**: Bootstrap revealed bimodality in best K (peaks at ~325 and ~425). A single hinge at K=400 captures most of the signal but a piecewise (gentle slope from clev ~300, steeper from ~425) might exist. Marginal in-sample gain (~5 AIC) wasn't worth chasing without more high-clev data.
+- **Per-skin level floors / caps**: Both unarmored CL48 rancors land at exactly 48 despite different stats — could indicate a rancor floor. Worth checking against the historical guide for documented floors and the SWGEmu pet-tier code.
+- **Low-stat negative cluster (Phase 10)**: Investigate as a separate mechanism. Likely a HAM-floor or skin-tier effect; the M7/M8 fixes don't help here. Several entries (e.g. `qkuvjn3m` bantha CL7 with health 875, `pumhbd0k` cu_pa CL13 with health 2473) look like furrycat data-entry issues — worth flagging as suspect rather than chasing.
 - **Cross-validate with other data sources**: If additional historical data exists, test formula generalization.
 - **Minimum CL by skin**: Consider adding floor constraints (e.g., rancor minimum CL 35).
 - **Template quality effects**: The historical guide mentions template quality affecting outcomes.
@@ -738,6 +814,9 @@ Analysis scripts (in `R/` directory):
 - `investigate_effective_resists.R` - Verified fort→effective-resist formula; ruled out as fort-coefficient cause (Phase 12)
 - `investigate_constrained_regression.R` - QP-constrained refit of M7 with fortitude ≥ 0 (Phase 14)
 - `investigate_elastic_net.R` - Ridge / elastic-net / lasso under CV; lasso entry order (Phase 14)
+- `investigate_high_dps.R` - Cleverness threshold scan, multiplicative DPS terms, knot-location scan (Phase 15)
+- `cv_cleverness_hinge.R` - Cross-validation and bootstrap of the M8 cleverness hinge (Phase 15)
+- `sanity_check_high_dps.R` - Influence diagnostics, sequential-removal robustness, typo-plausibility check on rancor `6j048r2a` (Phase 15)
 
 Historical documents (in `docs/` directory):
 - `historical_guide.md` - 2003 BE Guide

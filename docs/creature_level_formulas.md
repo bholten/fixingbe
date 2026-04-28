@@ -18,35 +18,43 @@ level = -23
 
 **Accuracy**: R² = 0.979, ±1.8 levels (1 SD)
 
-## Unarmored Creatures (fortitude < 500)
+## Unarmored Creatures (fortitude < 500) — M8
 
 ```
-level = 9
-      + 0.01  × hardiness
-      - 0.02  × fortitude
-      + 0.01  × dexterity
-      + 0.01  × intellect
-      + 0.025 × cleverness
-      + 0.015 × power
-      + 0.12  × kinen
-      + 0.06  × nonkinen
+level = 8.13
+      + 0.012  × hardiness
+      - 0.019  × fortitude
+      + 0.004  × dexterity
+      + 0.011  × intellect
+      + 0.020  × cleverness
+      + 0.016  × power
+      + 0.170  × ke_floor
+      + 0.050  × nonkinen
+      + 0.106  × pmax(cleverness − 400, 0)        # high-DPS hinge
       + skin_adjustment
 ```
 
-**Accuracy**: R² = 0.947, ±1.9 levels (1 SD)
+**Accuracy**: R² = 0.958, ±1.73 levels (1 SD)
 
 ## Variable Definitions
 
 ```
-kinen    = (kinetic_resist + energy_resist) / 2
+ke_floor = pmax(pmin(kinetic_resist, energy_resist), 0)   # weaker side, floored at 0
 nonkinen = (blast + heat + cold + electricity + acid + stun) / 6
 ```
 
+`ke_floor` reflects that vulnerability on either kinetic or energy erases all
+kin/eng resist credit (Phase 9). The cleverness hinge adds extra level for
+apex-DPS pets above clev 400 (Phase 15) — effective slope above the knot is
+0.020 + 0.106 = 0.126.
+
 ## Notable Skin Adjustments
+
+(Computed under M7. Apply alongside the unarmored formula. The rancor row was
+absorbed by the M8 cleverness hinge — do not apply it on top of M8.)
 
 | Skin | Adjustment |
 |------|------------|
-| Rancor | +5.2 |
 | Merek | +1.9 |
 | Falumpaset | +1.2 |
 | Woolamander | -2.5 |
@@ -70,7 +78,9 @@ From historical guide:
 
 ## Key Insights
 
-1. **Armor flips fortitude**: +0.06 for armored, -0.02 for unarmored
-2. **Kinetic/Energy dominant**: kinen coefficient > nonkinen
-3. **DPS contributes**: cleverness (0.025) + power (0.015)
-4. **~2 level variance**: Unexplained (likely crafting randomness)
+1. **Armor flips fortitude**: +0.06 for armored, -0.019 for unarmored
+2. **Kinetic/Energy dominant**: ke_floor coefficient > nonkinen, and weaker
+   side floored at zero (vulnerability erases credit)
+3. **DPS contributes**: cleverness (0.020) + power (0.016), with a steeper
+   slope above clev 400 (effective 0.126)
+4. **~1.7 level variance** unexplained (likely crafting randomness)

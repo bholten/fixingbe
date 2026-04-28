@@ -3,19 +3,21 @@ library(stats)
 
 
 creature_level_no_armor_lm <- function(data) {
-  ke_floor <- pmax(pmin(data$kinetic, data$energy), 0)
-  nonkinen <- (data$blast + data$heat + data$cold +
-               data$electricity + data$acid + data$stun) / 6
+  ke_floor  <- pmax(pmin(data$kinetic, data$energy), 0)
+  nonkinen  <- (data$blast + data$heat + data$cold +
+                data$electricity + data$acid + data$stun) / 6
+  clev_h400 <- pmax(data$cleverness - 400, 0)
   return(
-    7.873163 +
-      0.013015 * data$hardiness +
-     -0.019361 * data$fortitude +
-      0.004101 * data$dexterity +
-      0.010102 * data$intellect +
-      0.024797 * data$cleverness +
-      0.015077 * data$power +
-      0.166537 * ke_floor +
-      0.054300 * nonkinen
+    8.132249 +
+      0.012301 * data$hardiness +
+     -0.019403 * data$fortitude +
+      0.004439 * data$dexterity +
+      0.011387 * data$intellect +
+      0.019508 * data$cleverness +
+      0.015615 * data$power +
+      0.169649 * ke_floor +
+      0.050378 * nonkinen +
+      0.105771 * clev_h400
   )
 }
 
