@@ -1,0 +1,208 @@
+---
+title: "Core3 vs. Simple Model: Creature Level"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+# The Question
+
+SWGEmu's Core3 computes a pet/creature level (CL) from a creature's realized
+combat stats with a fairly involved formula (HAM lookup tables, DPS/hit/regen
+level bands, an armor term, and a two-pass "defense level" blend). This project
+has independently reverse-engineered a **much simpler** two-branch linear model
+straight from the historical Furrycat data.
+
+Now that the [DNA Lab](https://github.com/) simulator can run Core3's *real*
+level code path headless, we can put both predictors side by side against the
+one thing that is not a model — the **actual, empirically measured retail
+levels** — and ask: which is closer?
+
+# Method
+
+For each cleaned creature (the same filtered set the rest of this project uses)
+we produce three numbers:
+
+- **actual** — the retail-measured CL (`creatures.csv$level`).
+- **simple model** — our `custom_model()`: the M8 unarmored branch / clean
+  armored branch, keyed on the fortitude=500 split.
+- **Core3** — the real `Genetics::calculatePetLevel` path, invoked through the
+  `dna-lab-level` binary built with `-DUSE_CORE3_LIBS=ON` (i.e. linked against
+  the actual Core3 libraries, **not** a re-implementation).
+
+Two things worth stating plainly:
+
+1. **Different inputs, same target.** Core3 is fed each creature's *realized*
+   combat stats (HAM, damage, speed, to-hit, armor, resists) directly from
+   `creatures.csv`; `effectiveArmor` is derived inside Core3 as
+   `sum(resists) * 2` (the verified crafting-time semantics). Our simple model
+   is fed the *genetic attributes*. Both are judged only by how close their
+   output lands to the actual level.
+
+2. **In-sample caveat.** Our model's coefficients were fit on this very data;
+   Core3's were not. So the raw comparison flatters the simple model. The
+   cross-validation section below refits the simple model's *structure* on
+   held-out folds to give it an honest out-of-sample test — Core3, having no
+   fitted parameters here, is already out-of-sample everywhere.
+
+```{r load}
+source("R/core3_comparison.R")
+# Use the committed cache so this document builds without the dna-lab binary or
+# Core3 libraries (e.g. in the publish Docker image). Regenerate the cache with
+# refresh_core3_cache() after any change to dna-lab-level or the data.
+res <- run_core3_comparison(prefer_binary = FALSE)
+cmp <- res$comparison
+```
+
+# Headline: accuracy against actual level
+
+```{r metrics-table}
+m <- res$metrics
+num <- c("rmse", "mae", "bias", "r2", "within_1", "within_2")
+m[, num] <- round(m[, num], 3)
+knitr::kable(
+  m,
+  col.names = c("Subset", "Model", "n", "RMSE", "MAE", "Bias", "R2",
+                "within +/-1", "within +/-2"),
+  caption = "Lower RMSE/MAE/|Bias| is better; higher R2 and within-band is better."
+)
+```
+
+The simple model is far closer to the retail levels across the board. The gap
+is largest on **unarmored** creatures, where Core3 carries a systematic
+**~+2.6 level overshoot**. On **armored** creatures Core3 is much more
+competitive (and nearly unbiased), but the simple model still edges it.
+
+# Predicted vs. actual
+
+```{r pred-vs-actual, fig.width=10, fig.height=5}
+plot_df <- cmp %>%
+  select(actual, simple = model_level, core3 = core3_level, is_armored) %>%
+  pivot_longer(c(simple, core3), names_to = "model", values_to = "predicted") %>%
+  mutate(model = factor(model, levels = c("simple", "core3"),
+                        labels = c("Simple model", "Core3")),
+         armor = ifelse(is_armored, "Armored (fort>=500)", "Unarmored"))
+
+ggplot(plot_df, aes(actual, predicted, color = armor)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~model) +
+  coord_equal() +
+  labs(title = "Predicted vs. actual creature level",
+       subtitle = "Dashed line = perfect prediction",
+       x = "Actual level", y = "Predicted level", color = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+Core3's cloud sits visibly *above* the diagonal for unarmored creatures — the
+overshoot — and is much noisier than the simple model's tight band.
+
+# Residual distributions
+
+```{r residuals, fig.width=10, fig.height=4}
+resid_df <- cmp %>%
+  select(simple = model_resid, core3 = core3_resid) %>%
+  pivot_longer(everything(), names_to = "model", values_to = "residual") %>%
+  mutate(model = factor(model, levels = c("simple", "core3"),
+                        labels = c("Simple model", "Core3")))
+
+ggplot(resid_df, aes(residual, fill = model)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_histogram(binwidth = 1, alpha = 0.7, position = "identity") +
+  facet_wrap(~model) +
+  labs(title = "Residuals (predicted - actual)",
+       x = "Residual (levels)", y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+# Where does Core3 miss most?
+
+```{r worst}
+worst <- cmp %>%
+  arrange(desc(abs(core3_resid))) %>%
+  transmute(serial, skin,
+            armored = is_armored,
+            actual, core3_level, core3_resid,
+            model_level, model_resid) %>%
+  head(12)
+knitr::kable(worst, digits = 1,
+             caption = "12 creatures with the largest Core3 error.")
+```
+
+# Honest test: cross-validated simple model
+
+The simple model's coefficients were fit on this data, so its in-sample RMSE
+understates true error. Here we refit the simple model's *linear structure*
+(same terms, same fortitude=500 split) on 10 random folds and score each
+held-out fold. Core3, having no fitted parameters, uses its fixed predictions.
+
+```{r cv}
+set.seed(42)
+
+# Reconstruct the design used by the two hard-coded branches.
+add_terms <- function(d) {
+  d$ke_floor  <- pmax(pmin(d$kinetic, d$energy), 0)
+  d$nonkinen  <- (d$blast + d$heat + d$cold + d$electricity + d$acid + d$stun) / 6
+  d$clev_h400 <- pmax(d$cleverness - 400, 0)
+  d$avg_hdi   <- (d$hardiness + d$dexterity + d$intellect) / 3
+  d$kinen     <- (d$kinetic + d$energy) / 2
+  d
+}
+
+fml_unarmored <- level ~ hardiness + fortitude + dexterity + intellect +
+  cleverness + power + ke_floor + nonkinen + clev_h400
+fml_armored   <- level ~ avg_hdi + fortitude + cleverness + power +
+  kinen + nonkinen
+
+d <- add_terms(normalized_df)
+d$is_armored <- d$fortitude >= 500
+d <- dplyr::left_join(d, core3_levels(d, prefer_binary = FALSE), by = "serial")
+
+k <- 10
+d$fold <- sample(rep(1:k, length.out = nrow(d)))
+
+simple_oos <- numeric(nrow(d))
+for (f in 1:k) {
+  tr <- d[d$fold != f, ]; te_idx <- which(d$fold == f)
+  te <- d[te_idx, ]
+  fit_u <- lm(fml_unarmored, data = tr[!tr$is_armored, ])
+  fit_a <- lm(fml_armored,   data = tr[tr$is_armored, ])
+  pred <- ifelse(te$is_armored,
+                 predict(fit_a, te), predict(fit_u, te))
+  simple_oos[te_idx] <- pred
+}
+
+cv_metrics <- rbind(
+  cbind(model = "simple (10-fold CV)", level_metrics(simple_oos, d$level)),
+  cbind(model = "core3 (fixed)",       level_metrics(d$core3_level, d$level))
+)
+num <- c("rmse", "mae", "bias", "r2", "within_1", "within_2")
+cv_metrics[, num] <- round(cv_metrics[, num], 3)
+knitr::kable(cv_metrics, row.names = FALSE,
+             col.names = c("Model", "n", "RMSE", "MAE", "Bias", "R2",
+                           "within +/-1", "within +/-2"),
+             caption = "Out-of-sample: simple model refit per fold vs. fixed Core3.")
+```
+
+Even out-of-sample, the simple model's error is a fraction of Core3's. The gap
+is not an artifact of over-fitting — the reverse-engineered formula genuinely
+tracks the retail levels better than the current Core3 implementation.
+
+# Takeaways
+
+- Against the actual retail data, the **simple two-branch model is substantially
+  more accurate than Core3** (RMSE ~1.8 vs ~5.4), and this survives
+  cross-validation.
+- Core3 **systematically overshoots unarmored creatures by ~2 levels**; it is
+  far better calibrated on armored creatures.
+- This is evidence — not a mandate — that the reverse-engineered formula is a
+  candidate to *simplify and improve* the Core3 level calculation, especially
+  for unarmored pets. Reproducing this comparison only requires rebuilding
+  `dna-lab-level` and running `R/core3_comparison.R`.

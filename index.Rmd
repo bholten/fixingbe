@@ -29,3 +29,4 @@ All data is scraped from Furrycat's archives. The raw data has been archived to 
 - [Armor Analysis](armor_analysis.html)
 - To Do - [Resists Analysis](resists_analysis.html)
 - Work In Progress - [Creature Level Analysis](creature_level_analysis.html)
+- [Core3 vs. Simple Model Comparison](core3_comparison.html) — head-to-head against the actual retail levels
