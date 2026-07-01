@@ -77,6 +77,13 @@ gam(outcome ~ s(predictor1) + s(predictor2), data = df)
 
 ## Key Findings: Creature Level
 
+> **Settled questions & exonerations (2026-07):** see `docs/creature_level_investigation_review.md`
+> before reopening any of these — negative fortitude is a **real** term (not a collinearity
+> artifact), the species/skin effect is **data bias** (not a hidden mechanic), derived-stat-space
+> modeling is a **dead end**, and the hand-curated `bad_data` discards are **substantially justified**
+> (11/18 provably invalid). Core3-vs-retail divergences (incl. the power↔damage `damageToValue`
+> mismatch) are catalogued in `docs/retail_divergences.md`. Don't relitigate without new evidence.
+
 ### Two-Formula Hypothesis (Confirmed)
 The game uses **completely different formulas** for armored vs unarmored creatures:
 
